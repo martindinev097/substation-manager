@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <title>Meters</title>
+</head>
+<body>
+    <div th:replace="~{fragments/sidebar :: sidebar(currentPage=${currentPage})}"></div>
+
+    <div th:replace="~{fragments/sidebar :: sidebar(floorNumber=${floorNumber})}"></div>
+
+    <div class="main-content">
+        <header>
+            <h1 th:text="'Meters | Floor ' + ${floorNumber}">Floor 1</h1>
+            <p>Manage Air Conditioners' Meters and Readings</p>
+        </header>
+
+        <section class="add-company">
+            <h2>Add Meter</h2>
+            <form id="addMeterForm" class="styled-form">
+                <input type="text" name="meterName" placeholder="Meter Name" required>
+                <button type="submit"><i class="fa-solid fa-plus"></i> Add</button>
+            </form>
+        </section>
+
+        <section class="recent">
+            <h2>Readings</h2>
+
+            <table class="styled-table">
+                <thead>
+                <tr>
+                    <th>Meter</th>
+                    <th>Outside Body</th>
+                    <th>Room</th>
+                    <th>Description</th>
+                    <th>% Energy</th>
+                    <th>Old Readings</th>
+                    <th>New Readings</th>
+                    <th>Difference Readings</th>
+                    <th>Total Energy In BGN</th>
+                </tr>
+                </thead>
+                <tbody id="readingsBody">
+                <tr>
+                    <td>19</td>
+                    <td><input type="number" value="0"></td>
+                    <td><input type="number" value="0"></td>
+                    <td><input type="text" value="Sample"></td>
+                    <td><input type="number" class="energy-percentage" value="10"></td>
+                    <td><input type="number" class="old" value="1250"></td>
+                    <td><input type="number" class="new" value="1320"></td>
+                    <td class="diff">70</td>
+                    <td class="total-cost">100</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="save-container">
+                <button type="submit"><i class="fas fa-exchange-alt"></i> Swap readings</button>
+                <button type="submit"><i class="fas fa-save"></i> Save readings</button>
+            </div>
+        </section>
+    </div>
+
+    <script src="/js/sidebar/sidebar.js"></script>
+    <script src="/js/readings/meter-calculator.js"></script>
+</body>
+
+</html>

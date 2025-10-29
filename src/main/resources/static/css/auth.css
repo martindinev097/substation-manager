@@ -1,0 +1,131 @@
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('../images/elec1.jpg') no-repeat center center;
+    background-size: cover;
+    font-family: "Segoe UI", sans-serif;
+    color: #fff;
+}
+
+/*body::before {*/
+/*    content: "";*/
+/*    position: absolute;*/
+/*    inset: 0;*/
+/*    background: rgba(0, 0, 0, 0.35);*/
+/*    z-index: 0;*/
+/*}*/
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.login-box {
+    background-color: #1e2533;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    width: 360px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    margin-bottom: 10px;
+}
+
+.logo i {
+    color: #00e0ff;
+    font-size: 1.5em;
+    margin-top: 5px;
+}
+
+.logo h1 {
+    font-size: 26px;
+    color: #00c3ff;
+}
+
+.subtitle {
+    color: #aaa;
+    margin-bottom: 25px;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    font-size: 14px;
+    display: block;
+    margin-bottom: 5px;
+    color: #cfd3da;
+}
+
+.input-group input {
+    width: 93.5%;
+    padding: 0.8em;
+    border-radius: 6px;
+    border: none;
+    background-color: #2b3243;
+    color: #fff;
+    font-size: 15px;
+}
+
+.input-group input:focus {
+    outline: 2px solid #00c3ff;
+}
+
+.btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #00c3ff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #12141c;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-top: 0.6em;
+}
+
+.btn:hover {
+    background-color: #009ed6;
+}
+
+.success-message {
+    color: #2ea44f;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.error-message {
+    color: #ff6565;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.footer-text {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #888;
+}
+
+.footer-text a {
+    color: #00c3ff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.footer-text a:hover {
+    text-decoration: underline;
+}

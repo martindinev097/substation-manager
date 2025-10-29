@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+          integrity="sha512-jk..." crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+
+            <div class="logo">
+                <i class="fa-solid fa-bolt"></i>
+                <h1>Substation</h1>
+            </div>
+
+            <p class="subtitle">Sign in to your account</p>
+
+            <p th:if="${registeredMessage}" class="success-message" th:text="${registeredMessage}"></p>
+
+            <form th:action="@{/login}" th:method="POST" th:object="${loginRequest}">
+
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" th:field="*{username}" placeholder="Enter your username" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" th:field="*{password}" placeholder="Enter your password" required>
+                </div>
+
+                <p th:if="${errorMessage}" class="error-message">Invalid username or password.</p>
+
+                <button type="submit" class="btn">Login</button>
+            </form>
+
+            <p class="footer-text">
+                Don’t have an account?
+                <a th:href="@{/register}">Sign up</a>
+            </p>
+
+            <div th:replace="~{fragments/footer :: footer}"></div>
+        </div>
+    </div>
+</body>
+</html>

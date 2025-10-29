@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>Home | Substation Manager</title>
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+    <div th:replace="~{fragments/sidebar :: sidebar(currentPage=${currentPage})}"></div>
+
+    <div class="main-content" th:object="${user}">
+        <header>
+            <h1>Dashboard</h1>
+            <p th:text="${'Welcome, ' + user.role.getDisplayName()}">Welcome, Admin</p>
+        </header>
+
+        <section class="dashboard-cards">
+            <div class="card">
+                <i class="fa-solid fa-bolt"></i>
+                <div>
+                    <h3>Total Consumption</h3>
+                    <p>1250 kWh</p>
+                </div>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-building"></i>
+                <div>
+                    <h3>Active Floors</h3>
+                    <p>5</p>
+                </div>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-gauge-high"></i>
+                <div>
+                    <h3>Active Meters</h3>
+                    <p>12</p>
+                </div>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-users"></i>
+                <div>
+                    <h3>Registered Owners</h3>
+                    <p>8</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="recent">
+            <h2>Recent Readings</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>Meter #</th>
+                    <th>Floor</th>
+                    <th>Date</th>
+                    <th>Value (kWh)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>M-01</td>
+                    <td>1</td>
+                    <td>06-10-2025</td>
+                    <td>356</td>
+                </tr>
+                <tr>
+                    <td>M-02</td>
+                    <td>2</td>
+                    <td>06-10-2025</td>
+                    <td>490</td>
+                </tr>
+                <tr>
+                    <td>M-03</td>
+                    <td>3</td>
+                    <td>06-10-2025</td>
+                    <td>212</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script src="/js/sidebar/sidebar.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,142 @@
+html, body {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #333;
+    background: url('../images/elec1.jpg') no-repeat center center;
+    background-size: cover;
+    height: 100vh;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.3); /* adjust opacity here */
+    z-index: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.8em;
+    box-shadow: 0 8px 18px rgba(0,0,0,.15);
+    width: 20em;
+    padding: 2em;
+    background-color: white;
+    z-index: 1;
+}
+
+.container h2 {
+    text-align: center;
+    margin-bottom: 2.2em;
+}
+
+.form {
+    margin-bottom: 1em;
+}
+
+.form label {
+    display: block;
+    margin-bottom: 0.8em;
+    font-size: 14px;
+}
+
+.form input {
+    width: 81%;
+    padding: 0.7em 2.2em;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 1em;
+    transition: border-color 0.3s ease;
+}
+
+.form input:focus {
+    border-color: black;
+    outline: none;
+}
+
+.form .fa-solid {
+    position: absolute;
+    font-size: 12px;
+    padding: 1em;
+}
+
+.forgot {
+    text-align: right;
+}
+
+.forgot a {
+    color: #777;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.forgot a:hover {
+    color: #aaa;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 0.9em;
+    border: none;
+    border-radius: 1.5em;
+    background: linear-gradient(90deg,#30d0d0,#f600b3);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 0.8em;
+    transition: opacity 0.3s ease;
+    box-shadow: 0 1px 1px #888;
+    text-decoration: none;
+    font-size: 0.8em;
+    text-align: center;
+}
+
+.btn:hover {
+    opacity: 0.8;
+    box-shadow: none;
+}
+
+.btn:active {
+    opacity: 1;
+}
+
+.signup {
+    text-align: center;
+    margin-top: 2em;
+}
+
+.signup a {
+    font-size: 14px;
+    text-decoration: none;
+    color: #777;
+}
+
+.signup a:hover {
+    color: #aaa;
+}
+
+p.alert-warning {
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    background: linear-gradient(to left, #f88e8e, #f56767, #f53b3b);
+    background-size: 200%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 5px 0 0;
+}

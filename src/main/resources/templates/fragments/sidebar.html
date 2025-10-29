@@ -1,0 +1,73 @@
+<div th:fragment="sidebar">
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fa-solid fa-bolt"></i>
+            <h2>Substation</h2>
+        </div>
+        <div th:fragment="sidebar(floorNumber, currentPage)" class="menu-container">
+            <ul class="menu">
+                <li>
+                    <a th:href="@{/home}" th:classappend="${currentPage == 'home'} ? 'active' : ''">
+                        <i class="fa-solid fa-chart-line"></i>Dashboard</a>
+                </li>
+
+                <li class="dropdown" th:classappend="${currentPage == 'floor'} ? 'active open' : ''">
+                    <a href="#"><i class="fa-solid fa-building"></i>Floors<i
+                            class="fa-solid fa-caret-down caret"></i></a>
+                    <ul class="submenu">
+                        <li><a th:href="@{/floor/1}" th:classappend="${floorNumber == 1} ? 'active' : ''"><i
+                                class="fa-regular fa-circle fa-xs"></i>Floor
+                            1</a></li>
+                        <li><a th:href="@{/floor/2}"
+                               th:classappend="${floorNumber == 2} ? 'active' : ''"><i
+                                class="fa-regular fa-circle fa-xs"></i>Floor 2</a></li>
+                        <li><a th:href="@{/floor/3}"
+                               th:classappend="${floorNumber == 3} ? 'active' : ''"><i
+                                class="fa-regular fa-circle fa-xs"></i>Floor 3</a></li>
+                        <li><a th:href="@{/floor/4}"
+                               th:classappend="${floorNumber == 4} ? 'active' : ''"><i
+                                class="fa-regular fa-circle fa-xs"></i>Floor 4</a></li>
+                        <li><a th:href="@{/floor/5}"
+                               th:classappend="${floorNumber == 5} ? 'active' : ''"><i
+                                class="fa-regular fa-circle fa-xs"></i>Floor 5</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown" th:classappend="${currentPage == 'meters'} ? 'active open' : ''">
+                    <a href="#"><i class="fa-solid fa-gauge"></i>Meters
+                        <i class="fa-solid fa-caret-down caret"></i>
+                    </a>
+
+                    <ul class="submenu">
+                        <li><a th:href="@{/meters/floor/1}" th:classappend="${floorNumber == 1} ? 'active' : ''"><i
+                                class="fa-regular fa-circle fa-xs"></i>Floor
+                            1</a></li>
+                        <li><a th:href="@{/meters/floor/2}"
+                               th:classappend="${floorNumber == 2} ? 'active' : ''"><i
+                                class="fa-regular fa-circle fa-xs"></i>Floor 2</a></li>
+                        <li><a th:href="@{/meters/floor/3}"
+                               th:classappend="${floorNumber == 3} ? 'active' : ''"><i
+                                class="fa-regular fa-circle fa-xs"></i>Floor 3</a></li>
+                        <li><a th:href="@{/meters/floor/4}"
+                               th:classappend="${floorNumber == 4} ? 'active' : ''"><i
+                                class="fa-regular fa-circle fa-xs"></i>Floor 4</a></li>
+                        <li><a th:href="@{/meters/floor/5}"
+                               th:classappend="${floorNumber == 5} ? 'active' : ''"><i
+                                class="fa-regular fa-circle fa-xs"></i>Floor 5</a></li>
+                    </ul>
+                </li>
+
+                <li><a th:href="@{/owners}" th:classappend="${currentPage == 'owners'} ? 'active' : ''"><i
+                        class="fa-solid fa-users"></i>Owners</a></li>
+                <li><a th:href="@{/reports}" th:classappend="${currentPage == 'reports'} ? 'active' : ''"><i
+                        class="fa-solid fa-file-invoice-dollar"></i>Reports</a></li>
+                <li><a th:href="@{/settings}" th:classappend="${currentPage == 'settings'} ? 'active' : ''"><i
+                        class="fa-solid fa-gear"></i>Settings</a></li>
+            </ul>
+        </div>
+
+        <form th:action="@{/logout}" th:method="GET" class="logout">
+            <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+        </form>
+    </div>
+</div>

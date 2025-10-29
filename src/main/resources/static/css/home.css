@@ -1,0 +1,330 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    background: #f2f4f8;
+}
+
+.sidebar {
+    width: 240px;
+    background: linear-gradient(180deg, #101820, #1b2838);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1em 0;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #2d3b4a #101820;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    margin-bottom: 3em;
+}
+
+.logo i {
+    color: #00e0ff;
+    font-size: 1.5em;
+}
+
+.logo h2 {
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+.menu-container {
+    overflow-y: auto;
+    padding-top: 4.5em;
+}
+
+.menu {
+    list-style: none;
+    padding: 0 1em;
+    margin-top: -5em;
+}
+
+.menu li {
+    margin: 0.5em 0;
+}
+
+.menu a {
+    color: #ccc;
+    text-decoration: none;
+    padding: 0.7em 1em;
+    display: flex;
+    align-items: center;
+    gap: 0.8em;
+    border-radius: 6px;
+    transition: background 0.3s;
+}
+
+.menu > li:nth-child(1) > a {
+    gap: 0.8em;
+}
+
+.menu > li:nth-child(2) > a {
+    gap: 1.1em;
+    padding-left: 0.9em;
+}
+
+.menu > li:nth-child(3) > a {
+    gap: 0.9em;
+    padding-left: 0.8em;
+}
+
+.menu > li:nth-child(4) > a {
+    gap: 0.7em;
+    padding-left: 0.7em;
+}
+
+.menu > li:nth-child(5) > a {
+    gap: 0.9em;
+}
+
+.menu > li:nth-child(6) > a {
+    padding-left: 0.8em;
+}
+
+.menu a:hover, .menu a.active {
+    background: rgba(0, 224, 255, 0.15);
+    color: #fff;
+}
+
+.submenu {
+    list-style: none;
+    padding-left: 1.5em;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+}
+
+.submenu a i {
+    width: 1.2em;
+    color: #fff;
+    margin-right: 0.3em;
+}
+
+.submenu a:hover i {
+    color: #30d0d0;
+}
+
+.dropdown.open .submenu {
+    max-height: 500px;
+    opacity: 1;
+}
+
+.caret {
+    margin-left: auto;
+}
+
+.logout {
+    padding: 1em;
+    text-align: center;
+}
+
+.logout button {
+    color: #f56565;
+    background: transparent;
+    font-size: 1em;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 0.6em 1.2em;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.logout button:hover {
+    background-color: #f56565;
+    color: #fff;
+}
+
+.main-content {
+    margin-left: 240px;
+    padding: 2em;
+    width: calc(100% - 240px);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2em;
+}
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.2em;
+}
+
+.card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.5em;
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+.card i {
+    font-size: 1.8em;
+    color: #30d0d0;
+}
+
+.card h3 {
+    font-size: 0.9em;
+    color: #555;
+}
+
+.card p {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.recent {
+    margin-top: 3em;
+}
+
+.recent h2 {
+    margin-bottom: 1em;
+}
+
+.recent table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.recent th, .recent td {
+    padding: 1em;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.recent th {
+    background: #f9fafc;
+    color: #333;
+}
+
+.add-company {
+    background: #fff;
+    border-radius: 10px;
+    padding: 1.5em;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    margin-bottom: 2em;
+}
+
+.add-company h2 {
+    margin-bottom: 1em;
+}
+
+.styled-form {
+    display: flex;
+    gap: 1.5em;
+    align-items: center;
+}
+
+.styled-form input {
+    padding: 0.6em 1em;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    flex-grow: 10;
+}
+
+.styled-form button {
+    background: #2fc7c7;
+    border: none;
+    padding: 0.6em 1.2em;
+    border-radius: 6px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+    flex-grow: 1;
+}
+
+.styled-form button:hover {
+    background: #1f8c8c;
+}
+
+.save-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.save-container button:nth-child(2) {
+    width: 25%;
+    background: #2fc7c7;
+    color: white;
+    border: none;
+    padding: 0.6em 1.2em;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.save-container button:nth-child(2):hover {
+    background: #1f8c8c;
+}
+
+.save-container button:nth-child(1) {
+    width: 25%;
+    background: #c72f2f;
+    color: white;
+    border: none;
+    padding: 0.6em 1.2em;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.save-container button:nth-child(1):hover {
+    background: #8c1f23;
+}
+
+.styled-table input {
+    width: 80px;
+    padding: 0.3em;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.styled-table button.save {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 0.3em 0.8em;
+    cursor: pointer;
+}
+
+.styled-table button.save:hover {
+    background: #43a047;
+}
