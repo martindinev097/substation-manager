@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -11,7 +12,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "users")
 public class User {
 
     @Id
@@ -30,6 +31,12 @@ public class User {
     private String firstName;
 
     private String lastName;
+
+    @OneToMany
+    private List<Company> companies;
+
+    @OneToMany(mappedBy = "user")
+    private List<Floor> floors;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

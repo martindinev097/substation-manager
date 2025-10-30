@@ -20,7 +20,7 @@
 
         <section class="add-company">
             <h2>Add Company</h2>
-            <form id="addCompanyForm" class="styled-form">
+            <form class="styled-form" th:action="@{'/floor/' + ${floorNumber} + '/add-company'}" th:method="POST">
                 <input type="text" name="companyName" placeholder="Company Name" required>
                 <button type="submit"><i class="fa-solid fa-plus"></i> Add</button>
             </form>
@@ -44,8 +44,8 @@
                 </tr>
                 </thead>
                 <tbody id="readingsBody">
-                <tr>
-                    <td>TopRentACarBg</td>
+                <tr th:each="company : ${companies}">
+                    <td th:text="${company.name}">TopRentACarBg</td>
                     <td><input type="number" class="old" value="1250"></td>
                     <td><input type="number" class="new" value="1320"></td>
                     <td class="diff">70</td>
