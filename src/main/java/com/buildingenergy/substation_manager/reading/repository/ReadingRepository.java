@@ -1,6 +1,6 @@
-package com.buildingenergy.substation_manager.user.repository;
+package com.buildingenergy.substation_manager.reading.repository;
 
-import com.buildingenergy.substation_manager.user.model.Reading;
+import com.buildingenergy.substation_manager.reading.model.Reading;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

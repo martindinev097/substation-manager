@@ -1,8 +1,8 @@
-package com.buildingenergy.substation_manager.user.service;
+package com.buildingenergy.substation_manager.floor.service;
 
-import com.buildingenergy.substation_manager.user.model.Floor;
+import com.buildingenergy.substation_manager.floor.model.Floor;
 import com.buildingenergy.substation_manager.user.model.User;
-import com.buildingenergy.substation_manager.user.repository.FloorRepository;
+import com.buildingenergy.substation_manager.floor.repository.FloorRepository;
 import org.springframework.stereotype.Service;
 
 @Service

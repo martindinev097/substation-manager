@@ -1,5 +1,7 @@
 package com.buildingenergy.substation_manager.user.model;
 
+import com.buildingenergy.substation_manager.company.model.Company;
+import com.buildingenergy.substation_manager.floor.model.Floor;
 import jakarta.persistence.*;
 import lombok.*;
 

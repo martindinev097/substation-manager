@@ -1,9 +1,9 @@
 package com.buildingenergy.substation_manager.web.controller;
 
 import com.buildingenergy.substation_manager.security.UserData;
-import com.buildingenergy.substation_manager.user.model.Company;
+import com.buildingenergy.substation_manager.company.model.Company;
 import com.buildingenergy.substation_manager.user.model.User;
-import com.buildingenergy.substation_manager.user.service.CompanyService;
+import com.buildingenergy.substation_manager.company.service.CompanyService;
 import com.buildingenergy.substation_manager.user.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
