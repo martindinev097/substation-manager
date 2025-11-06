@@ -1,22 +1,115 @@
 package com.buildingenergy.substation_manager.web.controller;
 
+import com.buildingenergy.substation_manager.meter.model.Meter;
+import com.buildingenergy.substation_manager.meter.service.MeterHistoryService;
+import com.buildingenergy.substation_manager.meter.service.MeterService;
+import com.buildingenergy.substation_manager.floor.model.Floor;
+import com.buildingenergy.substation_manager.floor.service.FloorService;
+import com.buildingenergy.substation_manager.security.UserData;
+import com.buildingenergy.substation_manager.user.model.User;
+import com.buildingenergy.substation_manager.user.service.UserService;
+import com.buildingenergy.substation_manager.web.dto.MeterReadingRequest;
+import com.buildingenergy.substation_manager.web.dto.MeterReadingWrapper;
+import com.buildingenergy.substation_manager.web.dto.MeterRequest;
+import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/meters")
 public class MeterController {
 
-    @GetMapping("/floor/{floor}")
-    public ModelAndView getMetersPage(@PathVariable int floor) {
+    private final UserService userService;
+    private final FloorService floorService;
+    private final MeterService meterService;
+    private final MeterHistoryService meterHistoryService;
+
+    public MeterController(UserService userService, FloorService floorService, MeterService meterService, MeterHistoryService meterHistoryService) {
+        this.userService = userService;
+        this.floorService = floorService;
+        this.meterService = meterService;
+        this.meterHistoryService = meterHistoryService;
+    }
+
+    @GetMapping("/floor/{floorNumber}")
+    public ModelAndView getMetersPage(@PathVariable int floorNumber, @AuthenticationPrincipal UserData userData) {
         ModelAndView modelAndView = new ModelAndView();
 
+        User user = userService.getById(userData.getUserId());
+        Floor floor = floorService.findByFloorNumberAndUser(floorNumber, user);
+        List<Meter> meters = meterService.findAllByFloorAndUser(floor, user);
+
+        List<MeterReadingRequest> readingRequests = meterService.getMeterReadings(meters);
+        MeterReadingWrapper wrapper = new MeterReadingWrapper();
+        wrapper.setReadings(readingRequests);
+
         modelAndView.setViewName("meters");
-        modelAndView.addObject("floorNumber", floor);
+        modelAndView.addObject("floorNumber", floorNumber);
         modelAndView.addObject("currentPage", "meters");
+        modelAndView.addObject("meters", meters);
+        modelAndView.addObject("meterRequest", new MeterRequest());
+        modelAndView.addObject("readingWrapper", wrapper);
+
+        return modelAndView;
+    }
+
+    @PostMapping("/floor/{floorNumber}")
+    public ModelAndView addMeter(@PathVariable int floorNumber, @Valid MeterRequest meterRequest, BindingResult bindingResult, @AuthenticationPrincipal UserData userData) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        User user = userService.getById(userData.getUserId());
+        Floor floor = floorService.findByFloorNumberAndUser(floorNumber, user);
+        List<Meter> meters = meterService.findAllByFloorAndUser(floor, user);
+
+        if (bindingResult.hasErrors()) {
+            modelAndView.addObject("errorMessage", "Invalid data. Please check your input");
+            modelAndView.addObject("floorNumber", floorNumber);
+            modelAndView.addObject("currentPage", "meters");
+            modelAndView.addObject("meters", meters);
+            modelAndView.setViewName("/meters");
+            return modelAndView;
+        }
+
+        meterService.createMeter(meterRequest, floor, floorNumber, user);
+
+        modelAndView.setViewName("redirect:/meters/floor/" + floorNumber);
+
+        return modelAndView;
+    }
+
+    @PostMapping("/save")
+    public ModelAndView saveMeterReadings(@RequestParam int floorNumber, @ModelAttribute("readingWrapper") MeterReadingWrapper wrapper, @AuthenticationPrincipal UserData userData) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        User user = userService.getById(userData.getUserId());
+        Floor floor = floorService.findByFloorNumberAndUser(floorNumber, user);
+
+        meterService.updateMeterReadings(wrapper.getReadings(), user, floor);
+
+        modelAndView.setViewName("redirect:/meters/floor/" + floorNumber);
+
+        return modelAndView;
+    }
+
+    @PostMapping("/swap")
+    public ModelAndView swapMeterReadings(@RequestParam int floorNumber, @AuthenticationPrincipal UserData userData) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        User user = userService.getById(userData.getUserId());
+        Floor floor = floorService.findByFloorNumberAndUser(floorNumber, user);
+
+        List<Meter> meters = meterService.findAllByFloorAndUser(floor, user);
+
+        meterHistoryService.backupCurrentReadings(meters, user);
+
+        meterService.swapMeterReadings(meters);
+
+        modelAndView.setViewName("redirect:/meters/floor/" + floorNumber);
 
         return modelAndView;
     }

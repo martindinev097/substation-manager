@@ -29,38 +29,49 @@
         <section class="recent">
             <h2>Readings</h2>
 
-            <table class="styled-table">
-                <thead>
-                <tr>
-                    <th>Company</th>
-                    <th>Old Reading M1</th>
-                    <th>New Reading M1</th>
-                    <th>Difference M1</th>
-                    <th>Old Reading M2</th>
-                    <th>New Reading M2</th>
-                    <th>Difference M2</th>
-                    <th>Total Consumption M1+M2</th>
-                    <th>Total Energy In BGN</th>
-                </tr>
-                </thead>
-                <tbody id="readingsBody">
-                <tr th:each="company : ${companies}">
-                    <td th:text="${company.name}">TopRentACarBg</td>
-                    <td><input type="number" class="old" value="1250"></td>
-                    <td><input type="number" class="new" value="1320"></td>
-                    <td class="diff">70</td>
-                    <td><input type="number" class="old2" value="420"></td>
-                    <td><input type="number" class="new2" value="465"></td>
-                    <td class="diff2">45</td>
-                    <td class="sum-diffs">80</td>
-                    <td class="total-cost">100</td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="save-container">
-                <button type="submit"><i class="fas fa-exchange-alt"></i> Swap readings</button>
-                <button type="submit"><i class="fas fa-save"></i> Save readings</button>
-            </div>
+            <form th:action="@{'/readings/save?floorNumber=' + ${floorNumber}}" th:method="POST" th:object="${readingWrapper}" >
+                <table class="styled-table">
+                    <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Old Reading M1</th>
+                        <th>New Reading M1</th>
+                        <th>Difference M1</th>
+                        <th>Old Reading M2</th>
+                        <th>New Reading M2</th>
+                        <th>Difference M2</th>
+                        <th>Total Consumption</th>
+                        <th>Total Cost</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="reading, iter : ${readingWrapper.readings}">
+                        <td>
+                            <span th:text="${companies[iter.index].name}"></span>
+                            <input type="hidden" th:field="*{readings[__${iter.index}__].companyId}"/>
+                        </td>
+                        <td><input th:field="*{readings[__${iter.index}__].oldReadingM1}" class="old" type="number" value="0"/></td>
+                        <td><input th:field="*{readings[__${iter.index}__].newReadingM1}" class="new" type="number" value="0"/></td>
+                        <td><input th:field="*{readings[__${iter.index}__].differenceM1}" class="diff" type="number" readonly/></td>
+                        <td><input th:field="*{readings[__${iter.index}__].oldReadingM2}" class="old2" type="number" value="0"/></td>
+                        <td><input th:field="*{readings[__${iter.index}__].newReadingM2}" class="new2" type="number" value="0"/></td>
+                        <td><input th:field="*{readings[__${iter.index}__].differenceM2}" class="diff2" type="number" readonly/></td>
+                        <td><input th:field="*{readings[__${iter.index}__].totalConsumption}" class="sum-diffs" type="number" readonly/></td>
+                        <td><input th:field="*{readings[__${iter.index}__].totalCost}" class="total-cost" type="number" readonly/></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="save-container">
+                    <button th:if="${companies.size() > 0}" type="submit" class="save-btn"><i class="fas fa-save"></i> Save readings</button>
+                </div>
+            </form>
+
+
+            <form class="swap-form" th:action="@{'/readings/swap?floorNumber=' + ${floorNumber}}" th:method="POST">
+                <button th:if="${companies.size() > 0}" type="submit" class="swap-btn"><i class="fas fa-exchange-alt"></i> Swap readings</button>
+            </form>
+
         </section>
     </div>
 

@@ -203,6 +203,8 @@ header {
 }
 
 .recent {
+    display: flex;
+    flex-direction: column;
     margin-top: 3em;
 }
 
@@ -251,7 +253,7 @@ header {
     padding: 0.6em 1em;
     border-radius: 6px;
     border: 1px solid #ccc;
-    flex-grow: 10;
+    flex-grow: 5;
 }
 
 .styled-form button {
@@ -270,30 +272,20 @@ header {
     background: #1f8c8c;
 }
 
+.swap-form {
+    align-self: flex-start;
+    margin-top: -2em;
+}
+
 .save-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     margin-top: 1rem;
 }
 
-.save-container button:nth-child(2) {
-    width: 25%;
-    background: #2fc7c7;
-    color: white;
-    border: none;
-    padding: 0.6em 1.2em;
-    font-weight: 600;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.save-container button:nth-child(2):hover {
-    background: #1f8c8c;
-}
-
-.save-container button:nth-child(1) {
-    width: 25%;
+.swap-btn {
+    width: auto;
+    min-width: 20em;
     background: #c72f2f;
     color: white;
     border: none;
@@ -304,8 +296,25 @@ header {
     transition: background 0.3s ease;
 }
 
-.save-container button:nth-child(1):hover {
+.swap-btn:hover {
     background: #8c1f23;
+}
+
+.save-container .save-btn {
+    width: auto;
+    min-width: 20em;
+    background: #2fc7c7;
+    color: white;
+    border: none;
+    padding: 0.6em 1.2em;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.save-container .save-btn:hover {
+    background: #1f8c8c;
 }
 
 .styled-table input {
@@ -327,4 +336,10 @@ header {
 
 .styled-table button.save:hover {
     background: #43a047;
+}
+
+.error-message {
+    color: #c72f2f;
+    font-size: 1em;
+    margin-bottom: 0.5em;
 }

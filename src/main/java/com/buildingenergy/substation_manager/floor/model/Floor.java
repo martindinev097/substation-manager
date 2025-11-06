@@ -1,5 +1,6 @@
 package com.buildingenergy.substation_manager.floor.model;
 
+import com.buildingenergy.substation_manager.meter.model.Meter;
 import com.buildingenergy.substation_manager.company.model.Company;
 import com.buildingenergy.substation_manager.user.model.User;
 import jakarta.persistence.*;
@@ -27,5 +28,8 @@ public class Floor {
 
     @ManyToOne(optional = false)
     private User user;
+
+    @OneToMany(mappedBy = "floor")
+    private List<Meter> meters;
 
 }

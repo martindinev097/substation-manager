@@ -24,16 +24,22 @@ public class Reading {
     @JoinColumn(nullable = false)
     private Company company;
 
+    @Column(name = "old_reading_m1")
     private BigDecimal oldReadingM1;
 
+    @Column(name = "new_reading_m1")
     private BigDecimal newReadingM1;
 
+    @Column(name = "difference_m1")
     private BigDecimal differenceM1;
 
+    @Column(name = "old_reading_m2")
     private BigDecimal oldReadingM2;
 
+    @Column(name = "new_reading_m2")
     private BigDecimal newReadingM2;
 
+    @Column(name = "difference_m2")
     private BigDecimal differenceM2;
 
     private BigDecimal totalConsumption;

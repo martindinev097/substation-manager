@@ -30,21 +30,21 @@
                 <i class="fa-solid fa-building"></i>
                 <div>
                     <h3>Active Floors</h3>
-                    <p>5</p>
+                    <p th:text="${user.getFloors().size()}">5</p>
                 </div>
             </div>
             <div class="card">
                 <i class="fa-solid fa-gauge-high"></i>
                 <div>
                     <h3>Active Meters</h3>
-                    <p>12</p>
+                    <p th:text="${user.getMeters().size()}">12</p>
                 </div>
             </div>
             <div class="card">
                 <i class="fa-solid fa-users"></i>
                 <div>
                     <h3>Registered Owners</h3>
-                    <p>8</p>
+                    <p th:text="${user.getCompanies().size()}">8</p>
                 </div>
             </div>
         </section>

@@ -15,20 +15,16 @@
                     <a href="#"><i class="fa-solid fa-building"></i>Floors<i
                             class="fa-solid fa-caret-down caret"></i></a>
                     <ul class="submenu">
-                        <li><a th:href="@{/floor/1}" th:classappend="${floorNumber == 1} ? 'active' : ''"><i
+                        <li><a th:href="@{/floor/1}" th:classappend="${currentPage == 'floor' and floorNumber == 1} ? 'active' : ''"><i
                                 class="fa-regular fa-circle fa-xs"></i>Floor
                             1</a></li>
-                        <li><a th:href="@{/floor/2}"
-                               th:classappend="${floorNumber == 2} ? 'active' : ''"><i
+                        <li><a th:href="@{/floor/2}" th:classappend="${currentPage == 'floor' and floorNumber == 2} ? 'active' : ''"><i
                                 class="fa-regular fa-circle fa-xs"></i>Floor 2</a></li>
-                        <li><a th:href="@{/floor/3}"
-                               th:classappend="${floorNumber == 3} ? 'active' : ''"><i
+                        <li><a th:href="@{/floor/3}" th:classappend="${currentPage == 'floor' and floorNumber == 3} ? 'active' : ''"><i
                                 class="fa-regular fa-circle fa-xs"></i>Floor 3</a></li>
-                        <li><a th:href="@{/floor/4}"
-                               th:classappend="${floorNumber == 4} ? 'active' : ''"><i
+                        <li><a th:href="@{/floor/4}" th:classappend="${currentPage == 'floor' and floorNumber == 4} ? 'active' : ''"><i
                                 class="fa-regular fa-circle fa-xs"></i>Floor 4</a></li>
-                        <li><a th:href="@{/floor/5}"
-                               th:classappend="${floorNumber == 5} ? 'active' : ''"><i
+                        <li><a th:href="@{/floor/5}" th:classappend="${currentPage == 'floor' and floorNumber == 5} ? 'active' : ''"><i
                                 class="fa-regular fa-circle fa-xs"></i>Floor 5</a></li>
                     </ul>
                 </li>
@@ -39,20 +35,20 @@
                     </a>
 
                     <ul class="submenu">
-                        <li><a th:href="@{/meters/floor/1}" th:classappend="${floorNumber == 1} ? 'active' : ''"><i
+                        <li><a th:href="@{/meters/floor/1}" th:classappend="${currentPage == 'meters' and floorNumber == 1} ? 'active' : ''"><i
                                 class="fa-regular fa-circle fa-xs"></i>Floor
                             1</a></li>
                         <li><a th:href="@{/meters/floor/2}"
-                               th:classappend="${floorNumber == 2} ? 'active' : ''"><i
+                               th:classappend="${currentPage == 'meters' and floorNumber == 2} ? 'active' : ''"><i
                                 class="fa-regular fa-circle fa-xs"></i>Floor 2</a></li>
                         <li><a th:href="@{/meters/floor/3}"
-                               th:classappend="${floorNumber == 3} ? 'active' : ''"><i
+                               th:classappend="${currentPage == 'meters' and floorNumber == 3} ? 'active' : ''"><i
                                 class="fa-regular fa-circle fa-xs"></i>Floor 3</a></li>
                         <li><a th:href="@{/meters/floor/4}"
-                               th:classappend="${floorNumber == 4} ? 'active' : ''"><i
+                               th:classappend="${currentPage == 'meters' and floorNumber == 4} ? 'active' : ''"><i
                                 class="fa-regular fa-circle fa-xs"></i>Floor 4</a></li>
                         <li><a th:href="@{/meters/floor/5}"
-                               th:classappend="${floorNumber == 5} ? 'active' : ''"><i
+                               th:classappend="${currentPage == 'meters' and floorNumber == 5} ? 'active' : ''"><i
                                 class="fa-regular fa-circle fa-xs"></i>Floor 5</a></li>
                     </ul>
                 </li>

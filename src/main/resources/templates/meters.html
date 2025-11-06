@@ -22,8 +22,13 @@
 
         <section class="add-company">
             <h2>Add Meter</h2>
-            <form id="addMeterForm" class="styled-form">
-                <input type="text" name="meterName" placeholder="Meter Name" required>
+            <p th:if="${errorMessage}" th:text="${errorMessage}" class="error-message"></p>
+            <form id="addMeterForm" class="styled-form" th:action="@{'/meters/floor/' + ${floorNumber}}"
+                  th:method="POST" th:object="${meterRequest}">
+                <input th:field="*{meterName}" type="text" name="meterName" placeholder="Meter Name" required>
+                <input th:field="*{outsideBody}" type="text" placeholder="Outside Body" required>
+                <input th:field="*{room}" type="text" placeholder="Room" required>
+                <input th:field="*{description}" type="text" placeholder="Description">
                 <button type="submit"><i class="fa-solid fa-plus"></i> Add</button>
             </form>
         </section>
@@ -31,38 +36,46 @@
         <section class="recent">
             <h2>Readings</h2>
 
-            <table class="styled-table">
-                <thead>
-                <tr>
-                    <th>Meter</th>
-                    <th>Outside Body</th>
-                    <th>Room</th>
-                    <th>Description</th>
-                    <th>% Energy</th>
-                    <th>Old Readings</th>
-                    <th>New Readings</th>
-                    <th>Difference Readings</th>
-                    <th>Total Energy In BGN</th>
-                </tr>
-                </thead>
-                <tbody id="readingsBody">
-                <tr>
-                    <td>19</td>
-                    <td><input type="number" value="0"></td>
-                    <td><input type="number" value="0"></td>
-                    <td><input type="text" value="Sample"></td>
-                    <td><input type="number" class="energy-percentage" value="10"></td>
-                    <td><input type="number" class="old" value="1250"></td>
-                    <td><input type="number" class="new" value="1320"></td>
-                    <td class="diff">70</td>
-                    <td class="total-cost">100</td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="save-container">
-                <button type="submit"><i class="fas fa-exchange-alt"></i> Swap readings</button>
-                <button type="submit"><i class="fas fa-save"></i> Save readings</button>
-            </div>
+            <form th:action="@{'/meters/save?floorNumber=' + ${floorNumber}}" th:method="POST" th:object="${readingWrapper}" >
+                <table class="styled-table">
+                    <thead>
+                    <tr>
+                        <th>Meter</th>
+                        <th>Outside Body</th>
+                        <th>Room</th>
+                        <th>Description</th>
+                        <th>% Energy</th>
+                        <th>Old Readings</th>
+                        <th>New Readings</th>
+                        <th>Difference Readings</th>
+                        <th>Total Energy In BGN</th>
+                    </tr>
+                    </thead>
+                    <tbody id="readingsBody">
+                    <tr th:each="meter, iter : ${readingWrapper.readings}">
+                        <td>
+                            <span th:text="${meters[iter.index].meterName}"></span>
+                            <input type="hidden" th:field="*{readings[__${iter.index}__].meterName}"/>
+                        </td>
+                        <td><input th:field="*{readings[__${iter.index}__].outsideBody}" type="text" /></td>
+                        <td><input th:field="*{readings[__${iter.index}__].room}" type="text" /></td>
+                        <td><input th:field="*{readings[__${iter.index}__].description}" type="text" /></td>
+                        <td><input th:field="*{readings[__${iter.index}__].energyPercentage}" class="energy-percentage" type="number" /></td>
+                        <td><input th:field="*{readings[__${iter.index}__].oldReadings}" class="old" type="number" /></td>
+                        <td><input th:field="*{readings[__${iter.index}__].newReadings}" class="new" type="number" /></td>
+                        <td><input th:field="*{readings[__${iter.index}__].differenceReadings}" class="diff" type="number" readonly /></td>
+                        <td><input th:field="*{readings[__${iter.index}__].totalCost}" class="total-cost" type="number" readonly /></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="save-container">
+                    <button th:unless="${meters.isEmpty()}" type="submit" class="save-btn"><i class="fas fa-save"></i> Save readings</button>
+                </div>
+            </form>
+
+            <form class="swap-form" th:action="@{'/meters/swap?floorNumber=' + ${floorNumber}}" th:method="POST">
+                <button th:unless="${meters.isEmpty()}" type="submit" class="swap-btn"><i class="fas fa-exchange-alt"></i> Swap readings</button>
+            </form>
         </section>
     </div>
 

@@ -15,13 +15,15 @@ public class FloorService {
     }
 
     public Floor findByFloorNumberAndUser(int floorNumber, User user) {
-        return floorRepository.findByFloorNumberAndUser(floorNumber, user).orElseGet(() -> {
-            Floor floor = Floor.builder()
-                    .floorNumber(floorNumber)
-                    .user(user)
-                    .build();
+        return floorRepository.findByFloorNumberAndUser(floorNumber, user).orElse(null);
+    }
 
-            return floorRepository.save(floor);
-        });
+    public Floor createFloor(int floorNumber, User user) {
+        Floor floor = Floor.builder()
+                .floorNumber(floorNumber)
+                .user(user)
+                .build();
+
+        return floorRepository.save(floor);
     }
 }
