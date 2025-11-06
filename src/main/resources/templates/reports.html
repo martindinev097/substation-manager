@@ -6,12 +6,97 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/reports.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <title>Reports</title>
 </head>
 <body>
     <div th:replace="~{fragments/sidebar :: sidebar(currentPage=${currentPage})}"></div>
 
+    <div class="main-content">
+        <header>
+            <h1><i class="fa-solid fa-chart-line"></i> Reports & History</h1>
+            <p>Track past readings and energy usage across all companies.</p>
+        </header>
+
+        <section class="report-section">
+            <h2><i class="fa-solid fa-clock-rotate-left"></i> Company Reading History</h2>
+            <p class="section-subtitle">View previous readings saved automatically before swaps.</p>
+
+            <div class="table-container">
+                <table class="styled-table">
+                    <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Old Reading M1</th>
+                        <th>New Reading M1</th>
+                        <th>Difference M1</th>
+                        <th>Old Reading M2</th>
+                        <th>New Reading M2</th>
+                        <th>Difference M2</th>
+                        <th>Total Consumption</th>
+                        <th>Total Cost (Lv.)</th>
+                        <th>Saved On</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr th:each="reading : ${readingHistory}">
+                        <td th:text="${reading.getCompany().getName()}">TopRentACarBG</td>
+                        <td th:text="${reading.oldReadingM1}">12540</td>
+                        <td th:text="${reading.newReadingM1}">12980</td>
+                        <td th:text="${reading.differenceM1}">220</td>
+                        <td th:text="${reading.oldReadingM2}">250</td>
+                        <td th:text="${reading.newReadingM2}">350</td>
+                        <td th:text="${reading.differenceM2}">100</td>
+                        <td th:text="${reading.totalConsumption}">12.69</td>
+                        <td th:text="${reading.totalCost}">5</td>
+                        <td th:text="${#temporals.format(reading.savedAt, 'dd-MM-yyyy HH:mm')}">2025-11-03 17:48</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2><i class="fa-solid fa-bolt"></i> Substation Meter Readings</h2>
+            <p class="section-subtitle">View detailed history for each substation meter.</p>
+
+            <div class="table-container">
+                <table class="styled-table">
+                    <thead>
+                    <tr>
+                        <th>Meter</th>
+                        <th>Outside Body</th>
+                        <th>Room</th>
+                        <th>Description</th>
+                        <th>% Energy</th>
+                        <th>Old Readings</th>
+                        <th>New Readings</th>
+                        <th>Difference Readings</th>
+                        <th>Total Cost (Lv.)</th>
+                        <th>Saved On</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr th:each="meter : ${meterHistory}">
+                        <td th:text="${meter.meterName}">Meter 19</td>
+                        <td th:text="${meter.outsideBody}">12540</td>
+                        <td th:text="${meter.room}">12980</td>
+                        <td th:text="${meter.description}">220</td>
+                        <td th:text="${meter.energyPercentage}">250</td>
+                        <td th:text="${meter.oldReadings}">350</td>
+                        <td th:text="${meter.newReadings}">100</td>
+                        <td th:text="${meter.differenceReadings}">12.69</td>
+                        <td th:text="${meter.totalCost}">5</td>
+                        <td th:text="${#temporals.format(meter.savedAt, 'dd-MM-yyyy HH:mm')}">2025-11-03 17:48</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
 
     <script src="/js/sidebar/sidebar.js"></script>
 </body>
