@@ -9,6 +9,9 @@
 </head>
 
 <body>
+    <input type="hidden" id="pricePerKwh" th:value="${formula.pricePerKwh}">
+    <input type="hidden" id="multiplier" th:value="${formula.multiplier}">
+    <input type="hidden" id="divider" th:value="${formula.divider}">
 
     <div th:replace="~{fragments/sidebar :: sidebar(floorNumber=${floorNumber})}"></div>
 
@@ -34,6 +37,7 @@
                     <thead>
                     <tr>
                         <th>Company</th>
+                        <th>Office</th>
                         <th>Old Reading M1</th>
                         <th>New Reading M1</th>
                         <th>Difference M1</th>
@@ -50,6 +54,7 @@
                             <span th:text="${companies[iter.index].name}"></span>
                             <input type="hidden" th:field="*{readings[__${iter.index}__].companyId}"/>
                         </td>
+                        <td><input th:field="*{readings[__${iter.index}__].office}" type="text"/></td>
                         <td><input th:field="*{readings[__${iter.index}__].oldReadingM1}" class="old" type="number" value="0"/></td>
                         <td><input th:field="*{readings[__${iter.index}__].newReadingM1}" class="new" type="number" value="0"/></td>
                         <td><input th:field="*{readings[__${iter.index}__].differenceM1}" class="diff" type="number" readonly/></td>

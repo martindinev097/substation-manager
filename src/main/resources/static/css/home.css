@@ -52,7 +52,7 @@ body {
 .menu {
     list-style: none;
     padding: 0 1em;
-    margin-top: -5em;
+    margin-top: -2em;
 }
 
 .menu li {
@@ -95,6 +95,12 @@ body {
 
 .menu > li:nth-child(6) > a {
     padding-left: 0.8em;
+}
+
+.menu > li:nth-child(7) > a {
+    margin-top: 3em;
+    padding-left: 0.8em;
+    gap: 0.5em;
 }
 
 .menu a:hover, .menu a.active {

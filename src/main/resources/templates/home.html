@@ -54,30 +54,18 @@
             <table>
                 <thead>
                 <tr>
-                    <th>Meter #</th>
+                    <th>Company</th>
                     <th>Floor</th>
                     <th>Date</th>
                     <th>Value (kWh)</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>M-01</td>
-                    <td>1</td>
-                    <td>06-10-2025</td>
-                    <td>356</td>
-                </tr>
-                <tr>
-                    <td>M-02</td>
-                    <td>2</td>
-                    <td>06-10-2025</td>
-                    <td>490</td>
-                </tr>
-                <tr>
-                    <td>M-03</td>
-                    <td>3</td>
-                    <td>06-10-2025</td>
-                    <td>212</td>
+                <tr th:each="company : ${companies}">
+                    <td th:text="${company.name}">M-01</td>
+                    <td th:text="${company.floor.getFloorNumber()}">1</td>
+                    <td th:text="${#temporals.format(company.createdOn, 'dd-MM-yyyy')}">06-10-2025</td>
+                    <td th:text="${company.readings.get(0).getTotalConsumption()}">356</td>
                 </tr>
                 </tbody>
             </table>

@@ -1,0 +1,68 @@
+.settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+}
+
+.settings-form label {
+    font-weight: 600;
+    color: #333;
+}
+
+.settings-form input,
+.settings-form textarea {
+    padding: 0.6rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 0.95rem;
+}
+
+.settings-form button {
+    margin-top: 1rem;
+    align-self: flex-start;
+    background-color: #2fc7c7;
+    border: none;
+    padding: 0.7rem 1.2rem;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.settings-form button:hover {
+    background-color: #26a0a0;
+}
+
+.email-field {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.email-field input {
+    flex: 1;
+}
+
+.edit-btn {
+    background-color: #2fc7c7;
+    border: none;
+    color: white;
+    padding: 0.45rem 0.9rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.edit-btn.cancel {
+    background-color: #777;
+}
+
+.edit-btn:hover {
+    opacity: 0.9;
+}

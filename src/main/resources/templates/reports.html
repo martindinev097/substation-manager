@@ -19,15 +19,43 @@
             <p>Track past readings and energy usage across all companies.</p>
         </header>
 
-        <section class="report-section">
+
+        <section class="report-section" id="company-history-section">
             <h2><i class="fa-solid fa-clock-rotate-left"></i> Company Reading History</h2>
             <p class="section-subtitle">View previous readings saved automatically before swaps.</p>
 
-            <div class="table-container">
+            <div class="month-filter">
+                <div class="months">
+                    <form th:action="@{/reports}" method="get">
+                        <th:block th:each="m : ${#numbers.sequence(1,12)}">
+                            <button type="submit"
+                                    name="month"
+                                    th:value="${m}"
+                                    th:text="${#dates.format(#dates.create(2000, m, 1), 'MMM')}"
+                                    th:classappend="${m == selectedMonth} ? ' active' : ''"
+                                    class="month-btn">
+                            </button>
+                        </th:block>
+                    </form>
+                </div>
+
+                <form th:action="@{/reports/export-company}" th:method="get">
+                    <input type="hidden" name="month" th:value="${selectedMonth}">
+                    <button th:disabled="${readingHistory.isEmpty()}" class="export-btn"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
+                </form>
+            </div>
+
+            <div th:if="${readingHistory.isEmpty()}" class="placeholder">
+                <i class="fa-regular fa-folder-open"></i>
+                <span>No history for this month yet.</span>
+            </div>
+
+            <div th:unless="${readingHistory.isEmpty()}" class="table-container">
                 <table class="styled-table">
                     <thead>
                     <tr>
                         <th>Company</th>
+                        <th>Office</th>
                         <th>Old Reading M1</th>
                         <th>New Reading M1</th>
                         <th>Difference M1</th>
@@ -43,13 +71,14 @@
 
                     <tr th:each="reading : ${readingHistory}">
                         <td th:text="${reading.getCompany().getName()}">TopRentACarBG</td>
-                        <td th:text="${reading.oldReadingM1}">12540</td>
-                        <td th:text="${reading.newReadingM1}">12980</td>
-                        <td th:text="${reading.differenceM1}">220</td>
-                        <td th:text="${reading.oldReadingM2}">250</td>
-                        <td th:text="${reading.newReadingM2}">350</td>
-                        <td th:text="${reading.differenceM2}">100</td>
-                        <td th:text="${reading.totalConsumption}">12.69</td>
+                        <td th:text="${reading.getOffice()}">2</td>
+                        <td th:text="${reading.oldReadingM1.stripTrailingZeros().toPlainString()}">12540</td>
+                        <td th:text="${reading.newReadingM1.stripTrailingZeros().toPlainString()}">12980</td>
+                        <td th:text="${reading.differenceM1.stripTrailingZeros().toPlainString()}">220</td>
+                        <td th:text="${reading.oldReadingM2.stripTrailingZeros().toPlainString()}">250</td>
+                        <td th:text="${reading.newReadingM2.stripTrailingZeros().toPlainString()}">350</td>
+                        <td th:text="${reading.differenceM2.stripTrailingZeros().toPlainString()}">100</td>
+                        <td th:text="${reading.totalConsumption.stripTrailingZeros().toPlainString()}">12.69</td>
                         <td th:text="${reading.totalCost}">5</td>
                         <td th:text="${#temporals.format(reading.savedAt, 'dd-MM-yyyy HH:mm')}">2025-11-03 17:48</td>
                     </tr>
@@ -58,11 +87,37 @@
             </div>
         </section>
 
-        <section class="report-section">
+        <section class="report-section" id="meter-history-section">
             <h2><i class="fa-solid fa-bolt"></i> Substation Meter Readings</h2>
             <p class="section-subtitle">View detailed history for each substation meter.</p>
 
-            <div class="table-container">
+            <div class="month-filter">
+                <div class="months">
+                    <form th:action="@{/reports}" method="get">
+                        <th:block th:each="m : ${#numbers.sequence(1,12)}">
+                            <button type="submit"
+                                    name="month"
+                                    th:value="${m}"
+                                    th:text="${#dates.format(#dates.create(2000, m, 1), 'MMM')}"
+                                    th:classappend="${m == selectedMonth} ? ' active' : ''"
+                                    class="month-btn">
+                            </button>
+                        </th:block>
+                    </form>
+                </div>
+
+                <form th:action="@{/reports/export-meters}" th:method="get">
+                    <input type="hidden" name="month" th:value="${selectedMonth}">
+                    <button th:disabled="${meterHistory.isEmpty()}" class="export-btn"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
+                </form>
+            </div>
+
+            <div th:if="${meterHistory.isEmpty()}" class="placeholder">
+                <i class="fa-regular fa-folder-open"></i>
+                <span>No history for this month yet.</span>
+            </div>
+
+            <div th:unless="${meterHistory.isEmpty()}" class="table-container">
                 <table class="styled-table">
                     <thead>
                     <tr>
@@ -85,10 +140,10 @@
                         <td th:text="${meter.outsideBody}">12540</td>
                         <td th:text="${meter.room}">12980</td>
                         <td th:text="${meter.description}">220</td>
-                        <td th:text="${meter.energyPercentage}">250</td>
-                        <td th:text="${meter.oldReadings}">350</td>
-                        <td th:text="${meter.newReadings}">100</td>
-                        <td th:text="${meter.differenceReadings}">12.69</td>
+                        <td th:text="${meter.energyPercentage.stripTrailingZeros().toPlainString()}">250</td>
+                        <td th:text="${meter.oldReadings.stripTrailingZeros().toPlainString()}">350</td>
+                        <td th:text="${meter.newReadings.stripTrailingZeros().toPlainString()}">100</td>
+                        <td th:text="${meter.differenceReadings.stripTrailingZeros().toPlainString()}">12.69</td>
                         <td th:text="${meter.totalCost}">5</td>
                         <td th:text="${#temporals.format(meter.savedAt, 'dd-MM-yyyy HH:mm')}">2025-11-03 17:48</td>
                     </tr>

@@ -33,8 +33,10 @@
                     <input type="password" id="password" th:field="*{password}" placeholder="Enter your password" required>
                 </div>
 
-                <p th:if="${errorMessage}" class="error-message">Invalid username or password.</p>
-
+                <p th:if="${errorMessage}" class="error-message" th:text="${errorMessage}">Invalid</p>
+                <p th:if="${inactiveMessage}" class="error-message" th:text="${inactiveMessage}">Deactivated</p>
+                <p th:if="${usernameNotExist}" class="error-message" th:text="${usernameNotExist}">Not exist</p>
+                <p th:if="${param.roleChanged}" class="warning-message">Your role has been changed. Please log in again.</p>
                 <button type="submit" class="btn">Login</button>
             </form>
 

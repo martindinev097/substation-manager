@@ -6,13 +6,73 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/settings.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <title>Settings</title>
 </head>
 <body>
     <div th:replace="~{fragments/sidebar :: sidebar(currentPage=${currentPage})}"></div>
 
-    <script src="/js/sidebar/sidebar.js"></script>
-</body>
+    <div class="main-content">
+        <div class="admin-container">
+            <h1><i class="fa-solid fa-user-gear"></i> Profile & System Settings</h1>
+            <p class="subtitle">Manage your profile and system configuration</p>
 
+            <div class="admin-tabs">
+                <button class="tab-btn active" data-tab="profile"><i class="fa-solid fa-user"></i> Profile</button>
+                <button class="tab-btn" data-tab="settings"><i class="fa-solid fa-sliders"></i> System Settings</button>
+            </div>
+
+            <div id="tab-profile" class="tab-content active">
+                <form class="settings-form" th:action="@{/settings/update-profile}" th:method="post" th:object="${editProfileRequest}">
+                    <h2><i class="fa-solid fa-user-circle"></i> Profile Details</h2>
+
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" th:value="${user.username}" readonly>
+
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" th:field="*{email}">
+
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" name="firstName" th:field="*{firstName}">
+
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" th:field="*{lastName}">
+
+                    <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message">Invalid email</p>
+
+                    <button type="submit"><i class="fa-solid fa-floppy-disk"></i> Save Profile</button>
+                </form>
+            </div>
+
+            <div id="tab-settings" class="tab-content">
+                <form class="settings-form" th:action="@{/settings/update-formula}" th:method="post">
+                    <h2><i class="fa-solid fa-bolt"></i> Company Readings Calculation Formula</h2>
+
+                    <label for="pricePerKwh">Energy Cost per kWh (Lv)</label>
+                    <input type="number" id="pricePerKwh" name="pricePerKwh" step="0.01" placeholder="e.g. 0.25"
+                           th:value="${formula.pricePerKwh}">
+
+                    <label for="multiplier">Multiplier</label>
+                    <input type="number" id="multiplier" name="multiplier" step="0.5" placeholder="e.g. 13.5"
+                           th:value="${formula.multiplier}">
+
+                    <label for="divider">Divider</label>
+                    <input type="number" id="divider" name="divider" step="1" placeholder="e.g. 100"
+                           th:value="${formula.divider}">
+
+                    <label for="formula-preview">Formula Preview</label>
+                    <textarea id="formula-preview" name="formulaPreview" rows="3" readonly
+                              th:text="${'Total Cost = Difference Readings * ' + formula.pricePerKwh + ' * ' + formula.multiplier + ' / ' + formula.multiplier}"></textarea>
+
+                    <button type="submit"><i class="fa-solid fa-floppy-disk"></i> Save Formula</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/sidebar/sidebar.js"></script>
+    <script src="/js/admin/admin-tabs.js"></script>
+</body>
 </html>
