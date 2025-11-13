@@ -13,6 +13,8 @@ public class ReadingRequest {
 
     private UUID companyId;
 
+    private String office;
+
     private BigDecimal oldReadingM1;
 
     private BigDecimal newReadingM1;

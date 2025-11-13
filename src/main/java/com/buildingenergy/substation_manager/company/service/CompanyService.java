@@ -9,6 +9,7 @@ import com.buildingenergy.substation_manager.floor.service.FloorService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -37,6 +38,7 @@ public class CompanyService {
                 .name(companyName)
                 .user(user)
                 .floor(floor)
+                .createdOn(LocalDateTime.now())
                 .build();
 
         companyRepository.save(company);
@@ -48,5 +50,9 @@ public class CompanyService {
         Floor floor = floorService.findByFloorNumberAndUser(floorNumber, user);
 
         return companyRepository.findAllByFloorAndUser(floor, user);
+    }
+
+    public List<Company> findTop5ByUser(User user) {
+        return companyRepository.findTop5ByUserOrderByCreatedOnDesc(user);
     }
 }

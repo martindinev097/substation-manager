@@ -24,6 +24,8 @@ public class Reading {
     @JoinColumn(nullable = false)
     private Company company;
 
+    private String office;
+
     @Column(name = "old_reading_m1")
     private BigDecimal oldReadingM1;
 

@@ -14,4 +14,5 @@ public interface CompanyRepository extends JpaRepository<Company, UUID> {
 
     List<Company> findAllByFloorAndUser(Floor floor, User user);
 
+    List<Company> findTop5ByUserOrderByCreatedOnDesc(User user);
 }

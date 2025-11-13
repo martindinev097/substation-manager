@@ -7,7 +7,6 @@ import com.buildingenergy.substation_manager.reading.repository.ReadingHistoryRe
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,6 +27,7 @@ public class ReadingHistoryService {
         List<ReadingHistory> readingHistory = readings.stream()
                 .map(r -> ReadingHistory.builder()
                         .company(r.getCompany())
+                        .office(r.getOffice())
                         .oldReadingM1(r.getOldReadingM1())
                         .newReadingM1(r.getNewReadingM1())
                         .differenceM1(r.getDifferenceM1())
@@ -36,7 +36,7 @@ public class ReadingHistoryService {
                         .differenceM2(r.getDifferenceM2())
                         .totalConsumption(r.getTotalConsumption())
                         .totalCost(r.getTotalCost())
-                        .savedAt(LocalDateTime.now())
+                        .savedAt(r.getCreatedOn())
                         .build()).toList();
 
         readingHistoryRepository.saveAll(readingHistory);
@@ -44,7 +44,16 @@ public class ReadingHistoryService {
 
     public List<ReadingHistory> getAll() {
         return readingHistoryRepository.findAllByOrderBySavedAtDesc()
-                .stream().filter(r -> r.getNewReadingM1().compareTo(BigDecimal.ZERO) != 0 && r.getNewReadingM2().compareTo(BigDecimal.ZERO) != 0)
+                .stream()
+                .filter(r -> r.getNewReadingM1().compareTo(BigDecimal.ZERO) != 0 && r.getNewReadingM2().compareTo(BigDecimal.ZERO) != 0)
+                .toList();
+    }
+
+    public List<ReadingHistory> getAllByMonth(int month) {
+        return readingHistoryRepository.findAllByOrderBySavedAtDesc()
+                .stream()
+                .filter(r -> r.getNewReadingM1().compareTo(BigDecimal.ZERO) != 0 && r.getNewReadingM2().compareTo(BigDecimal.ZERO) != 0)
+                .filter(r -> r.getSavedAt().getMonthValue() == month)
                 .toList();
     }
 }

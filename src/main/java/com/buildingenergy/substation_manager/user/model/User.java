@@ -35,6 +35,9 @@ public class User {
 
     private String lastName;
 
+    @Column(nullable = false)
+    private boolean isActive;
+
     @OneToMany(mappedBy = "user")
     private List<Company> companies;
 

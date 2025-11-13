@@ -1,22 +1,23 @@
 package com.buildingenergy.substation_manager.user.service;
 
-import com.buildingenergy.substation_manager.exception.EmailAlreadyExists;
-import com.buildingenergy.substation_manager.exception.PasswordsDoNotMatch;
-import com.buildingenergy.substation_manager.exception.UsernameAlreadyExists;
-import com.buildingenergy.substation_manager.exception.UsernameDoesNotExist;
+import com.buildingenergy.substation_manager.exception.*;
 import com.buildingenergy.substation_manager.security.UserData;
 import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.user.model.UserRole;
 import com.buildingenergy.substation_manager.user.repository.UserRepository;
+import com.buildingenergy.substation_manager.web.dto.EditProfileRequest;
 import com.buildingenergy.substation_manager.web.dto.RegisterRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -58,6 +59,7 @@ public class UserService implements UserDetailsService {
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .email(email)
                 .role(UserRole.USER)
+                .isActive(true)
                 .createdOn(LocalDateTime.now())
                 .build();
 
@@ -74,11 +76,69 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findUserByUsername(username).orElseThrow(() -> new UsernameDoesNotExist("Username [%s] does not exist.".formatted(username)));
 
+        if (!user.isActive()) {
+            throw new DisabledException("User account is inactive");
+        }
+
         return UserData.builder()
                 .userId(user.getId())
                 .username(user.getUsername())
                 .password(user.getPassword())
                 .role(user.getRole())
+                .isActive(user.isActive())
                 .build();
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public void changeStatus(User user) {
+        if (user.getRole() == UserRole.ADMIN) {
+            throw new CannotChangeAdminStatus("Admin status can't be changed");
+        }
+
+        user.setActive(!user.isActive());
+
+        userRepository.save(user);
+    }
+
+    public void updateProfile(User u, EditProfileRequest editProfileRequest) {
+        User user = getById(u.getId());
+
+        Optional<User> optionalEmailUser = userRepository.findByEmail(editProfileRequest.getEmail());
+
+        if (optionalEmailUser.isPresent() && !user.getEmail().equals(editProfileRequest.getEmail())) {
+            throw new EmailAlreadyExists("Email [%s] is already in use.".formatted(editProfileRequest.getEmail()));
+        }
+
+        user.setEmail(editProfileRequest.getEmail());
+        user.setFirstName(editProfileRequest.getFirstName());
+        user.setLastName(editProfileRequest.getLastName());
+
+        userRepository.save(user);
+    }
+
+    public void updateRole(UUID id, User u) {
+        User user = getById(id);
+        User currentUser = getById(u.getId());
+
+        if (user.getRole() == UserRole.ADMIN) {
+            user.setRole(UserRole.USER);
+
+            userRepository.save(user);
+
+            if (user.getId().equals(currentUser.getId())) {
+                throw new ForbiddenAccess("Your role has been changed. Please log in again.");
+            }
+        } else if (user.getRole() == UserRole.USER) {
+            user.setRole(UserRole.ADMIN);
+        }
+
+        userRepository.save(user);
+    }
+
+    public List<User> findAllAdmins() {
+        return findAll().stream().filter(user -> user.getRole() == UserRole.ADMIN).toList();
     }
 }

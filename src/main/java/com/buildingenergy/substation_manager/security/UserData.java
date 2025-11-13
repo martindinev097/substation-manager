@@ -21,11 +21,32 @@ public class UserData implements UserDetails {
     private String username;
     private String password;
     private UserRole role;
+    private boolean isActive;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority role = new SimpleGrantedAuthority("ROLE_" + this.role.name());
 
         return List.of(role);
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.isActive();
     }
 }

@@ -11,5 +11,7 @@ import java.util.UUID;
 
 @Repository
 public interface MeterRepository extends JpaRepository<Meter, UUID> {
+
     List<Meter> findAllByFloorAndUser(Floor floor, User user);
+
 }

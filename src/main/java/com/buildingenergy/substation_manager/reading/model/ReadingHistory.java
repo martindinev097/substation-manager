@@ -23,6 +23,8 @@ public class ReadingHistory {
     @ManyToOne(optional = false)
     private Company company;
 
+    private String office;
+
     private BigDecimal oldReadingM1;
     private BigDecimal newReadingM1;
     private BigDecimal differenceM1;

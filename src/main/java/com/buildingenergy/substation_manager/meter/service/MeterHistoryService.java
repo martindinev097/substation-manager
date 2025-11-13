@@ -42,4 +42,11 @@ public class MeterHistoryService {
     public List<MeterHistory> getAll() {
         return meterHistoryRepository.findAllByOrderBySavedAtDesc().stream().filter(m -> m.getNewReadings().compareTo(BigDecimal.ZERO) != 0).toList();
     }
+
+    public List<MeterHistory> getAllByMonth(Integer month) {
+        return meterHistoryRepository.findAllByOrderBySavedAtDesc().stream()
+                .filter(m -> m.getNewReadings().compareTo(BigDecimal.ZERO) != 0)
+                .filter(m -> m.getSavedAt().getMonthValue() == month)
+                .toList();
+    }
 }

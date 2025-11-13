@@ -1,14 +1,18 @@
 package com.buildingenergy.substation_manager.config;
 
+import com.buildingenergy.substation_manager.exception.UsernameDoesNotExist;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+@EnableWebSecurity
 public class WebConfiguration implements WebMvcConfigurer {
 
     @Bean
@@ -16,18 +20,35 @@ public class WebConfiguration implements WebMvcConfigurer {
         httpSecurity.authorizeHttpRequests(matcher -> matcher
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/login", "/register").permitAll()
+                        .requestMatchers("/admin-panel", "/admin").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
+                        .failureHandler(((request, response, exception) -> {
+                            Throwable cause = exception.getCause();
+
+                            if (cause instanceof DisabledException || exception instanceof DisabledException) {
+                                response.sendRedirect("/login?account-inactive");
+                            } else if (cause instanceof UsernameDoesNotExist) {
+                                response.sendRedirect("/login?username-not-exist");
+                            } else {
+                                response.sendRedirect("/login?error");
+                            }
+                        }))
                         .defaultSuccessUrl("/home", true)
-                        .failureUrl("/login?error")
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
-                        .logoutSuccessUrl("/login")
+                        .logoutSuccessHandler(((request, response, authentication) -> {
+                            if ("true".equals(request.getParameter("roleChanged"))) {
+                                response.sendRedirect("/login?roleChanged=true");
+                            } else {
+                                response.sendRedirect("/login?logout");
+                            }
+                        }))
                 );
 
         return httpSecurity.build();

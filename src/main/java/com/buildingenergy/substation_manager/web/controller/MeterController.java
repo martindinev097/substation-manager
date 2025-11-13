@@ -91,6 +91,10 @@ public class MeterController {
 
         meterService.updateMeterReadings(wrapper.getReadings(), user, floor);
 
+        List<Meter> meters = meterService.findAllByFloorAndUser(floor, user);
+
+        meterHistoryService.backupCurrentReadings(meters, user);
+
         modelAndView.setViewName("redirect:/meters/floor/" + floorNumber);
 
         return modelAndView;
@@ -104,8 +108,6 @@ public class MeterController {
         Floor floor = floorService.findByFloorNumberAndUser(floorNumber, user);
 
         List<Meter> meters = meterService.findAllByFloorAndUser(floor, user);
-
-        meterHistoryService.backupCurrentReadings(meters, user);
 
         meterService.swapMeterReadings(meters);
 

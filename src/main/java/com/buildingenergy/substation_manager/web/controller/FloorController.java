@@ -1,6 +1,7 @@
 package com.buildingenergy.substation_manager.web.controller;
 
-import com.buildingenergy.substation_manager.reading.model.Reading;
+import com.buildingenergy.substation_manager.formula.client.CompanyFormulaClient;
+import com.buildingenergy.substation_manager.formula.dto.CompanyFormulaResponse;
 import com.buildingenergy.substation_manager.reading.service.ReadingService;
 import com.buildingenergy.substation_manager.security.UserData;
 import com.buildingenergy.substation_manager.company.model.Company;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -24,11 +24,13 @@ public class FloorController {
     private final UserService userService;
     private final CompanyService companyService;
     private final ReadingService readingService;
+    private final CompanyFormulaClient formulaClient;
 
-    public FloorController(UserService userService, CompanyService companyService, ReadingService readingService) {
+    public FloorController(UserService userService, CompanyService companyService, ReadingService readingService, CompanyFormulaClient formulaClient) {
         this.userService = userService;
         this.companyService = companyService;
         this.readingService = readingService;
+        this.formulaClient = formulaClient;
     }
 
     @GetMapping("/{floorNumber}")
@@ -44,10 +46,13 @@ public class FloorController {
         ReadingListWrapper wrapper = new ReadingListWrapper();
         wrapper.setReadings(readingRequests);
 
+        CompanyFormulaResponse formula = formulaClient.getFormula(userData.getUserId()).getBody();
+
         modelAndView.setViewName("floor");
         modelAndView.addObject("floorNumber", floorNumber);
         modelAndView.addObject("currentPage", "floor");
         modelAndView.addObject("companies", companies);
+        modelAndView.addObject("formula", formula);
         modelAndView.addObject("readingWrapper", wrapper);
 
         return modelAndView;

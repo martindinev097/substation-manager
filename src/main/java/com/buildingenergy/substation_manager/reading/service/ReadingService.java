@@ -28,6 +28,7 @@ public class ReadingService {
     public void createDefaultReading(Company company) {
         Reading defaultReading = Reading.builder()
                 .company(company)
+                .office("")
                 .oldReadingM1(BigDecimal.ZERO)
                 .newReadingM1(BigDecimal.ZERO)
                 .differenceM1(BigDecimal.ZERO)
@@ -51,6 +52,7 @@ public class ReadingService {
                         .createdOn(LocalDateTime.now())
                         .build());
 
+        existingReading.setOffice(readingRequest.getOffice() == null ? "" : readingRequest.getOffice());
         existingReading.setOldReadingM1(readingRequest.getOldReadingM1());
         existingReading.setNewReadingM1(readingRequest.getNewReadingM1());
         existingReading.setDifferenceM1(readingRequest.getDifferenceM1());
@@ -97,6 +99,7 @@ public class ReadingService {
 
                     ReadingRequest dto = new ReadingRequest();
                     dto.setCompanyId(c.getId());
+                    dto.setOffice(reading != null ? reading.getOffice() : "");
                     dto.setOldReadingM1(reading != null ? reading.getOldReadingM1() : BigDecimal.ZERO);
                     dto.setNewReadingM1(reading != null ? reading.getNewReadingM1() : BigDecimal.ZERO);
                     dto.setDifferenceM1(reading != null ? reading.getDifferenceM1() : BigDecimal.ZERO);

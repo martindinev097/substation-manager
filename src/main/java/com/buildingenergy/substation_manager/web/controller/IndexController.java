@@ -1,5 +1,7 @@
 package com.buildingenergy.substation_manager.web.controller;
 
+import com.buildingenergy.substation_manager.company.model.Company;
+import com.buildingenergy.substation_manager.company.service.CompanyService;
 import com.buildingenergy.substation_manager.exception.EmailAlreadyExists;
 import com.buildingenergy.substation_manager.exception.PasswordsDoNotMatch;
 import com.buildingenergy.substation_manager.exception.UsernameAlreadyExists;
@@ -18,13 +20,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 @Controller
 public class IndexController {
 
     private final UserService userService;
+    private final CompanyService companyService;
 
-    public IndexController(UserService userService) {
+    public IndexController(UserService userService, CompanyService companyService) {
         this.userService = userService;
+        this.companyService = companyService;
     }
 
     @GetMapping("/")
@@ -35,13 +41,15 @@ public class IndexController {
     @GetMapping("/login")
     public ModelAndView getLoginPage(
             @RequestParam(name = "error", required = false) String errorMessage,
+            @RequestParam(name = "account-inactive", required = false) String inactiveMessage,
+            @RequestParam(name = "username-not-exist", required = false) String usernameNotExist,
             @RequestParam(name = "registered", required = false) String registered) {
 
         ModelAndView modelAndView = new ModelAndView("login");
 
         modelAndView.addObject("loginRequest", new LoginRequest());
 
-        LoginPageUtil.addMessages(modelAndView, errorMessage, registered);
+        LoginPageUtil.addMessages(modelAndView, errorMessage, inactiveMessage, usernameNotExist, registered);
 
         return modelAndView;
     }
@@ -87,10 +95,12 @@ public class IndexController {
         ModelAndView modelAndView = new ModelAndView();
 
         User user = userService.getById(userData.getUserId());
+        List<Company> companies = companyService.findTop5ByUser(user);
 
         modelAndView.setViewName("home");
         modelAndView.addObject("user", user);
         modelAndView.addObject("currentPage", "home");
+        modelAndView.addObject("companies", companies);
 
         return modelAndView;
     }
