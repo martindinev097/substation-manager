@@ -3,8 +3,8 @@ package com.buildingenergy.substation_manager.web.controller;
 import com.buildingenergy.substation_manager.company.model.Company;
 import com.buildingenergy.substation_manager.company.service.CompanyService;
 import com.buildingenergy.substation_manager.exception.EmailAlreadyExists;
-import com.buildingenergy.substation_manager.exception.PasswordsDoNotMatch;
-import com.buildingenergy.substation_manager.exception.UsernameAlreadyExists;
+import com.buildingenergy.substation_manager.floor.service.FloorService;
+import com.buildingenergy.substation_manager.meter.service.MeterService;
 import com.buildingenergy.substation_manager.security.UserData;
 import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.user.service.UserService;
@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,10 +28,14 @@ public class IndexController {
 
     private final UserService userService;
     private final CompanyService companyService;
+    private final FloorService floorService;
+    private final MeterService meterService;
 
-    public IndexController(UserService userService, CompanyService companyService) {
+    public IndexController(UserService userService, CompanyService companyService, FloorService floorService, MeterService meterService) {
         this.userService = userService;
         this.companyService = companyService;
+        this.floorService = floorService;
+        this.meterService = meterService;
     }
 
     @GetMapping("/")
@@ -72,20 +77,9 @@ public class IndexController {
             return modelAndView;
         }
 
-        try {
-            userService.register(registerRequest);
+        userService.register(registerRequest);
 
-            modelAndView.setViewName("redirect:/login?registered");
-        } catch (UsernameAlreadyExists e) {
-            bindingResult.rejectValue("username", "error.username", e.getMessage());
-            return modelAndView;
-        } catch (EmailAlreadyExists e) {
-            bindingResult.rejectValue("email", "error.email", e.getMessage());
-            return modelAndView;
-        } catch (PasswordsDoNotMatch e) {
-            bindingResult.rejectValue("confirmedPassword", "error.confirmedPassword", e.getMessage());
-            return modelAndView;
-        }
+        modelAndView.setViewName("redirect:/login?registered");
 
         return modelAndView;
     }
@@ -96,11 +90,27 @@ public class IndexController {
 
         User user = userService.getById(userData.getUserId());
         List<Company> companies = companyService.findTop5ByUser(user);
+        int companyCount = companyService.findAllByUser(user).size();
+        int floorCount = floorService.findAllByUser(user).size();
+        int meterCount = meterService.findAllByUser(user).size();
 
         modelAndView.setViewName("home");
         modelAndView.addObject("user", user);
         modelAndView.addObject("currentPage", "home");
         modelAndView.addObject("companies", companies);
+        modelAndView.addObject("floorCount", floorCount);
+        modelAndView.addObject("meterCount", meterCount);
+        modelAndView.addObject("companyCount", companyCount);
+
+        return modelAndView;
+    }
+
+    @ExceptionHandler(EmailAlreadyExists.class)
+    public ModelAndView handleEmailAlreadyExists(EmailAlreadyExists ex) {
+        ModelAndView modelAndView = new ModelAndView("register");
+
+        modelAndView.addObject("registerRequest", new RegisterRequest());
+        modelAndView.addObject("emailExistsMessage", ex.getMessage());
 
         return modelAndView;
     }

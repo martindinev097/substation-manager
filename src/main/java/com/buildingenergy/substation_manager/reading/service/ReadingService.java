@@ -7,6 +7,7 @@ import com.buildingenergy.substation_manager.floor.model.Floor;
 import com.buildingenergy.substation_manager.reading.model.Reading;
 import com.buildingenergy.substation_manager.reading.repository.ReadingRepository;
 import com.buildingenergy.substation_manager.user.model.User;
+import com.buildingenergy.substation_manager.web.dto.ReadingListWrapper;
 import com.buildingenergy.substation_manager.web.dto.ReadingRequest;
 import org.springframework.stereotype.Service;
 
@@ -112,5 +113,22 @@ public class ReadingService {
                     return dto;
                 })
                 .toList();
+    }
+
+    public ReadingListWrapper getWrapperForCompanies(List<Company> companies) {
+        List<ReadingRequest> readingRequests = getReadingRequests(companies);
+
+        return new ReadingListWrapper(readingRequests);
+    }
+
+    public void updateAllReadings(ReadingListWrapper wrapper) {
+        wrapper.getReadings().forEach(this::updateReadingForCompany);
+    }
+
+    public boolean areSwapped(User user, Floor floor) {
+        List<Reading> newReadings = readingRepository.findAllByCompany_UserAndCompany_FloorAndNewReadingM1AndNewReadingM2(user, floor, BigDecimal.ZERO, BigDecimal.ZERO);
+        List<Reading> allReadings = readingRepository.findAllByCompany_UserAndCompany_Floor(user, floor);
+
+        return allReadings.size() == newReadings.size();
     }
 }

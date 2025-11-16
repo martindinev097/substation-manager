@@ -74,7 +74,7 @@
             </form>
 
             <form class="swap-form" th:action="@{'/meters/swap?floorNumber=' + ${floorNumber}}" th:method="POST">
-                <button th:unless="${meters.isEmpty()}" type="submit" class="swap-btn"><i class="fas fa-exchange-alt"></i> Swap readings</button>
+                <button th:unless="${meters.isEmpty()}" th:disabled="${areSwapped == true}" type="submit" class="swap-btn"><i class="fas fa-exchange-alt"></i> Swap readings</button>
             </form>
         </section>
     </div>

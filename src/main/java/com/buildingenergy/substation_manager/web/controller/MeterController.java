@@ -8,7 +8,6 @@ import com.buildingenergy.substation_manager.floor.service.FloorService;
 import com.buildingenergy.substation_manager.security.UserData;
 import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.user.service.UserService;
-import com.buildingenergy.substation_manager.web.dto.MeterReadingRequest;
 import com.buildingenergy.substation_manager.web.dto.MeterReadingWrapper;
 import com.buildingenergy.substation_manager.web.dto.MeterRequest;
 import jakarta.validation.Valid;
@@ -44,9 +43,9 @@ public class MeterController {
         Floor floor = floorService.findByFloorNumberAndUser(floorNumber, user);
         List<Meter> meters = meterService.findAllByFloorAndUser(floor, user);
 
-        List<MeterReadingRequest> readingRequests = meterService.getMeterReadings(meters);
-        MeterReadingWrapper wrapper = new MeterReadingWrapper();
-        wrapper.setReadings(readingRequests);
+        MeterReadingWrapper wrapper = meterService.buildMeterReadingWrapper(meters);
+
+        boolean areSwapped = meterService.areSwapped(user, floor);
 
         modelAndView.setViewName("meters");
         modelAndView.addObject("floorNumber", floorNumber);
@@ -54,6 +53,7 @@ public class MeterController {
         modelAndView.addObject("meters", meters);
         modelAndView.addObject("meterRequest", new MeterRequest());
         modelAndView.addObject("readingWrapper", wrapper);
+        modelAndView.addObject("areSwapped", areSwapped);
 
         return modelAndView;
     }
@@ -67,11 +67,14 @@ public class MeterController {
         List<Meter> meters = meterService.findAllByFloorAndUser(floor, user);
 
         if (bindingResult.hasErrors()) {
+            MeterReadingWrapper wrapper = meterService.buildMeterReadingWrapper(meters);
+
             modelAndView.addObject("errorMessage", "Invalid data. Please check your input");
             modelAndView.addObject("floorNumber", floorNumber);
             modelAndView.addObject("currentPage", "meters");
             modelAndView.addObject("meters", meters);
-            modelAndView.setViewName("/meters");
+            modelAndView.addObject("readingWrapper", wrapper);
+            modelAndView.setViewName("meters");
             return modelAndView;
         }
 

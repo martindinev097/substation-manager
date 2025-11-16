@@ -1,19 +1,12 @@
 package com.buildingenergy.substation_manager.web.controller;
 
-import com.buildingenergy.substation_manager.exception.CannotChangeAdminStatus;
-import com.buildingenergy.substation_manager.exception.ForbiddenAccess;
 import com.buildingenergy.substation_manager.security.UserData;
 import com.buildingenergy.substation_manager.user.model.User;
-import com.buildingenergy.substation_manager.user.model.UserRole;
 import com.buildingenergy.substation_manager.user.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -45,28 +38,20 @@ public class AdminController {
         return modelAndView;
     }
 
-    @PostMapping("/deactivate/{id}")
+    @PatchMapping("/deactivate/{id}")
     public String deactivateUser(@PathVariable UUID id) {
         User user = userService.getById(id);
 
-        try {
-            userService.changeStatus(user);
-        } catch (CannotChangeAdminStatus e) {
-            return "redirect:/admin-panel?error=cannot-deactivate-admin";
-        }
+        userService.changeStatus(user);
 
         return "redirect:/admin-panel";
     }
 
-    @PostMapping("/change-role/{id}")
+    @PatchMapping("/role/change/{id}")
     public String changeRole(@PathVariable UUID id, @AuthenticationPrincipal UserData userData) {
         User currentUser = userService.getById(userData.getUserId());
 
-        try {
-            userService.updateRole(id, currentUser);
-        } catch (ForbiddenAccess e) {
-            return "redirect:/logout?roleChanged=true";
-        }
+        userService.updateRole(id, currentUser);
 
         return "redirect:/admin-panel";
     }

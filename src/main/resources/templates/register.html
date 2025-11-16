@@ -23,24 +23,28 @@
                     <label>Username</label>
                     <input type="text" placeholder="Type your username" th:field="*{username}">
                     <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="error-message"></p>
+                    <p th:if="${usernameExistsMessage}" th:text="${usernameExistsMessage}" class="error-message"></p>
                 </div>
 
                 <div class="input-group">
                     <label>Email</label>
                     <input type="text" placeholder="Type your email" th:field="*{email}">
                     <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message"></p>
+                    <p th:if="${emailExistsMessage}" th:text="${emailExistsMessage}" class="error-message"></p>
                 </div>
 
                 <div class="input-group">
                     <label>Password</label>
                     <input type="password" placeholder="Type your password" th:field="*{password}">
                     <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-message"></p>
+                    <p th:if="${passwordErrorMessage}" th:text="${passwordErrorMessage}" class="error-message"></p>
                 </div>
 
                 <div class="input-group">
                     <label>Confirm Password</label>
                     <input type="password" placeholder="Retype your password" th:field="*{confirmedPassword}">
-                    <p th:if="${#fields.hasErrors('confirmedPassword')}" th:errors="*{confirmedPassword}" class="error-message"></p>
+                    <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-message"></p>
+                    <p th:if="${passwordErrorMessage}" th:text="${passwordErrorMessage}" class="error-message"></p>
                 </div>
 
                 <button class="btn" type="submit">Register</button>

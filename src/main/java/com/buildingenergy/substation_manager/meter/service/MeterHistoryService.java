@@ -7,7 +7,6 @@ import com.buildingenergy.substation_manager.user.model.User;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -33,18 +32,14 @@ public class MeterHistoryService {
                         .newReadings(m.getNewReadings())
                         .differenceReadings(m.getDifferenceReadings())
                         .totalCost(m.getTotalCost())
-                        .savedAt(LocalDateTime.now())
+                        .savedAt(m.getCreatedOn())
                         .build()).toList();
 
         meterHistoryRepository.saveAll(metersHistory);
     }
 
-    public List<MeterHistory> getAll() {
-        return meterHistoryRepository.findAllByOrderBySavedAtDesc().stream().filter(m -> m.getNewReadings().compareTo(BigDecimal.ZERO) != 0).toList();
-    }
-
-    public List<MeterHistory> getAllByMonth(Integer month) {
-        return meterHistoryRepository.findAllByOrderBySavedAtDesc().stream()
+    public List<MeterHistory> getAllByMonthAndUser(Integer month, User user) {
+        return meterHistoryRepository.findAllByUserOrderBySavedAtDesc(user).stream()
                 .filter(m -> m.getNewReadings().compareTo(BigDecimal.ZERO) != 0)
                 .filter(m -> m.getSavedAt().getMonthValue() == month)
                 .toList();

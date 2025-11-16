@@ -74,7 +74,7 @@
 
 
             <form class="swap-form" th:action="@{'/readings/swap?floorNumber=' + ${floorNumber}}" th:method="POST">
-                <button th:if="${companies.size() > 0}" type="submit" class="swap-btn"><i class="fas fa-exchange-alt"></i> Swap readings</button>
+                <button th:if="${companies.size() > 0}" th:disabled="${areSwapped == true}" type="submit" class="swap-btn"><i class="fas fa-exchange-alt"></i> Swap readings</button>
             </form>
 
         </section>

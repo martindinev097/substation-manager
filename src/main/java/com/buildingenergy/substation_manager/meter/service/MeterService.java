@@ -6,11 +6,13 @@ import com.buildingenergy.substation_manager.meter.repository.MeterRepository;
 import com.buildingenergy.substation_manager.floor.model.Floor;
 import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.web.dto.MeterReadingRequest;
+import com.buildingenergy.substation_manager.web.dto.MeterReadingWrapper;
 import com.buildingenergy.substation_manager.web.dto.MeterRequest;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -41,6 +43,7 @@ public class MeterService {
                 .energyPercentage(BigDecimal.ZERO)
                 .oldReadings(BigDecimal.ZERO)
                 .newReadings(BigDecimal.ZERO)
+                .createdOn(LocalDateTime.now())
                 .user(user)
                 .floor(floor)
                 .build();
@@ -88,7 +91,28 @@ public class MeterService {
                         .newReadings(m.getNewReadings())
                         .differenceReadings(m.getDifferenceReadings())
                         .totalCost(m.getTotalCost())
+                        .createdOn(m.getCreatedOn())
                         .build())
                 .toList();
+    }
+
+    public List<Meter> findAllByUser(User user) {
+        return meterRepository.findAllByUser(user);
+    }
+
+    public MeterReadingWrapper buildMeterReadingWrapper(List<Meter> meters) {
+        List<MeterReadingRequest> readingRequests = getMeterReadings(meters);
+
+        MeterReadingWrapper wrapper = new MeterReadingWrapper();
+        wrapper.setReadings(readingRequests);
+
+        return wrapper;
+    }
+
+    public boolean areSwapped(User user, Floor floor) {
+        List<Meter> newReadings = findAllByFloorAndUser(floor, user).stream().filter(m -> m.getNewReadings().compareTo(BigDecimal.ZERO) == 0).toList();
+        List<Meter> allReadings = findAllByFloorAndUser(floor, user);
+
+        return allReadings.size() == newReadings.size();
     }
 }

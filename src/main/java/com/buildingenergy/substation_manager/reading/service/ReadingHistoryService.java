@@ -4,6 +4,7 @@ import com.buildingenergy.substation_manager.company.model.Company;
 import com.buildingenergy.substation_manager.reading.model.Reading;
 import com.buildingenergy.substation_manager.reading.model.ReadingHistory;
 import com.buildingenergy.substation_manager.reading.repository.ReadingHistoryRepository;
+import com.buildingenergy.substation_manager.user.model.User;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -42,15 +43,8 @@ public class ReadingHistoryService {
         readingHistoryRepository.saveAll(readingHistory);
     }
 
-    public List<ReadingHistory> getAll() {
-        return readingHistoryRepository.findAllByOrderBySavedAtDesc()
-                .stream()
-                .filter(r -> r.getNewReadingM1().compareTo(BigDecimal.ZERO) != 0 && r.getNewReadingM2().compareTo(BigDecimal.ZERO) != 0)
-                .toList();
-    }
-
-    public List<ReadingHistory> getAllByMonth(int month) {
-        return readingHistoryRepository.findAllByOrderBySavedAtDesc()
+    public List<ReadingHistory> getAllByMonthAndUser(int month, User user) {
+        return readingHistoryRepository.findAllByCompany_UserOrderBySavedAtDesc(user)
                 .stream()
                 .filter(r -> r.getNewReadingM1().compareTo(BigDecimal.ZERO) != 0 && r.getNewReadingM2().compareTo(BigDecimal.ZERO) != 0)
                 .filter(r -> r.getSavedAt().getMonthValue() == month)

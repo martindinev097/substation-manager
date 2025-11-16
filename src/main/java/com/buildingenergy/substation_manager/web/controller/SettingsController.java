@@ -1,10 +1,9 @@
 package com.buildingenergy.substation_manager.web.controller;
 
-import com.buildingenergy.substation_manager.config.FormulaConfiguration;
 import com.buildingenergy.substation_manager.exception.EmailAlreadyExists;
-import com.buildingenergy.substation_manager.formula.client.CompanyFormulaClient;
 import com.buildingenergy.substation_manager.formula.dto.CompanyFormulaRequest;
 import com.buildingenergy.substation_manager.formula.dto.CompanyFormulaResponse;
+import com.buildingenergy.substation_manager.formula.service.CompanyFormulaService;
 import com.buildingenergy.substation_manager.security.UserData;
 import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.user.service.UserService;
@@ -16,29 +15,27 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/settings")
 public class SettingsController {
 
     private final UserService userService;
-    private final CompanyFormulaClient formulaClient;
-    private final FormulaConfiguration formulaConfig;
+    private final CompanyFormulaService companyFormulaService;
 
-    public SettingsController(UserService userService, CompanyFormulaClient formulaClient, FormulaConfiguration formulaConfig) {
+    public SettingsController(UserService userService, CompanyFormulaService companyFormulaService) {
         this.userService = userService;
-        this.formulaClient = formulaClient;
-        this.formulaConfig = formulaConfig;
+        this.companyFormulaService = companyFormulaService;
     }
 
     @GetMapping
-    public ModelAndView getSettingsPage(@AuthenticationPrincipal UserData userData) {
+    public ModelAndView getSettingsPage(@AuthenticationPrincipal UserData userData, @RequestParam(name = "tab", required = false, defaultValue = "profile") String activeTab) {
         ModelAndView modelAndView = new ModelAndView("settings");
 
         User user = userService.getById(userData.getUserId());
 
-        CompanyFormulaResponse formula = formulaClient.getFormula(userData.getUserId()).getBody();
-
+        CompanyFormulaResponse formula = companyFormulaService.getFormula(userData.getUserId());
 
         EditProfileRequest editProfileRequest = DtoMapper.from(user);
 
@@ -46,37 +43,58 @@ public class SettingsController {
         modelAndView.addObject("user", user);
         modelAndView.addObject("formula", formula);
         modelAndView.addObject("editProfileRequest", editProfileRequest);
+        modelAndView.addObject("activeTab", activeTab);
 
         return modelAndView;
     }
 
-    @PostMapping("/update-profile")
-    public ModelAndView updateProfile(@AuthenticationPrincipal UserData userData, @Valid EditProfileRequest editProfileRequest, BindingResult bindingResult) {
+    @PutMapping("/profile/update")
+    public ModelAndView updateProfile(@AuthenticationPrincipal UserData userData, @Valid EditProfileRequest editProfileRequest, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         ModelAndView modelAndView = new ModelAndView("settings");
 
         User user = userService.getById(userData.getUserId());
 
-        try {
-            userService.updateProfile(user, editProfileRequest);
-            modelAndView.addObject("user", user);
-        } catch (EmailAlreadyExists e) {
-            bindingResult.rejectValue("email", "error.email", e.getMessage());
-
+        if (bindingResult.hasErrors()) {
             modelAndView.addObject("user", user);
             modelAndView.addObject("editProfileRequest", editProfileRequest);
-            modelAndView.addObject("formula", formulaClient.getFormula(userData.getUserId()).getBody());
+            modelAndView.addObject("formula", companyFormulaService.getFormula(userData.getUserId()));
+            modelAndView.addObject("activeTab", "profile");
 
             return modelAndView;
         }
 
+        userService.updateProfile(user, editProfileRequest);
+
+        modelAndView.addObject("user", user);
+        redirectAttributes.addFlashAttribute("successMessage", "Successfully updated profile.");
+
         return new ModelAndView("redirect:/settings");
     }
 
-    @PostMapping("/update-formula")
-    public String updateFormula(@AuthenticationPrincipal UserData userData, @ModelAttribute CompanyFormulaRequest request) {
-        formulaClient.updateFormula(formulaConfig.getKey(), userData.getUserId(), request);
+    @PutMapping("/formula/update")
+    public String updateFormula(@AuthenticationPrincipal UserData userData, @ModelAttribute CompanyFormulaRequest request, RedirectAttributes redirectAttributes) {
+        boolean success = companyFormulaService.updateFormula(userData.getUserId(), request);
 
-        return "redirect:/settings";
+        redirectAttributes.addFlashAttribute("successUpdateMessage", success);
+
+        return "redirect:/settings?tab=settings";
+    }
+
+    @ExceptionHandler(EmailAlreadyExists.class)
+    public ModelAndView handleEmailAlreadyExists(EmailAlreadyExists ex, @AuthenticationPrincipal UserData userData) {
+        ModelAndView modelAndView = new ModelAndView("settings");
+
+        User user = userService.getById(userData.getUserId());
+
+        EditProfileRequest editProfileRequest = DtoMapper.from(user);
+
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("editProfileRequest", editProfileRequest);
+        modelAndView.addObject("formula", companyFormulaService.getFormula(userData.getUserId()));
+        modelAndView.addObject("activeTab", "profile");
+        modelAndView.addObject("emailExistsMessage", ex.getMessage());
+
+        return modelAndView;
     }
 
 }

@@ -1,13 +1,9 @@
 package com.buildingenergy.substation_manager.user.model;
 
-import com.buildingenergy.substation_manager.meter.model.Meter;
-import com.buildingenergy.substation_manager.company.model.Company;
-import com.buildingenergy.substation_manager.floor.model.Floor;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -37,15 +33,6 @@ public class User {
 
     @Column(nullable = false)
     private boolean isActive;
-
-    @OneToMany(mappedBy = "user")
-    private List<Company> companies;
-
-    @OneToMany(mappedBy = "user")
-    private List<Floor> floors;
-
-    @OneToMany(mappedBy = "user")
-    private List<Meter> meters;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

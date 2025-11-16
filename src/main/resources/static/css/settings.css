@@ -19,7 +19,7 @@
 }
 
 .settings-form button {
-    margin-top: 1rem;
+    margin-top: 0.5em;
     align-self: flex-start;
     background-color: #2fc7c7;
     border: none;
@@ -65,4 +65,10 @@
 
 .edit-btn:hover {
     opacity: 0.9;
+}
+
+.success-message {
+    color: #2ea44f;
+    font-size: 1em;
+    margin-top: 5px;
 }

@@ -55,4 +55,8 @@ public class CompanyService {
     public List<Company> findTop5ByUser(User user) {
         return companyRepository.findTop5ByUserOrderByCreatedOnDesc(user);
     }
+
+    public List<Company> findAllByUser(User user) {
+        return companyRepository.findAllByUser(user);
+    }
 }

@@ -39,7 +39,7 @@
                     </form>
                 </div>
 
-                <form th:action="@{/reports/export-company}" th:method="get">
+                <form th:action="@{/reports/company/export}" th:method="get">
                     <input type="hidden" name="month" th:value="${selectedMonth}">
                     <button th:disabled="${readingHistory.isEmpty()}" class="export-btn"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
                 </form>
@@ -106,7 +106,7 @@
                     </form>
                 </div>
 
-                <form th:action="@{/reports/export-meters}" th:method="get">
+                <form th:action="@{/reports/meters/export}" th:method="get">
                     <input type="hidden" name="month" th:value="${selectedMonth}">
                     <button th:disabled="${meterHistory.isEmpty()}" class="export-btn"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
                 </form>

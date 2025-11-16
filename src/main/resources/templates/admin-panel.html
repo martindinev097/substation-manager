@@ -20,6 +20,8 @@
                 <button class="tab-btn active" data-tab="users"><i class="fa-solid fa-users"></i> Users</button>
             </div>
 
+            <p th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></p>
+
             <div id="tab-users" class="tab-content active">
                 <table class="users-table">
                     <thead>
@@ -41,7 +43,7 @@
                               th:text="${user.isActive()} ? 'Active' : 'Inactive'">Active</span>
                         </td>
                         <td>
-                            <form th:action="@{'/admin-panel/deactivate/' + ${user.id}}" th:method="post">
+                            <form th:action="@{'/admin-panel/deactivate/' + ${user.id}}" th:method="patch">
                                 <button type="submit" class="deactivate-btn"
                                         th:if="${user.isActive()}"
                                         th:disabled="${user.role.name() == 'ADMIN'}">
@@ -51,7 +53,7 @@
                                         th:unless="${user.isActive()}">Activate</button>
                             </form>
 
-                            <form th:action="@{'/admin-panel/change-role/' + ${user.id}}" th:method="post" style="display:inline;">
+                            <form th:action="@{'/admin-panel/role/change/' + ${user.id}}" th:method="patch" style="display:inline;">
                                 <button type="submit" class="change-role-btn"
                                         th:disabled="${!user.isActive() or admins.size() == 1 and user.role.name() == 'ADMIN'}">
                                     <i class="fa-solid fa-arrows-rotate"></i>
