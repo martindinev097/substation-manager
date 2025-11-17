@@ -31,8 +31,8 @@ public class GlobalControllerAdvice {
         return "not-found";
     }
 
-    @ExceptionHandler(ForbiddenAccess.class)
-    public String handleForbiddenAccess() {
+    @ExceptionHandler(ForbiddenAccessAfterRoleChange.class)
+    public String handleForbiddenAccessAfterRoleChange() {
         return "redirect:/logout?roleChanged=true";
     }
 
@@ -72,13 +72,19 @@ public class GlobalControllerAdvice {
         return modelAndView;
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({
             NoResourceFoundException.class,
-            AuthorizationDeniedException.class,
             MethodArgumentNotValidException.class
     })
     public String handleNoResourceFoundException() {
         return "not-found";
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public String handleAuthorizationDeniedException() {
+        return "forbidden";
     }
 
     @ExceptionHandler(Exception.class)

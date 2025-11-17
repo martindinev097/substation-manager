@@ -128,7 +128,7 @@ public class UserService implements UserDetailsService {
             userRepository.save(user);
 
             if (user.getId().equals(currentUser.getId())) {
-                throw new ForbiddenAccess("Your role has been changed. Please log in again.");
+                throw new ForbiddenAccessAfterRoleChange("Your role has been changed. Please log in again.");
             }
         } else if (user.getRole() == UserRole.USER) {
             user.setRole(UserRole.ADMIN);
