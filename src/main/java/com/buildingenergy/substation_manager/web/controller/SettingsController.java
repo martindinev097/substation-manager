@@ -3,7 +3,9 @@ package com.buildingenergy.substation_manager.web.controller;
 import com.buildingenergy.substation_manager.exception.EmailAlreadyExists;
 import com.buildingenergy.substation_manager.formula.dto.CompanyFormulaRequest;
 import com.buildingenergy.substation_manager.formula.dto.CompanyFormulaResponse;
-import com.buildingenergy.substation_manager.formula.service.CompanyFormulaService;
+import com.buildingenergy.substation_manager.formula.dto.MeterFormulaRequest;
+import com.buildingenergy.substation_manager.formula.dto.MeterFormulaResponse;
+import com.buildingenergy.substation_manager.formula.service.FormulaService;
 import com.buildingenergy.substation_manager.security.UserData;
 import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.user.service.UserService;
@@ -22,11 +24,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class SettingsController {
 
     private final UserService userService;
-    private final CompanyFormulaService companyFormulaService;
+    private final FormulaService formulaService;
 
-    public SettingsController(UserService userService, CompanyFormulaService companyFormulaService) {
+    public SettingsController(UserService userService, FormulaService companyFormulaService) {
         this.userService = userService;
-        this.companyFormulaService = companyFormulaService;
+        this.formulaService = companyFormulaService;
     }
 
     @GetMapping
@@ -35,13 +37,15 @@ public class SettingsController {
 
         User user = userService.getById(userData.getUserId());
 
-        CompanyFormulaResponse formula = companyFormulaService.getFormula(userData.getUserId());
+        CompanyFormulaResponse formula = formulaService.getCompanyFormula(userData.getUserId());
+        MeterFormulaResponse meterFormula = formulaService.getMeterFormula(userData.getUserId());
 
         EditProfileRequest editProfileRequest = DtoMapper.from(user);
 
         modelAndView.addObject("currentPage", "settings");
         modelAndView.addObject("user", user);
         modelAndView.addObject("formula", formula);
+        modelAndView.addObject("meterFormula", meterFormula);
         modelAndView.addObject("editProfileRequest", editProfileRequest);
         modelAndView.addObject("activeTab", activeTab);
 
@@ -57,7 +61,8 @@ public class SettingsController {
         if (bindingResult.hasErrors()) {
             modelAndView.addObject("user", user);
             modelAndView.addObject("editProfileRequest", editProfileRequest);
-            modelAndView.addObject("formula", companyFormulaService.getFormula(userData.getUserId()));
+            modelAndView.addObject("formula", formulaService.getCompanyFormula(userData.getUserId()));
+            modelAndView.addObject("meterFormula", formulaService.getMeterFormula(userData.getUserId()));
             modelAndView.addObject("activeTab", "profile");
 
             return modelAndView;
@@ -71,11 +76,20 @@ public class SettingsController {
         return new ModelAndView("redirect:/settings");
     }
 
-    @PutMapping("/formula/update")
+    @PutMapping("/company/formula/update")
     public String updateFormula(@AuthenticationPrincipal UserData userData, @ModelAttribute CompanyFormulaRequest request, RedirectAttributes redirectAttributes) {
-        boolean success = companyFormulaService.updateFormula(userData.getUserId(), request);
+        boolean success = formulaService.updateCompanyFormula(userData.getUserId(), request);
 
         redirectAttributes.addFlashAttribute("successUpdateMessage", success);
+
+        return "redirect:/settings?tab=settings";
+    }
+
+    @PutMapping("/meter/formula/update")
+    public String updateMeterFormula(@AuthenticationPrincipal UserData userData, @ModelAttribute MeterFormulaRequest request, RedirectAttributes redirectAttributes) {
+        boolean success = formulaService.updateMeterFormula(userData.getUserId(), request);
+
+        redirectAttributes.addFlashAttribute("meterSuccess", success);
 
         return "redirect:/settings?tab=settings";
     }
@@ -90,7 +104,8 @@ public class SettingsController {
 
         modelAndView.addObject("user", user);
         modelAndView.addObject("editProfileRequest", editProfileRequest);
-        modelAndView.addObject("formula", companyFormulaService.getFormula(userData.getUserId()));
+        modelAndView.addObject("formula", formulaService.getCompanyFormula(userData.getUserId()));
+        modelAndView.addObject("meterFormula", formulaService.getMeterFormula(userData.getUserId()));
         modelAndView.addObject("activeTab", "profile");
         modelAndView.addObject("emailExistsMessage", ex.getMessage());
 

@@ -1,5 +1,7 @@
 package com.buildingenergy.substation_manager.web.controller;
 
+import com.buildingenergy.substation_manager.formula.dto.MeterFormulaResponse;
+import com.buildingenergy.substation_manager.formula.service.FormulaService;
 import com.buildingenergy.substation_manager.meter.model.Meter;
 import com.buildingenergy.substation_manager.meter.service.MeterHistoryService;
 import com.buildingenergy.substation_manager.meter.service.MeterService;
@@ -27,12 +29,14 @@ public class MeterController {
     private final FloorService floorService;
     private final MeterService meterService;
     private final MeterHistoryService meterHistoryService;
+    private final FormulaService formulaService;
 
-    public MeterController(UserService userService, FloorService floorService, MeterService meterService, MeterHistoryService meterHistoryService) {
+    public MeterController(UserService userService, FloorService floorService, MeterService meterService, MeterHistoryService meterHistoryService, FormulaService formulaService) {
         this.userService = userService;
         this.floorService = floorService;
         this.meterService = meterService;
         this.meterHistoryService = meterHistoryService;
+        this.formulaService = formulaService;
     }
 
     @GetMapping("/floor/{floorNumber}")
@@ -42,6 +46,7 @@ public class MeterController {
         User user = userService.getById(userData.getUserId());
         Floor floor = floorService.findByFloorNumberAndUser(floorNumber, user);
         List<Meter> meters = meterService.findAllByFloorAndUser(floor, user);
+        MeterFormulaResponse meterFormula = formulaService.getMeterFormula(user.getId());
 
         MeterReadingWrapper wrapper = meterService.buildMeterReadingWrapper(meters);
 
@@ -51,6 +56,7 @@ public class MeterController {
         modelAndView.addObject("floorNumber", floorNumber);
         modelAndView.addObject("currentPage", "meters");
         modelAndView.addObject("meters", meters);
+        modelAndView.addObject("meterFormula", meterFormula);
         modelAndView.addObject("meterRequest", new MeterRequest());
         modelAndView.addObject("readingWrapper", wrapper);
         modelAndView.addObject("areSwapped", areSwapped);

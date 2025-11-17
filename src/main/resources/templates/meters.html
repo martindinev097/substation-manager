@@ -10,6 +10,9 @@
     <title>Meters</title>
 </head>
 <body>
+    <input type="hidden" id="pricePerKwh" th:value="${meterFormula.pricePerKwh}">
+    <input type="hidden" id="divider" th:value="${meterFormula.divider}">
+
     <div th:replace="~{fragments/sidebar :: sidebar(currentPage=${currentPage})}"></div>
 
     <div th:replace="~{fragments/sidebar :: sidebar(floorNumber=${floorNumber})}"></div>
@@ -41,14 +44,14 @@
                     <thead>
                     <tr>
                         <th>Meter</th>
-                        <th>Outside Body</th>
+                        <th>Out Body</th>
                         <th>Room</th>
                         <th>Description</th>
                         <th>% Energy</th>
-                        <th>Old Readings</th>
-                        <th>New Readings</th>
-                        <th>Difference Readings</th>
-                        <th>Total Energy In BGN</th>
+                        <th>Old kWh</th>
+                        <th>New kWh</th>
+                        <th>Diff kWh</th>
+                        <th>Total Cost</th>
                     </tr>
                     </thead>
                     <tbody id="readingsBody">

@@ -29,7 +29,8 @@
             </div>
 
             <div id="tab-profile" class="tab-content" th:classappend="${activeTab == 'profile'} ? ' active' : ''">
-                <form class="settings-form" th:action="@{/settings/profile/update}" th:method="put" th:object="${editProfileRequest}">
+                <form class="settings-form profile" th:action="@{/settings/profile/update}" th:method="put"
+                      th:object="${editProfileRequest}">
                     <h2><i class="fa-solid fa-user-circle"></i> Profile Details</h2>
 
                     <label for="username">Username</label>
@@ -53,40 +54,76 @@
             </div>
 
             <div id="tab-settings" class="tab-content" th:classappend="${activeTab == 'settings'} ? ' active' : ''">
-                <form class="settings-form" th:action="@{/settings/formula/update}" th:method="put">
-                    <h2><i class="fa-solid fa-bolt"></i> Company Readings Calculation Formula</h2>
+                <div class="formula-sections">
+                    <div class="formula-box">
+                        <form class="settings-form" th:action="@{/settings/company/formula/update}" th:method="put">
+                            <h2><i class="fa-solid fa-bolt"></i> Company Readings Calculation Formula</h2>
 
-                    <label for="pricePerKwh">Energy Cost per kWh (Lv)</label>
-                    <input type="number" id="pricePerKwh" name="pricePerKwh" step="0.01" placeholder="e.g. 0.25"
-                           th:value="${formula != null ? formula.pricePerKwh : 0}">
+                            <label for="pricePerKwh">Energy Cost per kWh (Lv)</label>
+                            <input type="number" id="pricePerKwh" name="pricePerKwh" step="0.01" placeholder="e.g. 0.25"
+                                   th:value="${formula != null ? formula.pricePerKwh : 0}">
 
-                    <label for="multiplier">Multiplier</label>
-                    <input type="number" id="multiplier" name="multiplier" step="0.5" placeholder="e.g. 13.5"
-                           th:value="${formula != null ? formula.multiplier : 0}">
+                            <label for="multiplier">Multiplier</label>
+                            <input type="number" id="multiplier" name="multiplier" step="0.05" placeholder="e.g. 13.5"
+                                   th:value="${formula != null ? formula.multiplier : 0}">
 
-                    <label for="divider">Divider</label>
-                    <input type="number" id="divider" name="divider" step="1" placeholder="e.g. 100"
-                           th:value="${formula != null ? formula.divider : 0}">
+                            <label for="divider">Divider</label>
+                            <input type="number" id="divider" name="divider" step="0.01" placeholder="e.g. 100"
+                                   th:value="${formula != null ? formula.divider : 0}">
 
-                    <label for="formula-preview">Formula Preview</label>
-                    <textarea id="formula-preview" name="formulaPreview" rows="3" readonly
-                              th:classappend="${formula == null} ? 'error-message' : ''"
-                              th:text="${formula != null
+                            <label for="formula-preview">Formula Preview</label>
+                            <textarea id="formula-preview" name="formulaPreview" rows="3" readonly
+                                      th:classappend="${formula == null} ? 'error-message' : ''"
+                                      th:text="${formula != null
                               ? 'Total Cost = Difference Readings * ' + formula.pricePerKwh + ' * ' + formula.multiplier + ' / ' + formula.multiplier
                               : 'Formula service is currently unavailable. Please try again later.'}">
-                    </textarea>
+                            </textarea>
 
+                            <p th:if="${successUpdateMessage}" class="success-message">Successfully updated formula.</p>
+                            <p th:if="${successUpdateMessage == false}" class="error-message">Formula service is
+                                currently unavailable. Please try again later.</p>
 
-                    <p th:if="${successUpdateMessage}" class="success-message">Successfully updated formula.</p>
-                    <p th:if="${successUpdateMessage == false}" class="error-message">Formula service is currently unavailable. Please try again later.</p>
+                            <button type="submit"><i class="fa-solid fa-floppy-disk"></i> Save Formula</button>
+                        </form>
+                    </div>
 
-                    <button type="submit"><i class="fa-solid fa-floppy-disk"></i> Save Formula</button>
-                </form>
+                    <div class="formula-box">
+                        <form class="settings-form formula-box" th:action="@{/settings/meter/formula/update}" th:method="put">
+                            <h2><i class="fa-solid fa-gauge"></i> Meter Readings Calculation Formula</h2>
+
+<!--                            <label for="energyPercentage">Energy Percentage (%)</label>-->
+<!--                            <input type="number" id="energyPercentage" name="energyPercentage" step="0.01"-->
+<!--                                   th:value="${meterFormula != null ? meterFormula.energyPercentage : 0}">-->
+
+                            <label for="meterPricePerKwh">Price per kWh (Lv)</label>
+                            <input type="number" id="meterPricePerKwh" name="pricePerKwh" step="0.01"
+                                   th:value="${meterFormula != null ? meterFormula.pricePerKwh : 0}">
+
+                            <label for="meterDivider">Divider</label>
+                            <input type="number" id="meterDivider" name="divider" step="0.01"
+                                   th:value="${meterFormula != null ? meterFormula.divider : 0}">
+
+                            <label for="meter-preview">Formula Preview</label>
+                            <textarea id="meter-preview" name="meterPreview" rows="3" readonly
+                                      th:classappend="${meterFormula == null} ? 'error-message' : ''"
+                                      th:text="${meterFormula != null
+                                    ? 'Total Cost = Difference kWh * Energy Percentage / 100 * ' + meterFormula.pricePerKwh +
+                                    ' / ' + meterFormula.divider
+                                    : 'Meter formula service is currently unavailable. Please try again later.'}">
+                            </textarea>
+
+                            <p th:if="${meterSuccess}" class="success-message">Meter formula updated successfully.</p>
+                            <p th:if="${meterSuccess == false}" class="error-message">Meter formula service unavailable.</p>
+
+                            <button type="submit"><i class="fa-solid fa-floppy-disk"></i> Save Formula</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="/js/sidebar/sidebar.js"></script>
-    <script src="/js/admin/admin-tabs.js"></script>
+        <script src="/js/sidebar/sidebar.js"></script>
+        <script src="/js/admin/admin-tabs.js"></script>
 </body>
 </html>
