@@ -25,11 +25,8 @@ public class FormulaService {
     public CompanyFormulaResponse getCompanyFormula(UUID userId) {
         try {
             return client.getCompanyFormula(userId).getBody();
-        } catch (FeignException e) {
-            log.error("[S2S Call]: Failed to fetch formula for user [%s] because: [%s]".formatted(userId, e.getMessage()));
-            return null;
         } catch (Exception e) {
-            log.error("Unexpected error while fetching formula for user [%s] because: [%s]".formatted(userId, e.getMessage()));
+            log.error("[S2S Call]: Failed to fetch formula for user [%s] because: [%s]".formatted(userId, e.getMessage()));
             return null;
         }
     }
@@ -38,11 +35,8 @@ public class FormulaService {
         try {
             client.updateCompanyFormula(userId, request).getBody();
             return true;
-        } catch (FeignException e) {
-            log.error("[S2S Call]: Failed to update formula for user [%s] because: [%s]".formatted(userId, e.getMessage()));
-            return false;
         } catch (Exception e) {
-            log.error("Unexpected error while updating formula for user [%s] because: [%s]".formatted(userId, e.getMessage()));
+            log.error("[S2S Call]: Failed to update formula for user [%s] because: [%s]".formatted(userId, e.getMessage()));
             return false;
         }
     }
@@ -50,11 +44,8 @@ public class FormulaService {
     public MeterFormulaResponse getMeterFormula(UUID userId) {
         try {
             return client.getMeterFormula(userId).getBody();
-        } catch (FeignException e) {
-            log.error("[S2S Call]: Failed to fetch formula for user [%s] because: [%s]".formatted(userId, e.getMessage()));
-            return null;
         } catch (Exception e) {
-            log.error("Unexpected error while fetching formula for user [%s] because: [%s]".formatted(userId, e.getMessage()));
+            log.error("[S2S Call]: Failed to fetch formula for user [%s] because: [%s]".formatted(userId, e.getMessage()));
             return null;
         }
     }
@@ -63,11 +54,8 @@ public class FormulaService {
         try {
             client.updateMeterFormula(userId, request).getBody();
             return true;
-        } catch (FeignException e) {
-            log.error("[S2S Call]: Failed to update formula for user [%s] because: [%s]".formatted(userId, e.getMessage()));
-            return false;
         } catch (Exception e) {
-            log.error("Unexpected error while updating formula for user [%s] because: [%s]".formatted(userId, e.getMessage()));
+            log.error("[S2S Call]: Failed to update formula for user [%s] because: [%s]".formatted(userId, e.getMessage()));
             return false;
         }
     }
