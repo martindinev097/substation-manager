@@ -48,13 +48,14 @@ public class IndexController {
             @RequestParam(name = "error", required = false) String errorMessage,
             @RequestParam(name = "account-inactive", required = false) String inactiveMessage,
             @RequestParam(name = "username-not-exist", required = false) String usernameNotExist,
-            @RequestParam(name = "registered", required = false) String registered) {
+            @RequestParam(name = "registered", required = false) String registered,
+            @RequestParam(name = "logout", required = false) String loggedOut) {
 
         ModelAndView modelAndView = new ModelAndView("login");
 
         modelAndView.addObject("loginRequest", new LoginRequest());
 
-        LoginPageUtil.addMessages(modelAndView, errorMessage, inactiveMessage, usernameNotExist, registered);
+        LoginPageUtil.addMessages(modelAndView, errorMessage, inactiveMessage, usernameNotExist, registered, loggedOut);
 
         return modelAndView;
     }

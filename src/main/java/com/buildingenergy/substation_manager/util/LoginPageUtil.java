@@ -6,7 +6,7 @@ import org.springframework.web.servlet.ModelAndView;
 @UtilityClass
 public class LoginPageUtil {
 
-    public void addMessages(ModelAndView modelAndView, String errorMessage, String inactiveMessage, String usernameNotExist, String registered) {
+    public void addMessages(ModelAndView modelAndView, String errorMessage, String inactiveMessage, String usernameNotExist, String registered, String loggedOut) {
         if (errorMessage != null) {
             modelAndView.addObject("errorMessage", "Invalid username or password.");
         }
@@ -21,6 +21,10 @@ public class LoginPageUtil {
 
         if (registered != null) {
             modelAndView.addObject("registeredMessage", "Registration successful. You can now log in.");
+        }
+
+        if (loggedOut != null) {
+            modelAndView.addObject("loggedOut", "You've successfully logged out.");
         }
     }
 

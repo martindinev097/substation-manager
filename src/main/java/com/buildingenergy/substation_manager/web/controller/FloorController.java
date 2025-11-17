@@ -3,7 +3,7 @@ package com.buildingenergy.substation_manager.web.controller;
 import com.buildingenergy.substation_manager.floor.model.Floor;
 import com.buildingenergy.substation_manager.floor.service.FloorService;
 import com.buildingenergy.substation_manager.formula.dto.CompanyFormulaResponse;
-import com.buildingenergy.substation_manager.formula.service.CompanyFormulaService;
+import com.buildingenergy.substation_manager.formula.service.FormulaService;
 import com.buildingenergy.substation_manager.reading.service.ReadingService;
 import com.buildingenergy.substation_manager.security.UserData;
 import com.buildingenergy.substation_manager.company.model.Company;
@@ -25,14 +25,14 @@ public class FloorController {
     private final UserService userService;
     private final CompanyService companyService;
     private final ReadingService readingService;
-    private final CompanyFormulaService companyFormulaService;
+    private final FormulaService formulaService;
     private final FloorService floorService;
 
-    public FloorController(UserService userService, CompanyService companyService, ReadingService readingService, CompanyFormulaService companyFormulaService, FloorService floorService) {
+    public FloorController(UserService userService, CompanyService companyService, ReadingService readingService, FormulaService formulaService, FloorService floorService) {
         this.userService = userService;
         this.companyService = companyService;
         this.readingService = readingService;
-        this.companyFormulaService = companyFormulaService;
+        this.formulaService = formulaService;
         this.floorService = floorService;
     }
 
@@ -48,7 +48,7 @@ public class FloorController {
 
         ReadingListWrapper wrapper = readingService.getWrapperForCompanies(companies);
 
-        CompanyFormulaResponse formula = companyFormulaService.getFormula(userData.getUserId());
+        CompanyFormulaResponse formula = formulaService.getCompanyFormula(userData.getUserId());
 
         boolean areSwapped = readingService.areSwapped(user, floor);
 
