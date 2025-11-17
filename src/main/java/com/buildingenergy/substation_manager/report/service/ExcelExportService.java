@@ -32,7 +32,7 @@ public class ExcelExportService {
             cellStyle.setFont(headerFont);
 
             Row header = sheet.createRow(rowIndex++);
-            String[] columns = {"Company", "Office", "Old Readings M1", "New Readings M1", "Difference M1", "Old Readings M2", "New Readings M2", "Difference M2", "Total Consumption", "Total Cost", "Saved On"};
+            String[] columns = {"Company", "Office", "Old kWh M1", "New kWh M1", "Diff kWh M1", "Old kWh M2", "New kWh M2", "Diff kWh M2", "Total kWh", "Total Cost", "Saved On"};
 
             CellStyle dateCellStyle = createHeader(workbook, cellStyle, header, columns);
 
@@ -81,7 +81,7 @@ public class ExcelExportService {
 
             Row header = sheet.createRow(rowIndex++);
 
-            String[] columns = {"Meter", "Outside Body", "Room", "Description", "% Energy", "Old Reading", "New Reading", "Difference Readings", "Total Cost", "Saved On"};
+            String[] columns = {"Meter", "Outside Body", "Room", "Description", "% Energy", "Old kWh", "New kWh", "Difference kWh", "Total Cost", "Saved On"};
 
             CellStyle dateCellStyle = createHeader(workbook, cellStyle, header, columns);
 

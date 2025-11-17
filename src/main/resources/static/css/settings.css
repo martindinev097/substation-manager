@@ -35,6 +35,10 @@
     background-color: #26a0a0;
 }
 
+.settings-form.profile {
+    margin-top: 3rem;
+}
+
 .email-field {
     display: flex;
     align-items: center;
@@ -71,4 +75,17 @@
     color: #2ea44f;
     font-size: 1em;
     margin-top: 5px;
+}
+
+.formula-sections {
+    display: flex;
+    justify-content: space-between;
+    gap: 10rem;
+    margin-top: 1.5rem;
+}
+
+.formula-box {
+    flex: 1;
+    background: #fff;
+    border-radius: 20px;
 }

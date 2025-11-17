@@ -19,6 +19,8 @@
 
             <p class="subtitle">Sign in to your account</p>
 
+            <p th:if="${loggedOut}" class="success-message" th:text="${loggedOut}">Logged out successfully</p>
+
             <p th:if="${registeredMessage}" class="success-message" th:text="${registeredMessage}"></p>
 
             <form th:action="@{/login}" th:method="POST" th:object="${loginRequest}">
