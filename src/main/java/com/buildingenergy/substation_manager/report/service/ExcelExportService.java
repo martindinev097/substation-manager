@@ -38,7 +38,7 @@ public class ExcelExportService {
 
             for (ReadingHistory r : historyList) {
                 Row row = sheet.createRow(rowIndex++);
-                row.createCell(0).setCellValue(r.getCompany().getName());
+                row.createCell(0).setCellValue(r.getCompanyNameSnapshot());
                 row.createCell(1).setCellValue(r.getOffice());
                 row.createCell(2).setCellValue(r.getOldReadingM1().stripTrailingZeros().toPlainString());
                 row.createCell(3).setCellValue(r.getNewReadingM1().stripTrailingZeros().toPlainString());

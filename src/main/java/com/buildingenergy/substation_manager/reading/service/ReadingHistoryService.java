@@ -27,7 +27,9 @@ public class ReadingHistoryService {
 
         List<ReadingHistory> readingHistory = readings.stream()
                 .map(r -> ReadingHistory.builder()
-                        .company(r.getCompany())
+                        .companyIdSnapshot(r.getCompany().getId())
+                        .userIdSnapshot(r.getCompany().getUser().getId())
+                        .companyNameSnapshot(r.getCompany().getName())
                         .office(r.getOffice())
                         .oldReadingM1(r.getOldReadingM1())
                         .newReadingM1(r.getNewReadingM1())
@@ -44,7 +46,7 @@ public class ReadingHistoryService {
     }
 
     public List<ReadingHistory> getAllByMonthAndUser(int month, User user) {
-        return readingHistoryRepository.findAllByCompany_UserOrderBySavedAtDesc(user)
+        return readingHistoryRepository.findAllByUserIdSnapshotOrderBySavedAtDesc(user.getId())
                 .stream()
                 .filter(r -> r.getNewReadingM1().compareTo(BigDecimal.ZERO) != 0 && r.getNewReadingM2().compareTo(BigDecimal.ZERO) != 0)
                 .filter(r -> r.getSavedAt().getMonthValue() == month)

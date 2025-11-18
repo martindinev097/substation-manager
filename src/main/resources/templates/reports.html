@@ -70,7 +70,7 @@
                     <tbody>
 
                     <tr th:each="reading : ${readingHistory}">
-                        <td th:text="${reading.getCompany().getName()}">TopRentACarBG</td>
+                        <td th:text="${reading.getCompanyNameSnapshot()}">TopRentACarBG</td>
                         <td th:text="${reading.getOffice()}">2</td>
                         <td th:text="${reading.oldReadingM1.stripTrailingZeros().toPlainString()}">12540</td>
                         <td th:text="${reading.newReadingM1.stripTrailingZeros().toPlainString()}">12980</td>

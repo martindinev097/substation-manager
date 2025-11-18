@@ -20,8 +20,9 @@ public class ReadingHistory {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne(optional = false)
-    private Company company;
+    private UUID companyIdSnapshot;
+    private UUID userIdSnapshot;
+    private String companyNameSnapshot;
 
     private String office;
 
