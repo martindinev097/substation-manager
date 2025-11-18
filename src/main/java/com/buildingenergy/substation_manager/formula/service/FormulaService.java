@@ -1,12 +1,10 @@
 package com.buildingenergy.substation_manager.formula.service;
 
-import com.buildingenergy.substation_manager.config.FormulaConfiguration;
 import com.buildingenergy.substation_manager.formula.client.FormulaClient;
 import com.buildingenergy.substation_manager.formula.dto.CompanyFormulaRequest;
 import com.buildingenergy.substation_manager.formula.dto.CompanyFormulaResponse;
 import com.buildingenergy.substation_manager.formula.dto.MeterFormulaRequest;
 import com.buildingenergy.substation_manager.formula.dto.MeterFormulaResponse;
-import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
