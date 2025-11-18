@@ -25,13 +25,13 @@ public class Company {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private LocalDateTime createdOn;
 
     @ManyToOne(optional = false)
     private User user;
 
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy = "company", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Reading> readings;
 
     @ManyToOne(optional = false)

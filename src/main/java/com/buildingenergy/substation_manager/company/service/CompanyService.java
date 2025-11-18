@@ -1,16 +1,24 @@
 package com.buildingenergy.substation_manager.company.service;
 
 import com.buildingenergy.substation_manager.company.model.Company;
+import com.buildingenergy.substation_manager.exception.CompanyNotFound;
 import com.buildingenergy.substation_manager.floor.model.Floor;
+import com.buildingenergy.substation_manager.reading.model.Reading;
+import com.buildingenergy.substation_manager.reading.model.ReadingHistory;
+import com.buildingenergy.substation_manager.reading.service.ReadingHistoryService;
 import com.buildingenergy.substation_manager.reading.service.ReadingService;
 import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.company.repository.CompanyRepository;
 import com.buildingenergy.substation_manager.floor.service.FloorService;
+import com.buildingenergy.substation_manager.web.dto.CompanyView;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CompanyService {
@@ -18,7 +26,6 @@ public class CompanyService {
     private final FloorService floorService;
     private final CompanyRepository companyRepository;
     private final ReadingService readingService;
-
 
     public CompanyService(FloorService floorService, CompanyRepository companyRepository, ReadingService readingService) {
         this.floorService = floorService;
@@ -58,5 +65,39 @@ public class CompanyService {
 
     public List<Company> findAllByUser(User user) {
         return companyRepository.findAllByUser(user);
+    }
+
+    public List<CompanyView> getAllWithTotalConsumption(User user) {
+        List<Company> companies = findAllByUser(user);
+
+        List<CompanyView> companyViewList = new ArrayList<>();
+
+        for (Company company : companies) {
+
+            double totalConsumption = company.getReadings().stream()
+                    .mapToDouble(r -> r.getNewReadingM1()
+                            .subtract(r.getOldReadingM1())
+                            .add(r.getNewReadingM2().subtract(r.getOldReadingM2()))
+                            .doubleValue()
+                    )
+                    .sum();
+
+            CompanyView companyView = CompanyView.builder()
+                    .id(company.getId())
+                    .name(company.getName())
+                    .floorNumber(company.getFloor().getFloorNumber())
+                    .totalConsumption(totalConsumption)
+                    .build();
+
+            companyViewList.add(companyView);
+        }
+
+        return companyViewList;
+    }
+
+    public void deleteCompany(UUID id, UUID userId) {
+        Company company = companyRepository.findByIdAndUser_Id(id, userId).orElseThrow(() -> new CompanyNotFound("Company with id: [%s] for user with id: [%s] was not found.".formatted(id, userId)));
+
+        companyRepository.delete(company);
     }
 }

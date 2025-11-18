@@ -1,0 +1,87 @@
+.delete-btn {
+    background-color: #d9534f;
+    color: white;
+    padding: 0.55rem 0.9rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: background-color 0.25s ease, transform 0.15s ease;
+}
+
+.delete-btn:hover {
+    background-color: #c9302c;
+    transform: translateY(-2px);
+}
+
+.placeholder {
+    padding: 2.5rem 1rem;
+    text-align: center;
+    color: #999;
+    font-size: 1rem;
+}
+
+.placeholder i {
+    font-size: 1.8rem;
+    color: #bbb;
+    margin-bottom: 0.5rem;
+}
+
+.styled-table td i {
+    margin-right: 0.3rem;
+}
+
+.styled-table td:last-child {
+    text-align: left;
+}
+
+.report-section h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #26a0a0;
+    margin-bottom: 0.4rem;
+    font-size: 1.6rem;
+}
+
+.alert {
+    padding: 0.9rem 1.2rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.alert-success {
+    background-color: #e8f8ef;
+    border-left: 4px solid #28a745;
+    color: #1e7e34;
+}
+
+.alert-error {
+    background-color: #fdecea;
+    border-left: 4px solid #d9534f;
+    color: #c9302c;
+}
+
+.placeholder-center {
+    text-align: center;
+    padding: 2rem 0;
+    color: #999;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.placeholder-center i {
+    font-size: 2rem;
+    color: #bbb;
+}
