@@ -39,7 +39,7 @@ public class ReadingController {
 
     @PostMapping("/save")
     public String saveAllReadings(@RequestParam int floorNumber, @ModelAttribute("readingWrapper") ReadingListWrapper wrapper, @AuthenticationPrincipal UserData userData) {
-        readingService.updateAllReadings(wrapper);
+        readingService.updateAllReadings(wrapper, userData.getUserId());
 
         User user = userService.getById(userData.getUserId());
         List<Company> companies = companyService.findAllByFloorAndUser(floorNumber, user);

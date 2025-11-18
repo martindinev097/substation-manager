@@ -9,11 +9,13 @@ import com.buildingenergy.substation_manager.reading.repository.ReadingRepositor
 import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.web.dto.ReadingListWrapper;
 import com.buildingenergy.substation_manager.web.dto.ReadingRequest;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ReadingService {
@@ -121,7 +123,8 @@ public class ReadingService {
         return new ReadingListWrapper(readingRequests);
     }
 
-    public void updateAllReadings(ReadingListWrapper wrapper) {
+    @CacheEvict(value = "companyView", key = "#userId")
+    public void updateAllReadings(ReadingListWrapper wrapper, UUID userId) {
         wrapper.getReadings().forEach(this::updateReadingForCompany);
     }
 

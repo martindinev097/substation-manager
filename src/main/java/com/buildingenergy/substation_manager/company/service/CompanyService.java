@@ -11,6 +11,8 @@ import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.company.repository.CompanyRepository;
 import com.buildingenergy.substation_manager.floor.service.FloorService;
 import com.buildingenergy.substation_manager.web.dto.CompanyView;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +36,7 @@ public class CompanyService {
     }
 
     @Transactional
+    @CacheEvict(value = "companyView", key = "#user.id")
     public void addCompanyForFloor(String companyName, int floorNumber, User user) {
         Floor floor = floorService.findByFloorNumberAndUser(floorNumber, user);
 
@@ -67,6 +70,7 @@ public class CompanyService {
         return companyRepository.findAllByUser(user);
     }
 
+    @Cacheable(value = "companyViews", key = "#user.id")
     public List<CompanyView> getAllWithTotalConsumption(User user) {
         List<Company> companies = findAllByUser(user);
 
@@ -95,6 +99,7 @@ public class CompanyService {
         return companyViewList;
     }
 
+    @CacheEvict(value = "companyViews", key = "#userId")
     public void deleteCompany(UUID id, UUID userId) {
         Company company = companyRepository.findByIdAndUser_Id(id, userId).orElseThrow(() -> new CompanyNotFound("Company with id: [%s] for user with id: [%s] was not found.".formatted(id, userId)));
 
