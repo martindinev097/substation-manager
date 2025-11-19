@@ -32,7 +32,7 @@ public class CompanyService {
     }
 
     @Transactional
-    @CacheEvict(value = "companyView", key = "#user.id")
+    @CacheEvict(value = "companyViews", key = "#user.id")
     public void addCompanyForFloor(String companyName, int floorNumber, User user) {
         Floor floor = floorService.findByFloorNumberAndUser(floorNumber, user);
 
@@ -95,10 +95,20 @@ public class CompanyService {
         return companyViewList;
     }
 
+    @Transactional
     @CacheEvict(value = "companyViews", key = "#userId")
     public void deleteCompany(UUID id, UUID userId) {
         Company company = companyRepository.findByIdAndUser_Id(id, userId).orElseThrow(() -> new CompanyNotFound("Company with id: [%s] for user with id: [%s] was not found.".formatted(id, userId)));
 
+        int floorNumber = company.getFloor().getFloorNumber();
+        User user = company.getUser();
+
         companyRepository.delete(company);
+
+        List<Company> companies = findAllByFloorAndUser(floorNumber, user);
+
+        if (companies.isEmpty()) {
+            floorService.deleteFloorForUser(floorNumber, user);
+        }
     }
 }

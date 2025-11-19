@@ -98,7 +98,6 @@ public class ReadingService {
     }
 
     public List<ReadingRequest> getReadingRequests(List<Company> companies) {
-
         return companies.stream()
                 .map(c -> {
                     Reading reading = findByCompany(c);
@@ -126,7 +125,7 @@ public class ReadingService {
         return new ReadingListWrapper(readingRequests);
     }
 
-    @CacheEvict(value = "companyView", key = "#userId")
+    @CacheEvict(value = "companyViews", key = "#userId")
     public void updateAllReadings(ReadingListWrapper wrapper, UUID userId) {
         wrapper.getReadings().forEach(this::updateReadingForCompany);
     }
