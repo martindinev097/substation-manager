@@ -15,4 +15,6 @@ public interface FloorRepository extends JpaRepository<Floor, UUID> {
     Optional<Floor> findByFloorNumberAndUser(int floorNumber, User user);
 
     List<Floor> findAllByUser(User user);
+
+    void deleteByFloorNumberAndUser(int floorNumber, User user);
 }

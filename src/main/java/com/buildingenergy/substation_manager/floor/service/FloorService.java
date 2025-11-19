@@ -5,6 +5,7 @@ import com.buildingenergy.substation_manager.floor.model.Floor;
 import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.floor.repository.FloorRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,5 +37,10 @@ public class FloorService {
 
     public List<Floor> findAllByUser(User user) {
         return floorRepository.findAllByUser(user);
+    }
+
+    @Transactional
+    public void deleteFloorForUser(int floorNumber, User user) {
+        floorRepository.deleteByFloorNumberAndUser(floorNumber, user);
     }
 }

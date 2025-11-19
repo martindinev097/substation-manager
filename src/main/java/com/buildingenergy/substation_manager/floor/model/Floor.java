@@ -23,13 +23,7 @@ public class Floor {
 
     private int floorNumber;
 
-    @OneToMany(mappedBy = "floor")
-    private List<Company> companies;
-
     @ManyToOne(optional = false)
     private User user;
-
-    @OneToMany(mappedBy = "floor")
-    private List<Meter> meters;
 
 }
