@@ -1,14 +1,13 @@
 package com.buildingenergy.substation_manager.formula.dto;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Builder
 @Data
-@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CompanyFormulaResponse {
 
     private BigDecimal pricePerKwh;

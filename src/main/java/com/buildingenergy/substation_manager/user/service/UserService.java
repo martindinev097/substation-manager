@@ -132,9 +132,9 @@ public class UserService implements UserDetailsService {
             }
         } else if (user.getRole() == UserRole.USER) {
             user.setRole(UserRole.ADMIN);
-        }
 
-        userRepository.save(user);
+            userRepository.save(user);
+        }
     }
 
     public List<User> findAllAdmins() {

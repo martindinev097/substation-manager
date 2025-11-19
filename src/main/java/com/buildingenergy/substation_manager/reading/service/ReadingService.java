@@ -49,11 +49,14 @@ public class ReadingService {
     public void updateReadingForCompany(ReadingRequest readingRequest) {
         Company company = companyRepository.findById(readingRequest.getCompanyId()).orElseThrow(() -> new CompanyNotFound("Company with this id [%s] not found.".formatted(readingRequest.getCompanyId())));
 
-        Reading existingReading = readingRepository.findByCompany(company)
-                .orElseGet(() -> Reading.builder()
-                        .company(company)
-                        .createdOn(LocalDateTime.now())
-                        .build());
+        Reading existingReading = findByCompany(company);
+
+        if (existingReading == null) {
+            existingReading = Reading.builder()
+                    .company(company)
+                    .createdOn(LocalDateTime.now())
+                    .build();
+        }
 
         existingReading.setOffice(readingRequest.getOffice() == null ? "" : readingRequest.getOffice());
         existingReading.setOldReadingM1(readingRequest.getOldReadingM1());

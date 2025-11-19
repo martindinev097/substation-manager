@@ -3,9 +3,6 @@ package com.buildingenergy.substation_manager.company.service;
 import com.buildingenergy.substation_manager.company.model.Company;
 import com.buildingenergy.substation_manager.exception.CompanyNotFound;
 import com.buildingenergy.substation_manager.floor.model.Floor;
-import com.buildingenergy.substation_manager.reading.model.Reading;
-import com.buildingenergy.substation_manager.reading.model.ReadingHistory;
-import com.buildingenergy.substation_manager.reading.service.ReadingHistoryService;
 import com.buildingenergy.substation_manager.reading.service.ReadingService;
 import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.company.repository.CompanyRepository;
@@ -16,7 +13,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
