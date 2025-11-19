@@ -32,7 +32,7 @@ public class UserService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void register(RegisterRequest registerRequest) {
+    public User register(RegisterRequest registerRequest) {
 
         Optional<User> optionalUser = userRepository.findUserByUsername(registerRequest.getUsername());
 
@@ -64,7 +64,7 @@ public class UserService implements UserDetailsService {
 
         log.info("User %s has registered successfully".formatted(user.getUsername()));
 
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     public User getById(UUID id) {
@@ -139,5 +139,13 @@ public class UserService implements UserDetailsService {
 
     public List<User> findAllAdmins() {
         return findAll().stream().filter(user -> user.getRole() == UserRole.ADMIN).toList();
+    }
+
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
+    public List<User> getAll() {
+        return userRepository.findAll();
     }
 }
