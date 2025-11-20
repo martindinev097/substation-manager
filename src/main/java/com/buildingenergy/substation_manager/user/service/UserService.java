@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -90,15 +91,24 @@ public class UserService implements UserDetailsService {
     }
 
     public List<User> findAll() {
-        return userRepository.findAll();
+        return userRepository.findAll().stream()
+                .sorted(Comparator.comparing((User u) -> u.getRole() == UserRole.ADMIN ? 0 : 1))
+                .toList();
     }
 
-    public void changeStatus(User user) {
+    public void changeStatus(User user, User admin) {
         if (user.getRole() == UserRole.ADMIN) {
             throw new CannotChangeAdminStatus("Admin status can't be changed");
         }
 
         user.setActive(!user.isActive());
+
+        log.info("Admin [%s] changed account status of user [%s] from [%s] to [%s].".formatted(
+                admin.getUsername(),
+                user.getUsername(),
+                user.isActive() ? "Inactive" : "Active",
+                user.isActive() ? "Active" : "Inactive"
+        ));
 
         userRepository.save(user);
     }
@@ -136,6 +146,13 @@ public class UserService implements UserDetailsService {
 
             userRepository.save(user);
         }
+
+        log.info("Admin [%s] changed role of user [%s] from [%s] to [%s]".formatted(
+           currentUser.getUsername(),
+           user.getUsername(),
+           user.getRole() == UserRole.USER ? UserRole.ADMIN.getDisplayName() : UserRole.USER.getDisplayName(),
+           user.getRole() == UserRole.USER ? UserRole.USER.getDisplayName() : UserRole.ADMIN.getDisplayName()
+        ));
     }
 
     public List<User> findAllAdmins() {

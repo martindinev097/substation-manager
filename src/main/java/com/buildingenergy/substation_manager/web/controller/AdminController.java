@@ -39,10 +39,11 @@ public class AdminController {
     }
 
     @PatchMapping("/deactivate/{id}")
-    public String deactivateUser(@PathVariable UUID id) {
+    public String deactivateUser(@PathVariable UUID id, @AuthenticationPrincipal UserData userData) {
         User user = userService.getById(id);
+        User admin = userService.getById(userData.getUserId());
 
-        userService.changeStatus(user);
+        userService.changeStatus(user, admin);
 
         return "redirect:/admin-panel";
     }
