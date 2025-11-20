@@ -24,6 +24,8 @@
             <h2><i class="fa-solid fa-clock-rotate-left"></i> Company Reading History</h2>
             <p class="section-subtitle">View previous readings saved automatically before swaps.</p>
 
+            <p th:if="${emptyMonthMessage}" th:text="${emptyMonthMessage}" class="error-message"></p>
+
             <div class="month-filter">
                 <div class="months">
                     <form th:action="@{/reports}" method="get">
@@ -45,6 +47,8 @@
                 </form>
             </div>
 
+            <p th:if="${deletedMessage}" th:text="${deletedMessage}" class="alert alert-success"></p>
+
             <div th:if="${readingHistory.isEmpty()}" class="placeholder">
                 <i class="fa-regular fa-folder-open"></i>
                 <span>No history for this month yet.</span>
@@ -65,6 +69,7 @@
                         <th>Total kWh</th>
                         <th>Total Cost</th>
                         <th>Saved On</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -81,6 +86,12 @@
                         <td th:text="${reading.totalConsumption.stripTrailingZeros().toPlainString()}">12.69</td>
                         <td th:text="${reading.totalCost}">5</td>
                         <td th:text="${#temporals.format(reading.savedAt, 'dd-MM-yyyy HH:mm')}">2025-11-03 17:48</td>
+                        <td>
+                            <form th:action="@{'/reports/company/delete/' + ${reading.getCompanyIdSnapshot()} + '/' + ${selectedMonth}}" method="post" onsubmit="return confirm('Are you sure you want to delete this company?');">
+                                <input type="hidden" name="_method" value="delete">
+                                <button class="delete-btn"><i class="fa-solid fa-x"></i></button>
+                            </form>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -90,6 +101,8 @@
         <section class="report-section" id="meter-history-section">
             <h2><i class="fa-solid fa-bolt"></i> Substation Meter Readings</h2>
             <p class="section-subtitle">View detailed history for each substation meter.</p>
+
+            <p th:if="${emptyMeterHistory}" th:text="${emptyMeterHistory}" class="error-message"></p>
 
             <div class="month-filter">
                 <div class="months">
@@ -112,6 +125,8 @@
                 </form>
             </div>
 
+            <p th:if="${deletedMeterMessage}" th:text="${deletedMeterMessage}" class="alert alert-success"></p>
+
             <div th:if="${meterHistory.isEmpty()}" class="placeholder">
                 <i class="fa-regular fa-folder-open"></i>
                 <span>No history for this month yet.</span>
@@ -131,12 +146,13 @@
                         <th>Diff kWh</th>
                         <th>Total Cost</th>
                         <th>Saved On</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
 
                     <tr th:each="meter : ${meterHistory}">
-                        <td th:text="${meter.meterName}">Meter 19</td>
+                        <td th:text="${meter.meterNameSnapshot}">Meter 19</td>
                         <td th:text="${meter.outsideBody}">12540</td>
                         <td th:text="${meter.room}">12980</td>
                         <td th:text="${meter.description}">220</td>
@@ -146,6 +162,12 @@
                         <td th:text="${meter.differenceReadings.stripTrailingZeros().toPlainString()}">12.69</td>
                         <td th:text="${meter.totalCost}">5</td>
                         <td th:text="${#temporals.format(meter.savedAt, 'dd-MM-yyyy HH:mm')}">2025-11-03 17:48</td>
+                        <td>
+                            <form th:action="@{'/reports/meter/delete/' + ${meter.meterIdSnapshot} + '/' + ${selectedMonth}}" method="post" onsubmit="return confirm('Are you sure you want to delete this meter?');">
+                                <input type="hidden" name="_method" value="delete">
+                                <button class="delete-btn"><i class="fa-solid fa-x"></i></button>
+                            </form>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
