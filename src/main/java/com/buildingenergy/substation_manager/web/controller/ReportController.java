@@ -11,15 +11,15 @@ import com.buildingenergy.substation_manager.user.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/reports")
@@ -38,20 +38,19 @@ public class ReportController {
     }
 
     @GetMapping
-    public ModelAndView getReportsPage(@RequestParam Optional<Integer> month, @AuthenticationPrincipal UserData userData) {
-        ModelAndView modelAndView = new ModelAndView();
-
+    public String getReportsPage(@RequestParam Optional<Integer> month,
+                                       @AuthenticationPrincipal UserData userData,
+                                       Model model) {
         User user = userService.getById(userData.getUserId());
 
         int selectedMonth = month.orElse(LocalDate.now().getMonthValue());
 
-        modelAndView.setViewName("reports");
-        modelAndView.addObject("currentPage", "reports");
-        modelAndView.addObject("readingHistory", readingHistoryService.getAllByMonthAndUser(selectedMonth, user));
-        modelAndView.addObject("selectedMonth", selectedMonth);
-        modelAndView.addObject("meterHistory", meterHistoryService.getAllByMonthAndUser(selectedMonth, user));
+        model.addAttribute("currentPage", "reports");
+        model.addAttribute("readingHistory", readingHistoryService.getAllByMonthAndUser(selectedMonth, user));
+        model.addAttribute("selectedMonth", selectedMonth);
+        model.addAttribute("meterHistory", meterHistoryService.getAllByMonthAndUser(selectedMonth, user));
 
-        return modelAndView;
+        return "reports";
     }
 
     @GetMapping("/company/export")
@@ -60,7 +59,7 @@ public class ReportController {
 
         List<ReadingHistory> historyList = readingHistoryService.getAllByMonthAndUser(month, user);
 
-        excelExportService.exportReadingHistory(historyList, response);
+        excelExportService.exportReadingHistory(historyList, response, month);
     }
 
     @GetMapping("/meters/export")
@@ -69,7 +68,25 @@ public class ReportController {
 
         List<MeterHistory> historyList = meterHistoryService.getAllByMonthAndUser(month, user);
 
-        excelExportService.exportMeterHistory(historyList, response);
+        excelExportService.exportMeterHistory(historyList, response, month);
+    }
+
+    @DeleteMapping("/company/delete/{companyId}/{month}")
+    public String deleteCompany(@PathVariable UUID companyId, @PathVariable int month, RedirectAttributes redirectAttributes) {
+        readingHistoryService.deleteCompanyByIdAndMonth(companyId, month);
+
+        redirectAttributes.addFlashAttribute("deletedMessage", "Successfully deleted company.");
+
+        return "redirect:/reports?month=" + month;
+    }
+
+    @DeleteMapping("/meter/delete/{meterId}/{month}")
+    public String deleteMeter(@PathVariable UUID meterId, @PathVariable int month, RedirectAttributes redirectAttributes) {
+        meterHistoryService.deleteMeterByIdAndMonth(meterId, month);
+
+        redirectAttributes.addFlashAttribute("deletedMeterMessage", "Successfully deleted meter.");
+
+        return "redirect:/reports?month=" + month;
     }
 
 }
