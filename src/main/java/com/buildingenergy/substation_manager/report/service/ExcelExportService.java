@@ -1,5 +1,7 @@
 package com.buildingenergy.substation_manager.report.service;
 
+import com.buildingenergy.substation_manager.exception.CannotExportEmptyCompanyHistory;
+import com.buildingenergy.substation_manager.exception.CannotExportEmptyMetersHistory;
 import com.buildingenergy.substation_manager.meter.model.MeterHistory;
 import com.buildingenergy.substation_manager.reading.model.ReadingHistory;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,11 +15,15 @@ import java.util.List;
 @Service
 public class ExcelExportService {
 
-    public void exportReadingHistory(List<ReadingHistory> historyList, HttpServletResponse response) throws IOException {
-        String month = historyList.get(0).getSavedAt().getMonth().toString();
+    public void exportReadingHistory(List<ReadingHistory> historyList, HttpServletResponse response, int month) throws IOException {
+        if (historyList == null || historyList.isEmpty()) {
+            throw new CannotExportEmptyCompanyHistory("Cannot export empty history.", month);
+        }
+
+        String monthWord = historyList.get(0).getSavedAt().getMonth().toString();
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        String fileName = "company_readings_" + month + ".xlsx";
+        String fileName = "company_readings_" + monthWord + ".xlsx";
         response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 
         try (Workbook workbook = new XSSFWorkbook()) {
@@ -60,11 +66,15 @@ public class ExcelExportService {
         }
     }
 
-    public void exportMeterHistory(List<MeterHistory> historyList, HttpServletResponse response) throws IOException {
-        String month = historyList.get(0).getSavedAt().getMonth().toString();
+    public void exportMeterHistory(List<MeterHistory> historyList, HttpServletResponse response, int month) throws IOException {
+        if (historyList == null || historyList.isEmpty()) {
+            throw new CannotExportEmptyMetersHistory("Cannot export empty history.", month);
+        }
+
+        String monthWord = historyList.get(0).getSavedAt().getMonth().toString();
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        String fileName = "meter_readings_" + month + ".xlsx";
+        String fileName = "meter_readings_" + monthWord + ".xlsx";
         response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 
         try (Workbook workbook = new XSSFWorkbook()) {
@@ -87,7 +97,7 @@ public class ExcelExportService {
 
             for (MeterHistory r : historyList) {
                 Row row = sheet.createRow(rowIndex++);
-                row.createCell(0).setCellValue(r.getMeterName());
+                row.createCell(0).setCellValue(r.getMeterNameSnapshot());
                 row.createCell(1).setCellValue(r.getOutsideBody());
                 row.createCell(2).setCellValue(r.getRoom());
                 row.createCell(3).setCellValue(r.getDescription());
