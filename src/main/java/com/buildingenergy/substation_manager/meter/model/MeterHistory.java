@@ -1,6 +1,5 @@
 package com.buildingenergy.substation_manager.meter.model;
 
-import com.buildingenergy.substation_manager.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,14 +19,11 @@ public class MeterHistory {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne(optional = false)
-    private Meter meter;
+    private UUID meterIdSnapshot;
 
-    @ManyToOne(optional = false)
-    private User user;
+    private UUID userIdSnapshot;
 
-    @Column(nullable = false)
-    private String meterName;
+    private String meterNameSnapshot;
 
     @Column(nullable = false)
     private String outsideBody;
