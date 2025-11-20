@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.warning-icon {
+    font-size: 40px;
+    color: #ffcc00;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px #ffcc00;
+}
+
+.error-box h1 {
+    font-size: 64px;
+    margin: 0;
+    color: #ffcc00;
+    text-shadow: 0 0 15px #ffcc00;
+}
+
+.home-btn {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 10px 25px;
+    background-color: #ffcc00;
+    border-radius: 8px;
+    color: #1e2533;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.home-btn:hover {
+    background-color: #e6b800;
+    box-shadow: 0 0 12px #ffcc00;
+}

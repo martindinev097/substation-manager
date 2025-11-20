@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <link rel="stylesheet" href="/css/error.css">
+    <link rel="stylesheet" href="/css/not-found.css">
+</head>
+<body>
+    <div class="overlay">
+        <div class="error-box">
+            <i class="fa-solid fa-triangle-exclamation warning-icon"></i>
+            <h1 th:text="${status}">Error</h1>
+            <h2 th:text="${error}">Unexpected Error</h2>
+
+            <p th:text="${message} ?: 'Something went wrong.'"></p>
+
+            <a th:href="@{/home}" class="home-btn">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>
