@@ -15,6 +15,6 @@ public interface ReadingHistoryRepository extends JpaRepository<ReadingHistory, 
     List<ReadingHistory> findAllByUserIdSnapshotOrderBySavedAtDesc(UUID userIdSnapshot);
 
     @Modifying
-    @Query("DELETE FROM reading_history r WHERE r.companyIdSnapshot = :companyIdSnapshot AND MONTH(r.savedAt) = :savedAtMonthValue")
-    void deleteByCompanyIdSnapshotAndMonthValue(UUID companyIdSnapshot, int savedAtMonthValue);
+    @Query("DELETE FROM reading_history r WHERE r.id = :readingId AND MONTH(r.savedAt) = :savedAtMonthValue")
+    void deleteByIdAndMonthValue(UUID readingId, int savedAtMonthValue);
 }

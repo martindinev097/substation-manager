@@ -15,6 +15,7 @@ public interface MeterHistoryRepository extends JpaRepository<MeterHistory, UUID
     List<MeterHistory> findAllByUserIdSnapshotOrderBySavedAtDesc(UUID userIdSnapshot);
 
     @Modifying
-    @Query("DELETE FROM meter_history m WHERE m.meterIdSnapshot = :meterIdSnapshot AND MONTH(m.savedAt) = :savedAtMonthValue")
-    void deleteByMeterIdSnapshotAndSavedAt_MonthValue(UUID meterIdSnapshot, int savedAtMonthValue);
+    @Query("DELETE FROM meter_history m WHERE m.id = :meterId AND MONTH(m.savedAt) = :savedAtMonthValue")
+    void deleteByIdAndSavedAt_MonthValue(UUID meterId, int savedAtMonthValue);
+
 }
