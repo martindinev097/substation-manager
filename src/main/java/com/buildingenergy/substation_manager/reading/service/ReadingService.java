@@ -9,6 +9,7 @@ import com.buildingenergy.substation_manager.reading.repository.ReadingRepositor
 import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.web.dto.ReadingListWrapper;
 import com.buildingenergy.substation_manager.web.dto.ReadingRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class ReadingService {
 
@@ -26,6 +28,86 @@ public class ReadingService {
     public ReadingService(ReadingRepository readingRepository, CompanyRepository companyRepository) {
         this.readingRepository = readingRepository;
         this.companyRepository = companyRepository;
+    }
+
+    @CacheEvict(value = "companyViews", key = "#userId")
+    public void updateAllReadings(ReadingListWrapper wrapper, UUID userId) {
+        if (wrapper.getReadings() == null || wrapper.getReadings().isEmpty()) {
+            log.warn("updateAllReadings() called but no companies were provided.");
+            return;
+        }
+
+        wrapper.getReadings().forEach(this::updateReadingForCompany);
+
+        log.info("User with id: [%s] updated [%d] company readings at: [%s]".formatted(
+                userId,
+                wrapper.getReadings().size(),
+                LocalDateTime.now()
+        ));
+    }
+
+    public void swapAllReadingsForFloor(Floor floor, User user) {
+        List<Company> companies = companyRepository.findAllByFloorAndUser(floor, user);
+
+        if (companies == null || companies.isEmpty()) {
+            log.warn("swapAllReadingsForFloor() called by user [%s] but no companies were found.".formatted(user.getUsername()));
+            return;
+        }
+
+        for (Company company : companies) {
+            readingRepository.findByCompany(company).ifPresent(reading -> {
+                reading.setOldReadingM1(reading.getNewReadingM1());
+                reading.setOldReadingM2(reading.getNewReadingM2());
+
+                reading.setNewReadingM1(BigDecimal.ZERO);
+                reading.setNewReadingM2(BigDecimal.ZERO);
+
+                reading.setDifferenceM1(BigDecimal.ZERO);
+                reading.setDifferenceM2(BigDecimal.ZERO);
+                reading.setTotalConsumption(BigDecimal.ZERO);
+                reading.setTotalCost(BigDecimal.ZERO);
+
+                readingRepository.save(reading);
+            });
+        }
+
+        log.info("User [%s] swapped [%d] company readings at: [%s]".formatted(
+                companies.get(0).getUser().getUsername(),
+                companies.size(),
+                LocalDateTime.now())
+        );
+    }
+
+    public List<ReadingRequest> getReadingRequests(List<Company> companies) {
+        return companies.stream()
+                .map(c -> {
+                    Reading reading = findByCompany(c);
+
+                    ReadingRequest dto = new ReadingRequest();
+                    dto.setCompanyId(c.getId());
+                    dto.setOffice(reading != null ? reading.getOffice() : "");
+                    dto.setOldReadingM1(reading != null ? reading.getOldReadingM1() : BigDecimal.ZERO);
+                    dto.setNewReadingM1(reading != null ? reading.getNewReadingM1() : BigDecimal.ZERO);
+                    dto.setDifferenceM1(reading != null ? reading.getDifferenceM1() : BigDecimal.ZERO);
+                    dto.setOldReadingM2(reading != null ? reading.getOldReadingM2() : BigDecimal.ZERO);
+                    dto.setNewReadingM2(reading != null ? reading.getNewReadingM2() : BigDecimal.ZERO);
+                    dto.setDifferenceM2(reading != null ? reading.getDifferenceM2() : BigDecimal.ZERO);
+                    dto.setTotalConsumption(reading != null ? reading.getTotalConsumption() : BigDecimal.ZERO);
+                    dto.setTotalCost(reading != null ? reading.getTotalCost() : BigDecimal.ZERO);
+
+                    return dto;
+                })
+                .toList();
+    }
+
+    public Reading findByCompany(Company c) {
+        return readingRepository.findByCompany(c).orElse(null);
+    }
+
+    public ReadingListWrapper getWrapperForCompanies(List<Company> companies) {
+        List<ReadingRequest> readingRequests = getReadingRequests(companies);
+
+        return new ReadingListWrapper(readingRequests);
     }
 
     public void createDefaultReading(Company company) {
@@ -70,64 +152,6 @@ public class ReadingService {
         existingReading.setCreatedOn(LocalDateTime.now());
 
         readingRepository.save(existingReading);
-    }
-
-    public Reading findByCompany(Company c) {
-        return readingRepository.findByCompany(c).orElse(null);
-    }
-
-    public void swapAllReadingsForFloor(Floor floor, User user) {
-        List<Company> companies = companyRepository.findAllByFloorAndUser(floor, user);
-
-        for (Company company : companies) {
-            readingRepository.findByCompany(company).ifPresent(reading -> {
-                reading.setOldReadingM1(reading.getNewReadingM1());
-                reading.setOldReadingM2(reading.getNewReadingM2());
-
-                reading.setNewReadingM1(BigDecimal.ZERO);
-                reading.setNewReadingM2(BigDecimal.ZERO);
-
-                reading.setDifferenceM1(BigDecimal.ZERO);
-                reading.setDifferenceM2(BigDecimal.ZERO);
-                reading.setTotalConsumption(BigDecimal.ZERO);
-                reading.setTotalCost(BigDecimal.ZERO);
-
-                readingRepository.save(reading);
-            });
-        }
-    }
-
-    public List<ReadingRequest> getReadingRequests(List<Company> companies) {
-        return companies.stream()
-                .map(c -> {
-                    Reading reading = findByCompany(c);
-
-                    ReadingRequest dto = new ReadingRequest();
-                    dto.setCompanyId(c.getId());
-                    dto.setOffice(reading != null ? reading.getOffice() : "");
-                    dto.setOldReadingM1(reading != null ? reading.getOldReadingM1() : BigDecimal.ZERO);
-                    dto.setNewReadingM1(reading != null ? reading.getNewReadingM1() : BigDecimal.ZERO);
-                    dto.setDifferenceM1(reading != null ? reading.getDifferenceM1() : BigDecimal.ZERO);
-                    dto.setOldReadingM2(reading != null ? reading.getOldReadingM2() : BigDecimal.ZERO);
-                    dto.setNewReadingM2(reading != null ? reading.getNewReadingM2() : BigDecimal.ZERO);
-                    dto.setDifferenceM2(reading != null ? reading.getDifferenceM2() : BigDecimal.ZERO);
-                    dto.setTotalConsumption(reading != null ? reading.getTotalConsumption() : BigDecimal.ZERO);
-                    dto.setTotalCost(reading != null ? reading.getTotalCost() : BigDecimal.ZERO);
-
-                    return dto;
-                })
-                .toList();
-    }
-
-    public ReadingListWrapper getWrapperForCompanies(List<Company> companies) {
-        List<ReadingRequest> readingRequests = getReadingRequests(companies);
-
-        return new ReadingListWrapper(readingRequests);
-    }
-
-    @CacheEvict(value = "companyViews", key = "#userId")
-    public void updateAllReadings(ReadingListWrapper wrapper, UUID userId) {
-        wrapper.getReadings().forEach(this::updateReadingForCompany);
     }
 
     public boolean areSwapped(User user, Floor floor) {

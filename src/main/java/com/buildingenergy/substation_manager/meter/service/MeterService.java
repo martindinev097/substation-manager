@@ -9,12 +9,14 @@ import com.buildingenergy.substation_manager.web.dto.MeterReadingRequest;
 import com.buildingenergy.substation_manager.web.dto.MeterReadingWrapper;
 import com.buildingenergy.substation_manager.web.dto.MeterRequest;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 public class MeterService {
 
@@ -49,9 +51,16 @@ public class MeterService {
                 .build();
 
         meterRepository.save(meter);
+
+        log.info("Added meter [%s] for user [%s]".formatted(meter.getMeterName(), user.getUsername()));
     }
 
     public void swapMeterReadings(List<Meter> meters) {
+        if (meters == null || meters.isEmpty()) {
+            log.warn("swapMeterReadings() called but no meters were provided.");
+            return;
+        }
+
         for (Meter meter : meters) {
             meter.setOldReadings(meter.getNewReadings());
             meter.setNewReadings(BigDecimal.ZERO);
@@ -60,10 +69,32 @@ public class MeterService {
 
             meterRepository.save(meter);
         }
+
+
+        log.info("User [%s] swapped [%d] meter readings at: [%s]".formatted(
+                meters.get(0).getUser().getUsername(),
+                meters.size(),
+                LocalDateTime.now())
+        );
     }
 
     public void updateMeterReadings(List<MeterReadingRequest> readings, User user, Floor floor) {
         List<Meter> meters = findAllByFloorAndUser(floor, user);
+
+        if (meters == null || meters.isEmpty()) {
+            log.warn("updateMeterReadings() called but no meters were found.");
+            return;
+        }
+
+        if (readings == null || readings.size() != meters.size()) {
+            log.error("Mismatch between meters [%d] and readings [%d]. Update aborted for user [%s].".formatted(
+                    meters.size(),
+                    readings == null ? 0 : readings.size(),
+                    user.getUsername()
+            ));
+
+            return;
+        }
 
         for (int i = 0; i <= meters.size() - 1; i++) {
             Meter meter = meters.get(i);
@@ -77,6 +108,8 @@ public class MeterService {
         }
 
         meterRepository.saveAll(meters);
+
+        log.info("User [%s] updated [%d] meters readings.".formatted(user.getUsername(), meters.size()));
     }
 
     public List<MeterReadingRequest> getMeterReadings(List<Meter> meters) {

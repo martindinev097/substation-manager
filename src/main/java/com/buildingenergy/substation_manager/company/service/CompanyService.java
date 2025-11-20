@@ -8,6 +8,7 @@ import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.company.repository.CompanyRepository;
 import com.buildingenergy.substation_manager.floor.service.FloorService;
 import com.buildingenergy.substation_manager.web.dto.CompanyView;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class CompanyService {
 
@@ -50,6 +52,8 @@ public class CompanyService {
         companyRepository.save(company);
 
         readingService.createDefaultReading(company);
+
+        log.info("Company [%s] added for user [%s]".formatted(company.getName(), user.getUsername()));
     }
 
     public List<Company> findAllByFloorAndUser(int floorNumber, User user) {
@@ -73,7 +77,6 @@ public class CompanyService {
         List<CompanyView> companyViewList = new ArrayList<>();
 
         for (Company company : companies) {
-
             double totalConsumption = company.getReadings().stream()
                     .mapToDouble(r -> r.getNewReadingM1()
                             .subtract(r.getOldReadingM1())
@@ -110,5 +113,7 @@ public class CompanyService {
         if (companies.isEmpty()) {
             floorService.deleteFloorForUser(floorNumber, user);
         }
+
+        log.warn("Company [%s] deleted for user: [%s] with id: [%s]".formatted(company.getName(), user.getUsername(), userId));
     }
 }
