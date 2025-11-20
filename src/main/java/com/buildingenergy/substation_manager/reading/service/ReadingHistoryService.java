@@ -6,10 +6,12 @@ import com.buildingenergy.substation_manager.reading.model.ReadingHistory;
 import com.buildingenergy.substation_manager.reading.repository.ReadingHistoryRepository;
 import com.buildingenergy.substation_manager.user.model.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class ReadingHistoryService {
@@ -51,5 +53,10 @@ public class ReadingHistoryService {
                 .filter(r -> r.getNewReadingM1().compareTo(BigDecimal.ZERO) != 0 && r.getNewReadingM2().compareTo(BigDecimal.ZERO) != 0)
                 .filter(r -> r.getSavedAt().getMonthValue() == month)
                 .toList();
+    }
+
+    @Transactional
+    public void deleteCompanyByIdAndMonth(UUID companyId, int month) {
+        readingHistoryRepository.deleteByCompanyIdSnapshotAndMonthValue(companyId, month);
     }
 }
