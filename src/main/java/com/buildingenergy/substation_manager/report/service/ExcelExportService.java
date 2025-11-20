@@ -70,7 +70,7 @@ public class ExcelExportService {
             workbook.write(response.getOutputStream());
         }
 
-        log.info("Exporting history for month [%s] for user with id: [%s]".formatted(monthWord, userId));
+        log.info("Exporting company history for month [%s] for user with id: [%s]".formatted(monthWord, userId));
     }
 
     public void exportMeterHistory(List<MeterHistory> historyList, HttpServletResponse response, int month) throws IOException {
@@ -126,7 +126,7 @@ public class ExcelExportService {
             workbook.write(response.getOutputStream());
         }
 
-        log.info("Exporting history for month [%s] for user with id: [%s]".formatted(monthWord, userId));
+        log.info("Exporting meter history for month [%s] for user with id: [%s]".formatted(monthWord, userId));
     }
 
     private CellStyle createHeader(Workbook workbook, CellStyle cellStyle, Row header, String[] columns) {
