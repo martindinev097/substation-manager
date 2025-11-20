@@ -101,6 +101,12 @@ public class GlobalControllerAdvice {
         return "redirect:/reports?month=" + ex.getMonth();
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ReadingNotFound.class)
+    public String handleReadingNotFound(ReadingNotFound ex) {
+        return "not-found";
+    }
+
     @ExceptionHandler(Exception.class)
     public String handleAllOtherExceptions() {
         return "internal-server-error";

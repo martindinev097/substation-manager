@@ -87,7 +87,7 @@
                         <td th:text="${reading.totalCost}">5</td>
                         <td th:text="${#temporals.format(reading.savedAt, 'dd-MM-yyyy HH:mm')}">2025-11-03 17:48</td>
                         <td>
-                            <form th:action="@{'/reports/company/delete/' + ${reading.getCompanyIdSnapshot()} + '/' + ${selectedMonth}}" method="post" onsubmit="return confirm('Are you sure you want to delete this company?');">
+                            <form th:action="@{'/reports/company/delete/' + ${reading.id} + '/' + ${selectedMonth}}" method="post" onsubmit="return confirm('Are you sure you want to delete this company?');">
                                 <input type="hidden" name="_method" value="delete">
                                 <button class="delete-btn"><i class="fa-solid fa-x"></i></button>
                             </form>
@@ -163,7 +163,7 @@
                         <td th:text="${meter.totalCost}">5</td>
                         <td th:text="${#temporals.format(meter.savedAt, 'dd-MM-yyyy HH:mm')}">2025-11-03 17:48</td>
                         <td>
-                            <form th:action="@{'/reports/meter/delete/' + ${meter.meterIdSnapshot} + '/' + ${selectedMonth}}" method="post" onsubmit="return confirm('Are you sure you want to delete this meter?');">
+                            <form th:action="@{'/reports/meter/delete/' + ${meter.id} + '/' + ${selectedMonth}}" method="post" onsubmit="return confirm('Are you sure you want to delete this meter?');">
                                 <input type="hidden" name="_method" value="delete">
                                 <button class="delete-btn"><i class="fa-solid fa-x"></i></button>
                             </form>

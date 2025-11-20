@@ -71,9 +71,9 @@ public class ReportController {
         excelExportService.exportMeterHistory(historyList, response, month);
     }
 
-    @DeleteMapping("/company/delete/{companyId}/{month}")
-    public String deleteCompany(@PathVariable UUID companyId, @PathVariable int month, RedirectAttributes redirectAttributes) {
-        readingHistoryService.deleteCompanyByIdAndMonth(companyId, month);
+    @DeleteMapping("/company/delete/{readingId}/{month}")
+    public String deleteCompany(@PathVariable UUID readingId, @PathVariable int month, RedirectAttributes redirectAttributes) {
+        readingHistoryService.deleteCompanyByIdAndMonth(readingId, month);
 
         redirectAttributes.addFlashAttribute("deletedMessage", "Successfully deleted company.");
 
