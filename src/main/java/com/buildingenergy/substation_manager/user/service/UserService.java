@@ -76,6 +76,7 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findUserByUsername(username).orElseThrow(() -> new UsernameDoesNotExist("Username [%s] does not exist.".formatted(username)));
 
         if (!user.isActive()) {
+            log.warn("Authentication rejected for inactive user: %s".formatted(username));
             throw new DisabledException("User account is inactive");
         }
 
