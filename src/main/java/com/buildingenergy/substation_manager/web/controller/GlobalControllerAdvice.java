@@ -87,6 +87,20 @@ public class GlobalControllerAdvice {
         return "forbidden";
     }
 
+    @ExceptionHandler(CannotExportEmptyCompanyHistory.class)
+    public String handleCannotExportEmptyCompanyHistory(CannotExportEmptyCompanyHistory ex, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("emptyMonthMessage", "Cannot export history for an empty month.");
+
+        return "redirect:/reports?month=" + ex.getMonth();
+    }
+
+    @ExceptionHandler(CannotExportEmptyMetersHistory.class)
+    public String handleCannotExportEmptyMetersHistory(CannotExportEmptyMetersHistory ex, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("emptyMeterHistory", "Cannot export history for an empty month.");
+
+        return "redirect:/reports?month=" + ex.getMonth();
+    }
+
     @ExceptionHandler(Exception.class)
     public String handleAllOtherExceptions() {
         return "internal-server-error";
