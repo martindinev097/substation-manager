@@ -38,11 +38,6 @@ public class IndexController {
         this.meterService = meterService;
     }
 
-    @GetMapping("/")
-    public String indexPage() {
-        return "redirect:/login";
-    }
-
     @GetMapping("/login")
     public ModelAndView getLoginPage(
             @RequestParam(name = "error", required = false) String errorMessage,
@@ -91,9 +86,10 @@ public class IndexController {
 
         User user = userService.getById(userData.getUserId());
         List<Company> companies = companyService.findTop5ByUser(user);
-        int companyCount = companyService.findAllByUser(user).size();
-        int floorCount = floorService.findAllByUser(user).size();
-        int meterCount = meterService.findAllByUser(user).size();
+
+        int companyCount = companyService.countByUser(user);
+        int floorCount = floorService.countByUser(user);
+        int meterCount = meterService.countByUser(user);
 
         modelAndView.setViewName("home");
         modelAndView.addObject("user", user);

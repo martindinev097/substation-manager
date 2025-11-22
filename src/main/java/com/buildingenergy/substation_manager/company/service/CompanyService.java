@@ -70,6 +70,10 @@ public class CompanyService {
         return companyRepository.findAllByUser(user);
     }
 
+    public int countByUser(User user) {
+        return companyRepository.countByUser(user);
+    }
+
     @Cacheable(value = "companyViews", key = "#user.id")
     public List<CompanyView> getAllWithTotalConsumption(User user) {
         List<Company> companies = findAllByUser(user);

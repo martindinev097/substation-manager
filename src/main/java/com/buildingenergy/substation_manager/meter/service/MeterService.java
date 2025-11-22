@@ -129,8 +129,8 @@ public class MeterService {
                 .toList();
     }
 
-    public List<Meter> findAllByUser(User user) {
-        return meterRepository.findAllByUser(user);
+    public int countByUser(User user) {
+        return meterRepository.countByUser(user);
     }
 
     public MeterReadingWrapper buildMeterReadingWrapper(List<Meter> meters) {

@@ -20,4 +20,6 @@ public interface CompanyRepository extends JpaRepository<Company, UUID> {
     List<Company> findAllByUser(User user);
 
     Optional<Company> findByIdAndUser_Id(UUID id, UUID userId);
+
+    int countByUser(User user);
 }

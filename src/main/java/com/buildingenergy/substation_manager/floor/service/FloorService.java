@@ -7,7 +7,6 @@ import com.buildingenergy.substation_manager.floor.repository.FloorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
 @Service
 public class FloorService {
@@ -35,8 +34,8 @@ public class FloorService {
         return floorRepository.save(floor);
     }
 
-    public List<Floor> findAllByUser(User user) {
-        return floorRepository.findAllByUser(user);
+    public int countByUser(User user) {
+        return floorRepository.countByUser(user);
     }
 
     @Transactional

@@ -14,5 +14,5 @@ public interface MeterRepository extends JpaRepository<Meter, UUID> {
 
     List<Meter> findAllByFloorAndUser(Floor floor, User user);
 
-    List<Meter> findAllByUser(User user);
+    int countByUser(User user);
 }
