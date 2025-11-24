@@ -70,7 +70,6 @@ public class SettingsController {
 
         userService.updateProfile(user, editProfileRequest);
 
-        modelAndView.addObject("user", user);
         redirectAttributes.addFlashAttribute("successMessage", "Successfully updated profile.");
 
         return new ModelAndView("redirect:/settings");
