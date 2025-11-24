@@ -76,7 +76,16 @@ public class SettingsController {
     }
 
     @PutMapping("/company/formula/update")
-    public String updateFormula(@AuthenticationPrincipal UserData userData, @ModelAttribute CompanyFormulaRequest request, RedirectAttributes redirectAttributes) {
+    public String updateCompanyFormula(@AuthenticationPrincipal UserData userData,
+                                @ModelAttribute @Valid CompanyFormulaRequest request,
+                                BindingResult bindingResult,
+                                RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("errorCompanyFormulaMessage", "Formula fields must not be blank or negative numbers.");
+            return "redirect:/settings?tab=settings";
+        }
+
         boolean success = formulaService.updateCompanyFormula(userData.getUserId(), request);
 
         redirectAttributes.addFlashAttribute("successUpdateMessage", success);
@@ -85,7 +94,16 @@ public class SettingsController {
     }
 
     @PutMapping("/meter/formula/update")
-    public String updateMeterFormula(@AuthenticationPrincipal UserData userData, @ModelAttribute MeterFormulaRequest request, RedirectAttributes redirectAttributes) {
+    public String updateMeterFormula(@AuthenticationPrincipal UserData userData,
+                                     @ModelAttribute @Valid MeterFormulaRequest request,
+                                     BindingResult bindingResult,
+                                     RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("errorMeterFormulaMessage", "Formula fields must not be blank or negative numbers.");
+            return "redirect:/settings?tab=settings";
+        }
+
         boolean success = formulaService.updateMeterFormula(userData.getUserId(), request);
 
         redirectAttributes.addFlashAttribute("meterSuccess", success);

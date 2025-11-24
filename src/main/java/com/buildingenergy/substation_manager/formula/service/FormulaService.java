@@ -5,6 +5,7 @@ import com.buildingenergy.substation_manager.formula.dto.CompanyFormulaRequest;
 import com.buildingenergy.substation_manager.formula.dto.CompanyFormulaResponse;
 import com.buildingenergy.substation_manager.formula.dto.MeterFormulaRequest;
 import com.buildingenergy.substation_manager.formula.dto.MeterFormulaResponse;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,7 @@ public class FormulaService {
         }
     }
 
-    public boolean updateCompanyFormula(UUID userId, CompanyFormulaRequest request) {
+    public boolean updateCompanyFormula(UUID userId, @Valid CompanyFormulaRequest request) {
         try {
             client.updateCompanyFormula(userId, request).getBody();
             return true;
@@ -48,7 +49,7 @@ public class FormulaService {
         }
     }
 
-    public boolean updateMeterFormula(UUID userId, MeterFormulaRequest request) {
+    public boolean updateMeterFormula(UUID userId, @Valid MeterFormulaRequest request) {
         try {
             client.updateMeterFormula(userId, request).getBody();
             return true;
