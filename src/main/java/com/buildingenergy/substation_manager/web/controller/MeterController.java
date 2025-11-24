@@ -74,13 +74,17 @@ public class MeterController {
 
         if (bindingResult.hasErrors()) {
             MeterReadingWrapper wrapper = meterService.buildMeterReadingWrapper(meters);
+            MeterFormulaResponse meterFormula = formulaService.getMeterFormula(user.getId());
 
             modelAndView.addObject("errorMessage", "Invalid data. Please check your input");
             modelAndView.addObject("floorNumber", floorNumber);
             modelAndView.addObject("currentPage", "meters");
             modelAndView.addObject("meters", meters);
             modelAndView.addObject("readingWrapper", wrapper);
+            modelAndView.addObject("meterFormula", meterFormula);
+
             modelAndView.setViewName("meters");
+
             return modelAndView;
         }
 
