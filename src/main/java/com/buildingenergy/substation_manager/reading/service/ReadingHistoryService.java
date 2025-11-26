@@ -68,6 +68,10 @@ public class ReadingHistoryService {
         log.info("Deleted reading history for company: [%s] for month [%s]".formatted(reading.getCompanyNameSnapshot(), Month.of(month)));
     }
 
+    public List<ReadingHistory> findAllByUserId(UUID id) {
+        return readingHistoryRepository.findAllByUserIdSnapshot(id);
+    }
+
     private ReadingHistory findById(UUID id) {
         return readingHistoryRepository.findById(id).orElseThrow(() -> new ReadingNotFound("Reading with id: [%s] not found.".formatted(id)));
     }

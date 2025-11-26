@@ -3,6 +3,8 @@ package com.buildingenergy.substation_manager.company.service;
 import com.buildingenergy.substation_manager.company.model.Company;
 import com.buildingenergy.substation_manager.exception.CompanyNotFound;
 import com.buildingenergy.substation_manager.floor.model.Floor;
+import com.buildingenergy.substation_manager.reading.model.ReadingHistory;
+import com.buildingenergy.substation_manager.reading.service.ReadingHistoryService;
 import com.buildingenergy.substation_manager.reading.service.ReadingService;
 import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.company.repository.CompanyRepository;
@@ -14,6 +16,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +29,13 @@ public class CompanyService {
     private final FloorService floorService;
     private final CompanyRepository companyRepository;
     private final ReadingService readingService;
+    private final ReadingHistoryService readingHistoryService;
 
-    public CompanyService(FloorService floorService, CompanyRepository companyRepository, ReadingService readingService) {
+    public CompanyService(FloorService floorService, CompanyRepository companyRepository, ReadingService readingService, ReadingHistoryService readingHistoryService) {
         this.floorService = floorService;
         this.companyRepository = companyRepository;
         this.readingService = readingService;
+        this.readingHistoryService = readingHistoryService;
     }
 
     @Transactional
@@ -77,23 +82,24 @@ public class CompanyService {
     @Cacheable(value = "companyViews", key = "#user.id")
     public List<CompanyView> getAllWithTotalConsumption(User user) {
         List<Company> companies = findAllByUser(user);
+        List<ReadingHistory> readings = readingHistoryService.findAllByUserId(user.getId());
 
         List<CompanyView> companyViewList = new ArrayList<>();
 
         for (Company company : companies) {
-            double totalConsumption = company.getReadings().stream()
-                    .mapToDouble(r -> r.getNewReadingM1()
-                            .subtract(r.getOldReadingM1())
-                            .add(r.getNewReadingM2().subtract(r.getOldReadingM2()))
-                            .doubleValue()
-                    )
-                    .sum();
+            BigDecimal total = BigDecimal.ZERO;
+
+            for (ReadingHistory r : readings) {
+                if (company.getId().equals(r.getCompanyIdSnapshot())) {
+                    total = total.add(r.getTotalConsumption());
+                }
+            }
 
             CompanyView companyView = CompanyView.builder()
                     .id(company.getId())
                     .name(company.getName())
                     .floorNumber(company.getFloor().getFloorNumber())
-                    .totalConsumption(totalConsumption)
+                    .totalConsumption(total.doubleValue())
                     .build();
 
             companyViewList.add(companyView);
