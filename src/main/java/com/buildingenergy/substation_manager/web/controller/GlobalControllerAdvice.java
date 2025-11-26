@@ -103,10 +103,11 @@ public class GlobalControllerAdvice {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ReadingNotFound.class)
-    public String handleReadingNotFound(ReadingNotFound ex) {
+    public String handleReadingNotFound() {
         return "not-found";
     }
 
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public String handleAllOtherExceptions() {
         return "internal-server-error";
