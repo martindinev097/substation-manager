@@ -6,6 +6,8 @@ import com.buildingenergy.substation_manager.formula.dto.CompanyFormulaResponse;
 import com.buildingenergy.substation_manager.formula.dto.MeterFormulaRequest;
 import com.buildingenergy.substation_manager.formula.dto.MeterFormulaResponse;
 import com.buildingenergy.substation_manager.formula.service.FormulaService;
+import com.buildingenergy.substation_manager.login.handler.LoginFailureHandler;
+import com.buildingenergy.substation_manager.login.handler.LoginSuccessHandler;
 import com.buildingenergy.substation_manager.security.UserData;
 import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.user.model.UserRole;
@@ -35,6 +37,10 @@ public class SettingsControllerApiTest {
     private UserService userService;
     @MockitoBean
     private FormulaService formulaService;
+    @MockitoBean
+    private LoginSuccessHandler loginSuccessHandler;
+    @MockitoBean
+    private LoginFailureHandler loginFailureHandler;
 
     @Autowired
     private MockMvc mockMvc;

@@ -5,6 +5,8 @@ import com.buildingenergy.substation_manager.floor.model.Floor;
 import com.buildingenergy.substation_manager.floor.service.FloorService;
 import com.buildingenergy.substation_manager.formula.dto.MeterFormulaResponse;
 import com.buildingenergy.substation_manager.formula.service.FormulaService;
+import com.buildingenergy.substation_manager.login.handler.LoginFailureHandler;
+import com.buildingenergy.substation_manager.login.handler.LoginSuccessHandler;
 import com.buildingenergy.substation_manager.meter.model.Meter;
 import com.buildingenergy.substation_manager.meter.service.MeterHistoryService;
 import com.buildingenergy.substation_manager.meter.service.MeterService;
@@ -47,6 +49,10 @@ public class MeterControllerApiTest {
     private MeterHistoryService meterHistoryService;
     @MockitoBean
     private FormulaService formulaService;
+    @MockitoBean
+    private LoginSuccessHandler loginSuccessHandler;
+    @MockitoBean
+    private LoginFailureHandler loginFailureHandler;
 
     @Autowired
     private MockMvc mockMvc;

@@ -2,6 +2,8 @@ package com.buildingenergy.substation_manager.web;
 
 import com.buildingenergy.substation_manager.exception.CannotExportEmptyCompanyHistory;
 import com.buildingenergy.substation_manager.exception.CannotExportEmptyMetersHistory;
+import com.buildingenergy.substation_manager.login.handler.LoginFailureHandler;
+import com.buildingenergy.substation_manager.login.handler.LoginSuccessHandler;
 import com.buildingenergy.substation_manager.meter.model.MeterHistory;
 import com.buildingenergy.substation_manager.meter.service.MeterHistoryService;
 import com.buildingenergy.substation_manager.reading.model.ReadingHistory;
@@ -42,6 +44,10 @@ public class ReportControllerApiTest {
     private ExcelExportService excelExportService;
     @MockitoBean
     private UserService userService;
+    @MockitoBean
+    private LoginSuccessHandler loginSuccessHandler;
+    @MockitoBean
+    private LoginFailureHandler loginFailureHandler;
 
     @Autowired
     private MockMvc mockMvc;

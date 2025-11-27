@@ -2,6 +2,8 @@ package com.buildingenergy.substation_manager.web;
 
 import com.buildingenergy.substation_manager.company.service.CompanyService;
 import com.buildingenergy.substation_manager.exception.CompanyNotFound;
+import com.buildingenergy.substation_manager.login.handler.LoginFailureHandler;
+import com.buildingenergy.substation_manager.login.handler.LoginSuccessHandler;
 import com.buildingenergy.substation_manager.security.UserData;
 import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.user.model.UserRole;
@@ -33,6 +35,10 @@ public class OwnerControllerApiTest {
     private CompanyService companyService;
     @MockitoBean
     private UserService userService;
+    @MockitoBean
+    private LoginSuccessHandler loginSuccessHandler;
+    @MockitoBean
+    private LoginFailureHandler loginFailureHandler;
 
     @Autowired
     private MockMvc mockMvc;

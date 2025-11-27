@@ -3,6 +3,8 @@ package com.buildingenergy.substation_manager.web;
 import com.buildingenergy.substation_manager.company.service.CompanyService;
 import com.buildingenergy.substation_manager.floor.model.Floor;
 import com.buildingenergy.substation_manager.floor.service.FloorService;
+import com.buildingenergy.substation_manager.login.handler.LoginFailureHandler;
+import com.buildingenergy.substation_manager.login.handler.LoginSuccessHandler;
 import com.buildingenergy.substation_manager.reading.service.ReadingHistoryService;
 import com.buildingenergy.substation_manager.reading.service.ReadingService;
 import com.buildingenergy.substation_manager.security.UserData;
@@ -43,6 +45,10 @@ public class ReadingControllerApiTest {
     private CompanyService companyService;
     @MockitoBean
     private ReadingHistoryService readingHistoryService;
+    @MockitoBean
+    private LoginSuccessHandler loginSuccessHandler;
+    @MockitoBean
+    private LoginFailureHandler loginFailureHandler;
 
     @Autowired
     private MockMvc mockMvc;

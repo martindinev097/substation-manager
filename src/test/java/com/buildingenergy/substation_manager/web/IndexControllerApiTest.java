@@ -5,6 +5,8 @@ import com.buildingenergy.substation_manager.company.service.CompanyService;
 import com.buildingenergy.substation_manager.exception.EmailAlreadyExists;
 import com.buildingenergy.substation_manager.floor.model.Floor;
 import com.buildingenergy.substation_manager.floor.service.FloorService;
+import com.buildingenergy.substation_manager.login.handler.LoginFailureHandler;
+import com.buildingenergy.substation_manager.login.handler.LoginSuccessHandler;
 import com.buildingenergy.substation_manager.meter.service.MeterService;
 import com.buildingenergy.substation_manager.reading.model.Reading;
 import com.buildingenergy.substation_manager.security.UserData;
@@ -46,6 +48,10 @@ public class IndexControllerApiTest {
     private FloorService floorService;
     @MockitoBean
     private MeterService meterService;
+    @MockitoBean
+    private LoginSuccessHandler loginSuccessHandler;
+    @MockitoBean
+    private LoginFailureHandler loginFailureHandler;
 
     @Autowired
     private MockMvc mockMvc;

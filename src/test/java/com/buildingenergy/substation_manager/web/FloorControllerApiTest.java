@@ -5,6 +5,8 @@ import com.buildingenergy.substation_manager.floor.model.Floor;
 import com.buildingenergy.substation_manager.floor.service.FloorService;
 import com.buildingenergy.substation_manager.formula.dto.CompanyFormulaResponse;
 import com.buildingenergy.substation_manager.formula.service.FormulaService;
+import com.buildingenergy.substation_manager.login.handler.LoginFailureHandler;
+import com.buildingenergy.substation_manager.login.handler.LoginSuccessHandler;
 import com.buildingenergy.substation_manager.reading.service.ReadingService;
 import com.buildingenergy.substation_manager.security.UserData;
 import com.buildingenergy.substation_manager.user.model.User;
@@ -46,6 +48,10 @@ public class FloorControllerApiTest {
     private FormulaService formulaService;
     @MockitoBean
     private FloorService floorService;
+    @MockitoBean
+    private LoginSuccessHandler loginSuccessHandler;
+    @MockitoBean
+    private LoginFailureHandler loginFailureHandler;
 
     @Autowired
     private MockMvc mockMvc;
