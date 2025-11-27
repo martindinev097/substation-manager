@@ -1,11 +1,11 @@
 package com.buildingenergy.substation_manager.config;
 
-import com.buildingenergy.substation_manager.exception.UsernameDoesNotExist;
+import com.buildingenergy.substation_manager.login.handler.LoginFailureHandler;
+import com.buildingenergy.substation_manager.login.handler.LoginSuccessHandler;
 import com.buildingenergy.substation_manager.security.AccountStatusFilter;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -18,9 +18,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfiguration implements WebMvcConfigurer {
 
     private final AccountStatusFilter accountStatusFilter;
+    private final LoginSuccessHandler loginSuccessHandler;
+    private final LoginFailureHandler loginFailureHandler;
 
-    public WebConfiguration(AccountStatusFilter accountStatusFilter) {
+    public WebConfiguration(AccountStatusFilter accountStatusFilter, LoginSuccessHandler loginSuccessHandler, LoginFailureHandler loginFailureHandler) {
         this.accountStatusFilter = accountStatusFilter;
+        this.loginSuccessHandler = loginSuccessHandler;
+        this.loginFailureHandler = loginFailureHandler;
     }
 
     @Bean
@@ -35,18 +39,8 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .failureHandler(((request, response, exception) -> {
-                            Throwable cause = exception.getCause();
-
-                            if (cause instanceof DisabledException || exception instanceof DisabledException) {
-                                response.sendRedirect("/login?account-inactive");
-                            } else if (cause instanceof UsernameDoesNotExist) {
-                                response.sendRedirect("/login?username-not-exist");
-                            } else {
-                                response.sendRedirect("/login?error");
-                            }
-                        }))
-                        .defaultSuccessUrl("/home", true)
+                        .successHandler(loginSuccessHandler)
+                        .failureHandler(loginFailureHandler)
                         .permitAll()
                 )
                 .logout(logout -> logout
