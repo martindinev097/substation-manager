@@ -3,11 +3,13 @@ package com.buildingenergy.substation_manager.login.service;
 import com.buildingenergy.substation_manager.login.model.LoginHistory;
 import com.buildingenergy.substation_manager.login.model.LoginStatus;
 import com.buildingenergy.substation_manager.login.repository.LoginHistoryRepository;
+import com.buildingenergy.substation_manager.user.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -28,6 +30,10 @@ public class LoginHistoryService {
                 .build();
 
         loginHistoryRepository.save(login);
+    }
+
+    public List<LoginHistory> getLoginHistoryForUser(User user) {
+        return loginHistoryRepository.findTop5ByUsernameOrderByLoginTimeDesc(user.getUsername());
     }
 
     @Scheduled(fixedDelay = 1000 * 60 * 60 * 24)
