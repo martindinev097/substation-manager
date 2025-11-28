@@ -2,11 +2,10 @@ package com.buildingenergy.substation_manager.web.controller;
 
 import com.buildingenergy.substation_manager.exception.EmailAlreadyExists;
 import com.buildingenergy.substation_manager.formula.dto.CompanyFormulaRequest;
-import com.buildingenergy.substation_manager.formula.dto.CompanyFormulaResponse;
 import com.buildingenergy.substation_manager.formula.dto.MeterFormulaRequest;
-import com.buildingenergy.substation_manager.formula.dto.MeterFormulaResponse;
 import com.buildingenergy.substation_manager.formula.service.FormulaService;
 import com.buildingenergy.substation_manager.security.UserData;
+import com.buildingenergy.substation_manager.settings.SettingsPageModelBuilder;
 import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.user.service.UserService;
 import com.buildingenergy.substation_manager.web.dto.EditProfileRequest;
@@ -25,10 +24,12 @@ public class SettingsController {
 
     private final UserService userService;
     private final FormulaService formulaService;
+    private final SettingsPageModelBuilder modelBuilder;
 
-    public SettingsController(UserService userService, FormulaService companyFormulaService) {
+    public SettingsController(UserService userService, FormulaService companyFormulaService, SettingsPageModelBuilder modelBuilder) {
         this.userService = userService;
         this.formulaService = companyFormulaService;
+        this.modelBuilder = modelBuilder;
     }
 
     @GetMapping
@@ -36,18 +37,9 @@ public class SettingsController {
         ModelAndView modelAndView = new ModelAndView("settings");
 
         User user = userService.getById(userData.getUserId());
-
-        CompanyFormulaResponse formula = formulaService.getCompanyFormula(userData.getUserId());
-        MeterFormulaResponse meterFormula = formulaService.getMeterFormula(userData.getUserId());
-
         EditProfileRequest editProfileRequest = DtoMapper.from(user);
 
-        modelAndView.addObject("currentPage", "settings");
-        modelAndView.addObject("user", user);
-        modelAndView.addObject("formula", formula);
-        modelAndView.addObject("meterFormula", meterFormula);
-        modelAndView.addObject("editProfileRequest", editProfileRequest);
-        modelAndView.addObject("activeTab", activeTab);
+        modelBuilder.build(modelAndView, user, editProfileRequest, activeTab);
 
         return modelAndView;
     }
@@ -59,11 +51,7 @@ public class SettingsController {
         User user = userService.getById(userData.getUserId());
 
         if (bindingResult.hasErrors()) {
-            modelAndView.addObject("user", user);
-            modelAndView.addObject("editProfileRequest", editProfileRequest);
-            modelAndView.addObject("formula", formulaService.getCompanyFormula(userData.getUserId()));
-            modelAndView.addObject("meterFormula", formulaService.getMeterFormula(userData.getUserId()));
-            modelAndView.addObject("activeTab", "profile");
+            modelBuilder.build(modelAndView, user, editProfileRequest, "profile");
 
             return modelAndView;
         }
@@ -116,14 +104,10 @@ public class SettingsController {
         ModelAndView modelAndView = new ModelAndView("settings");
 
         User user = userService.getById(userData.getUserId());
-
         EditProfileRequest editProfileRequest = DtoMapper.from(user);
 
-        modelAndView.addObject("user", user);
-        modelAndView.addObject("editProfileRequest", editProfileRequest);
-        modelAndView.addObject("formula", formulaService.getCompanyFormula(userData.getUserId()));
-        modelAndView.addObject("meterFormula", formulaService.getMeterFormula(userData.getUserId()));
-        modelAndView.addObject("activeTab", "profile");
+        modelBuilder.build(modelAndView, user, editProfileRequest, "profile");
+
         modelAndView.addObject("emailExistsMessage", ex.getMessage());
 
         return modelAndView;
