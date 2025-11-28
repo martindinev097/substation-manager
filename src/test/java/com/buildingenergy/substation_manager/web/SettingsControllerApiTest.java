@@ -9,17 +9,21 @@ import com.buildingenergy.substation_manager.formula.service.FormulaService;
 import com.buildingenergy.substation_manager.login.handler.LoginFailureHandler;
 import com.buildingenergy.substation_manager.login.handler.LoginSuccessHandler;
 import com.buildingenergy.substation_manager.security.UserData;
+import com.buildingenergy.substation_manager.settings.SettingsPageModelBuilder;
 import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.user.model.UserRole;
 import com.buildingenergy.substation_manager.user.service.UserService;
 import com.buildingenergy.substation_manager.web.controller.SettingsController;
+import com.buildingenergy.substation_manager.web.dto.EditProfileRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -41,6 +45,8 @@ public class SettingsControllerApiTest {
     private LoginSuccessHandler loginSuccessHandler;
     @MockitoBean
     private LoginFailureHandler loginFailureHandler;
+    @MockitoBean
+    private SettingsPageModelBuilder modelBuilder;
 
     @Autowired
     private MockMvc mockMvc;
@@ -59,6 +65,17 @@ public class SettingsControllerApiTest {
         when(userService.getById(userId)).thenReturn(user);
         when(formulaService.getCompanyFormula(userId)).thenReturn(new CompanyFormulaResponse());
         when(formulaService.getMeterFormula(userId)).thenReturn(new MeterFormulaResponse());
+        doAnswer(invocation -> {
+            ModelAndView mv = invocation.getArgument(0);
+            mv.addObject("currentPage", "settings");
+            mv.addObject("user", user);
+            mv.addObject("formula", new CompanyFormulaResponse());
+            mv.addObject("meterFormula", new MeterFormulaResponse());
+            mv.addObject("loginHistory", List.of());
+            mv.addObject("editProfileRequest", new EditProfileRequest());
+            mv.addObject("activeTab", "profile");
+            return mv;
+        }).when(modelBuilder).build(any(), any(), any(), any());
 
         MockHttpServletRequestBuilder httpRequest = get("/settings")
                 .param("activeTab", "profile")
@@ -72,6 +89,7 @@ public class SettingsControllerApiTest {
                         "user",
                         "formula",
                         "meterFormula",
+                        "loginHistory",
                         "editProfileRequest",
                         "activeTab"
                 ));
@@ -119,6 +137,17 @@ public class SettingsControllerApiTest {
         when(userService.getById(userId)).thenReturn(user);
         when(formulaService.getCompanyFormula(userId)).thenReturn(new CompanyFormulaResponse());
         when(formulaService.getMeterFormula(userId)).thenReturn(new MeterFormulaResponse());
+        doAnswer(invocation -> {
+            ModelAndView mv = invocation.getArgument(0);
+            mv.addObject("currentPage", "settings");
+            mv.addObject("user", user);
+            mv.addObject("formula", new CompanyFormulaResponse());
+            mv.addObject("meterFormula", new MeterFormulaResponse());
+            mv.addObject("loginHistory", List.of());
+            mv.addObject("editProfileRequest", new EditProfileRequest());
+            mv.addObject("activeTab", "profile");
+            return mv;
+        }).when(modelBuilder).build(any(), any(), any(), any());
 
         MockHttpServletRequestBuilder httpRequest = put("/settings/profile/update")
                 .formField("email", "mdinev")
@@ -135,6 +164,7 @@ public class SettingsControllerApiTest {
                         "editProfileRequest",
                         "formula",
                         "meterFormula",
+                        "loginHistory",
                         "activeTab"
                 ));
 
@@ -155,6 +185,17 @@ public class SettingsControllerApiTest {
         when(userService.getById(userId)).thenReturn(user);
         when(formulaService.getCompanyFormula(userId)).thenReturn(new CompanyFormulaResponse());
         when(formulaService.getMeterFormula(userId)).thenReturn(new MeterFormulaResponse());
+        doAnswer(invocation -> {
+            ModelAndView mv = invocation.getArgument(0);
+            mv.addObject("currentPage", "settings");
+            mv.addObject("user", user);
+            mv.addObject("formula", new CompanyFormulaResponse());
+            mv.addObject("meterFormula", new MeterFormulaResponse());
+            mv.addObject("loginHistory", List.of());
+            mv.addObject("editProfileRequest", new EditProfileRequest());
+            mv.addObject("activeTab", "profile");
+            return mv;
+        }).when(modelBuilder).build(any(), any(), any(), any());
 
         doThrow(new EmailAlreadyExists("Email exists.")).when(userService).updateProfile(any(), any());
 
@@ -173,6 +214,7 @@ public class SettingsControllerApiTest {
                         "editProfileRequest",
                         "formula",
                         "meterFormula",
+                        "loginHistory",
                         "activeTab",
                         "emailExistsMessage"
                 ));
