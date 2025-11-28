@@ -127,6 +127,8 @@ public class UserService implements UserDetailsService {
         user.setLastName(editProfileRequest.getLastName());
 
         userRepository.save(user);
+
+        log.info("User with id: [%s] updated his profile.".formatted(u.getId()));
     }
 
     public void updateRole(UUID id, User u) {
