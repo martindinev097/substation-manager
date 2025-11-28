@@ -26,6 +26,9 @@
                 <button class="tab-btn" data-tab="settings" th:classappend="${activeTab == 'settings'} ? 'active' : ''">
                     <i class="fa-solid fa-sliders"></i> System Settings
                 </button>
+                <button class="tab-btn" data-tab="login-history" th:classappend="${activeTab == 'login-history' ? 'active' : ''}">
+                    <i class="fas fa-history"></i> Login History
+                </button>
             </div>
 
             <div id="tab-profile" class="tab-content" th:classappend="${activeTab == 'profile'} ? ' active' : ''">
@@ -115,6 +118,34 @@
                         </form>
                     </div>
                 </div>
+            </div>
+            <div id="tab-login-history" class="tab-content" th:classappend="${activeTab == 'login-history'} ? ' active' : ''">
+                <h2><i class="fas fa-history"></i> Login History</h2>
+                <p class="subtitle">Last five login attempts for your account from the past 30 days.</p>
+
+                <table class="login-history-table">
+                    <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>IP Address</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:unless="${loginHistory.isEmpty()}" th:each="log : ${loginHistory}">
+                        <td th:text="${#temporals.format(log.loginTime, 'dd-MM-yyyy HH:mm')}"></td>
+                        <td th:text="${log.ipAddress}"></td>
+                        <td>
+                            <span class="status-badge"
+                                  th:text="${log.loginStatus.getDisplayName()}"
+                                  th:classappend="${log.loginStatus.name() == 'SUCCEEDED' ? 'success' : 'fail'}">
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <p th:if="${loginHistory.isEmpty()}" class="error-message">No login history available.</p>
             </div>
         </div>
     </div>
