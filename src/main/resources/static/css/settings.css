@@ -131,3 +131,9 @@
     color: #c62828;
     border-color: #f5bcbc;
 }
+
+p.error-message {
+    display: flex;
+    justify-content: center;
+    font-style: italic;
+}
