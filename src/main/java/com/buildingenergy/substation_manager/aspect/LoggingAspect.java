@@ -1,5 +1,6 @@
 package com.buildingenergy.substation_manager.aspect;
 
+import com.buildingenergy.substation_manager.company.model.Company;
 import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.user.model.UserRole;
 import lombok.extern.slf4j.Slf4j;
@@ -7,6 +8,8 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Slf4j
 @Aspect
@@ -75,5 +78,23 @@ public class LoggingAspect {
         ));
     }
 
+    @After("execution(* com.buildingenergy.substation_manager.company.service.CompanyService.addCompanyForFloor(..))")
+    public void afterAddCompanyForFloor(JoinPoint jp) {
+        String companyName = (String) jp.getArgs()[0];
+        User user = (User) jp.getArgs()[2];
+
+        log.info("Company [%s] added for user [%s]".formatted(companyName, user.getUsername()));
+    }
+
+    @AfterReturning(
+            pointcut = "execution(* com.buildingenergy.substation_manager.company.service.CompanyService.deleteCompany(..))",
+            returning = "deletedCompany"
+    )
+    public void afterDeleteCompany(Company deletedCompany) {
+        String companyName = deletedCompany.getName();
+        User user = deletedCompany.getUser();
+
+        log.warn("Company [%s] deleted for user: [%s] with id: [%s]".formatted(companyName, user.getUsername(), user.getId()));
+    }
 
 }
