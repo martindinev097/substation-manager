@@ -7,7 +7,6 @@ import com.buildingenergy.substation_manager.user.model.UserRole;
 import com.buildingenergy.substation_manager.user.repository.UserRepository;
 import com.buildingenergy.substation_manager.web.dto.EditProfileRequest;
 import com.buildingenergy.substation_manager.web.dto.RegisterRequest;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Slf4j
 @Service
 public class UserService implements UserDetailsService {
 
@@ -63,8 +61,6 @@ public class UserService implements UserDetailsService {
                 .createdOn(LocalDateTime.now())
                 .build();
 
-        log.info("User %s has registered successfully".formatted(user.getUsername()));
-
         return userRepository.save(user);
     }
 
@@ -77,7 +73,6 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findUserByUsername(username).orElseThrow(() -> new UsernameDoesNotExist("Username [%s] does not exist.".formatted(username)));
 
         if (!user.isActive()) {
-            log.warn("Authentication rejected for inactive user: %s".formatted(username));
             throw new DisabledException("User account is inactive");
         }
 
@@ -103,62 +98,45 @@ public class UserService implements UserDetailsService {
 
         user.setActive(!user.isActive());
 
-        log.info("Admin [%s] changed account status of user [%s] from [%s] to [%s].".formatted(
-                admin.getUsername(),
-                user.getUsername(),
-                user.isActive() ? "Inactive" : "Active",
-                user.isActive() ? "Active" : "Inactive"
-        ));
-
         userRepository.save(user);
     }
 
     public void updateProfile(User u, EditProfileRequest editProfileRequest) {
-        User user = getById(u.getId());
-
         Optional<User> optionalEmailUser = userRepository.findByEmail(editProfileRequest.getEmail());
 
-        if (optionalEmailUser.isPresent() && !user.getEmail().equals(editProfileRequest.getEmail())) {
+        if (optionalEmailUser.isPresent() && !u.getUsername().equals(optionalEmailUser.get().getUsername())) {
             throw new EmailAlreadyExists("Email [%s] is already in use.".formatted(editProfileRequest.getEmail()));
         }
 
-        user.setEmail(editProfileRequest.getEmail());
-        user.setFirstName(editProfileRequest.getFirstName());
-        user.setLastName(editProfileRequest.getLastName());
+        u.setEmail(editProfileRequest.getEmail());
+        u.setFirstName(editProfileRequest.getFirstName());
+        u.setLastName(editProfileRequest.getLastName());
 
-        userRepository.save(user);
-
-        log.info("User with id: [%s] updated his profile.".formatted(u.getId()));
+        userRepository.save(u);
     }
 
-    public void updateRole(UUID id, User u) {
-        User user = getById(id);
-        User currentUser = getById(u.getId());
+    public User updateRole(UUID id, User currentUser) {
+        User targetUser = getById(id);
 
-        if (user.getRole() == UserRole.ADMIN) {
-            user.setRole(UserRole.USER);
+        if (targetUser.getRole() == UserRole.ADMIN) {
+            targetUser.setRole(UserRole.USER);
 
-            userRepository.save(user);
+            userRepository.save(targetUser);
 
-            if (user.getId().equals(currentUser.getId())) {
+            if (targetUser.getId().equals(currentUser.getId())) {
                 throw new ForbiddenAccessAfterRoleChange("Your role has been changed. Please log in again.");
             }
-        } else if (user.getRole() == UserRole.USER) {
-            user.setRole(UserRole.ADMIN);
+        } else if (targetUser.getRole() == UserRole.USER) {
+            targetUser.setRole(UserRole.ADMIN);
 
-            userRepository.save(user);
+            userRepository.save(targetUser);
         }
 
-        log.info("Admin [%s] changed role of user [%s] from [%s] to [%s]".formatted(
-           currentUser.getUsername(),
-           user.getUsername(),
-           user.getRole() == UserRole.USER ? UserRole.ADMIN.getDisplayName() : UserRole.USER.getDisplayName(),
-           user.getRole() == UserRole.USER ? UserRole.USER.getDisplayName() : UserRole.ADMIN.getDisplayName()
-        ));
+        return targetUser;
     }
 
     public List<User> findAllAdmins() {
-        return findAll().stream().filter(user -> user.getRole() == UserRole.ADMIN).toList();
+        return getAll().stream().filter(user -> user.getRole() == UserRole.ADMIN).toList();
     }
 
     public void save(User user) {
