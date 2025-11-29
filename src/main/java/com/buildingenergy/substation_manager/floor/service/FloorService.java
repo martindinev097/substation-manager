@@ -8,7 +8,6 @@ import com.buildingenergy.substation_manager.floor.repository.FloorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 public class FloorService {
 
