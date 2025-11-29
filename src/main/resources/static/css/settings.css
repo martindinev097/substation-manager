@@ -132,7 +132,7 @@
     border-color: #f5bcbc;
 }
 
-p.error-message {
+#tab-login-history p.error-message {
     display: flex;
     justify-content: center;
     font-style: italic;
