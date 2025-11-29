@@ -10,7 +10,6 @@ import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.company.repository.CompanyRepository;
 import com.buildingenergy.substation_manager.floor.service.FloorService;
 import com.buildingenergy.substation_manager.web.dto.CompanyView;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Slf4j
 @Service
 public class CompanyService {
 
@@ -57,8 +55,6 @@ public class CompanyService {
         companyRepository.save(company);
 
         readingService.createDefaultReading(company);
-
-        log.info("Company [%s] added for user [%s]".formatted(company.getName(), user.getUsername()));
     }
 
     public List<Company> findAllByFloorAndUser(int floorNumber, User user) {
@@ -110,7 +106,7 @@ public class CompanyService {
 
     @Transactional
     @CacheEvict(value = "companyViews", key = "#userId")
-    public void deleteCompany(UUID id, UUID userId) {
+    public Company deleteCompany(UUID id, UUID userId) {
         Company company = companyRepository.findByIdAndUser_Id(id, userId).orElseThrow(() -> new CompanyNotFound("Company with id: [%s] for user with id: [%s] was not found.".formatted(id, userId)));
 
         int floorNumber = company.getFloor().getFloorNumber();
@@ -120,10 +116,10 @@ public class CompanyService {
 
         List<Company> companies = findAllByFloorAndUser(floorNumber, user);
 
-        if (companies.isEmpty()) {
+        if (companies.isEmpty() && !floorService.hasMeters(company.getFloor(), user)) {
             floorService.deleteFloorForUser(floorNumber, user);
         }
 
-        log.warn("Company [%s] deleted for user: [%s] with id: [%s]".formatted(company.getName(), user.getUsername(), userId));
+        return company;
     }
 }
