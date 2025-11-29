@@ -185,11 +185,11 @@ public class UserServiceUTest {
         User u = new User();
         u.setId(id);
         u.setEmail("old@mail.com");
+        u.setUsername("someone");
 
         EditProfileRequest req = new EditProfileRequest();
         req.setEmail("new@mail.com");
 
-        when(userRepository.findById(id)).thenReturn(Optional.of(u));
         when(userRepository.findByEmail("new@mail.com")).thenReturn(Optional.of(new User()));
 
         assertThrows(EmailAlreadyExists.class, () -> userService.updateProfile(u, req));
@@ -201,14 +201,13 @@ public class UserServiceUTest {
 
         User u = new User();
         u.setId(id);
-        u.setEmail("old@mail.com");
+        u.setUsername("oldUser");
 
         EditProfileRequest req = new EditProfileRequest();
         req.setEmail("new@mail.com");
         req.setFirstName("John");
         req.setLastName("Smith");
 
-        when(userRepository.findById(id)).thenReturn(Optional.of(u));
         when(userRepository.findByEmail("new@mail.com")).thenReturn(Optional.empty());
 
         userService.updateProfile(u, req);
@@ -216,6 +215,7 @@ public class UserServiceUTest {
         assertEquals("new@mail.com", u.getEmail());
         assertEquals("John", u.getFirstName());
         assertEquals("Smith", u.getLastName());
+
         verify(userRepository).save(u);
     }
 
@@ -247,11 +247,11 @@ public class UserServiceUTest {
         current.setId(UUID.randomUUID());
 
         when(userRepository.findById(id)).thenReturn(Optional.of(target));
-        when(userRepository.findById(current.getId())).thenReturn(Optional.of(current));
 
         userService.updateRole(id, current);
 
         assertEquals(UserRole.USER, target.getRole());
+
         verify(userRepository, times(1)).save(target);
     }
 
@@ -267,7 +267,6 @@ public class UserServiceUTest {
         current.setId(UUID.randomUUID());
 
         when(userRepository.findById(id)).thenReturn(Optional.of(target));
-        when(userRepository.findById(current.getId())).thenReturn(Optional.of(current));
 
         userService.updateRole(id, current);
 
