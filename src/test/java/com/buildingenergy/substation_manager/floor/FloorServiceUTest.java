@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -28,13 +29,14 @@ public class FloorServiceUTest {
     @Test
     void givenValidFloorAndUser_whenFindByFloorNumber_thenReturnFloor() {
         User user = new User();
+        user.setId(UUID.randomUUID());
 
         Floor floor = Floor.builder()
                 .floorNumber(2)
                 .user(user)
                 .build();
 
-        when(floorRepository.findByFloorNumberAndUser(2, user))
+        when(floorRepository.findByFloorNumberAndUser_Id(2, user.getId()))
                 .thenReturn(Optional.of(floor));
 
         Floor result = floorService.findByFloorNumberAndUser(2, user);
@@ -42,25 +44,27 @@ public class FloorServiceUTest {
         assertNotNull(result);
         assertEquals(2, result.getFloorNumber());
 
-        verify(floorRepository).findByFloorNumberAndUser(2, user);
+        verify(floorRepository).findByFloorNumberAndUser_Id(2, user.getId());
     }
 
     @Test
     void givenMissingFloorForUser_whenFindByFloorNumber_thenReturnNull() {
         User user = new User();
+        user.setId(UUID.randomUUID());
 
-        when(floorRepository.findByFloorNumberAndUser(3, user)).thenReturn(Optional.empty());
+        when(floorRepository.findByFloorNumberAndUser_Id(3, user.getId())).thenReturn(Optional.empty());
 
         Floor result = floorService.findByFloorNumberAndUser(3, user);
 
         assertNull(result);
 
-        verify(floorRepository).findByFloorNumberAndUser(3, user);
+        verify(floorRepository).findByFloorNumberAndUser_Id(3, user.getId());
     }
 
     @Test
     void givenInvalidFloorNumber_whenFindByFloorNumber_thenThrowFloorNotFound() {
         User user = new User();
+        user.setId(UUID.randomUUID());
 
         assertThrows(FloorNotFound.class, () -> floorService.findByFloorNumberAndUser(0, user));
         assertThrows(FloorNotFound.class, () -> floorService.findByFloorNumberAndUser(6, user));

@@ -11,9 +11,10 @@ import java.util.UUID;
 @Repository
 public interface FloorRepository extends JpaRepository<Floor, UUID> {
 
-    Optional<Floor> findByFloorNumberAndUser(int floorNumber, User user);
-
     void deleteByFloorNumberAndUser(int floorNumber, User user);
 
     int countByUser(User user);
+
+    Optional<Floor> findByFloorNumberAndUser_Id(int floorNumber, UUID userId);
+
 }

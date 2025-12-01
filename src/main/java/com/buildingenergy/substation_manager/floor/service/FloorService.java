@@ -24,7 +24,7 @@ public class FloorService {
             throw new FloorNotFound("Floor number %d was not found.".formatted(floorNumber));
         }
 
-        return floorRepository.findByFloorNumberAndUser(floorNumber, user).orElse(null);
+        return floorRepository.findByFloorNumberAndUser_Id(floorNumber, user.getId()).orElse(null);
     }
 
     public Floor createFloor(int floorNumber, User user) {
