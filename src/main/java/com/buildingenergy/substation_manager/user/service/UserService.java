@@ -91,7 +91,7 @@ public class UserService implements UserDetailsService {
                 .toList();
     }
 
-    public void changeStatus(User user, User admin) {
+    public User changeStatus(User user, User admin) {
         if (user.getRole() == UserRole.ADMIN) {
             throw new CannotChangeAdminStatus("Admin status can't be changed");
         }
@@ -99,6 +99,8 @@ public class UserService implements UserDetailsService {
         user.setActive(!user.isActive());
 
         userRepository.save(user);
+
+        return admin;
     }
 
     public void updateProfile(User u, EditProfileRequest editProfileRequest) {

@@ -5,7 +5,6 @@ import com.buildingenergy.substation_manager.exception.CannotExportEmptyMetersHi
 import com.buildingenergy.substation_manager.meter.model.MeterHistory;
 import com.buildingenergy.substation_manager.reading.model.ReadingHistory;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
@@ -14,17 +13,17 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-@Slf4j
 @Service
 public class ExcelExportService {
 
-    public void exportReadingHistory(List<ReadingHistory> historyList, HttpServletResponse response, int month) throws IOException {
+    public record ExportResult(String monthWord, UUID userId) {}
+
+    public ExportResult exportReadingHistory(List<ReadingHistory> historyList, HttpServletResponse response, int month) throws IOException {
         if (historyList == null || historyList.isEmpty()) {
             throw new CannotExportEmptyCompanyHistory("Cannot export empty history.", month);
         }
 
         UUID userId = historyList.get(0).getUserIdSnapshot();
-
         String monthWord = historyList.get(0).getSavedAt().getMonth().toString();
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -70,16 +69,15 @@ public class ExcelExportService {
             workbook.write(response.getOutputStream());
         }
 
-        log.info("Exporting company history for month [%s] for user with id: [%s]".formatted(monthWord, userId));
+        return new ExportResult(monthWord, userId);
     }
 
-    public void exportMeterHistory(List<MeterHistory> historyList, HttpServletResponse response, int month) throws IOException {
+    public ExportResult exportMeterHistory(List<MeterHistory> historyList, HttpServletResponse response, int month) throws IOException {
         if (historyList == null || historyList.isEmpty()) {
             throw new CannotExportEmptyMetersHistory("Cannot export empty history.", month);
         }
 
         UUID userId = historyList.get(0).getUserIdSnapshot();
-
         String monthWord = historyList.get(0).getSavedAt().getMonth().toString();
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -126,7 +124,7 @@ public class ExcelExportService {
             workbook.write(response.getOutputStream());
         }
 
-        log.info("Exporting meter history for month [%s] for user with id: [%s]".formatted(monthWord, userId));
+        return new ExportResult(monthWord, userId);
     }
 
     private CellStyle createHeader(Workbook workbook, CellStyle cellStyle, Row header, String[] columns) {

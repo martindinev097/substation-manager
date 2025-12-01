@@ -6,17 +6,14 @@ import com.buildingenergy.substation_manager.reading.model.Reading;
 import com.buildingenergy.substation_manager.reading.model.ReadingHistory;
 import com.buildingenergy.substation_manager.reading.repository.ReadingHistoryRepository;
 import com.buildingenergy.substation_manager.user.model.User;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.Month;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-@Slf4j
 @Service
 public class ReadingHistoryService {
 
@@ -60,12 +57,12 @@ public class ReadingHistoryService {
     }
 
     @Transactional
-    public void deleteCompanyByIdAndMonth(UUID readingId, int month) {
+    public ReadingHistory deleteCompanyByIdAndMonth(UUID readingId, int month) {
         ReadingHistory reading = findById(readingId);
 
         readingHistoryRepository.deleteByIdAndMonthValue(readingId, month);
 
-        log.info("Deleted reading history for company: [%s] for month [%s]".formatted(reading.getCompanyNameSnapshot(), Month.of(month)));
+        return reading;
     }
 
     public List<ReadingHistory> findAllByUserId(UUID id) {

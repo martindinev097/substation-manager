@@ -4,16 +4,13 @@ import com.buildingenergy.substation_manager.meter.model.Meter;
 import com.buildingenergy.substation_manager.meter.model.MeterHistory;
 import com.buildingenergy.substation_manager.meter.repository.MeterHistoryRepository;
 import com.buildingenergy.substation_manager.user.model.User;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.Month;
 import java.util.List;
 import java.util.UUID;
 
-@Slf4j
 @Service
 public class MeterHistoryService {
 
@@ -53,7 +50,5 @@ public class MeterHistoryService {
     @Transactional
     public void deleteMeterByIdAndMonth(UUID meterId, int month) {
         meterHistoryRepository.deleteByIdAndSavedAt_MonthValue(meterId, month);
-
-        log.info("Deleted reading history for meter with id: [%s] for month [%s]".formatted(meterId, Month.of(month)));
     }
 }

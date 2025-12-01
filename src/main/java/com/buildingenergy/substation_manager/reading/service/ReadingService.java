@@ -9,7 +9,6 @@ import com.buildingenergy.substation_manager.reading.repository.ReadingRepositor
 import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.web.dto.ReadingListWrapper;
 import com.buildingenergy.substation_manager.web.dto.ReadingRequest;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Slf4j
 @Service
 public class ReadingService {
 
@@ -33,25 +31,17 @@ public class ReadingService {
     @CacheEvict(value = "companyViews", key = "#userId")
     public void updateAllReadings(ReadingListWrapper wrapper, UUID userId) {
         if (wrapper.getReadings() == null || wrapper.getReadings().isEmpty()) {
-            log.warn("updateAllReadings() called but no companies were provided.");
             return;
         }
 
         wrapper.getReadings().forEach(this::updateReadingForCompany);
-
-        log.info("User with id: [%s] updated [%d] company readings at: [%s]".formatted(
-                userId,
-                wrapper.getReadings().size(),
-                LocalDateTime.now()
-        ));
     }
 
-    public void swapAllReadingsForFloor(Floor floor, User user) {
+    public List<Company> swapAllReadingsForFloor(Floor floor, User user) {
         List<Company> companies = companyRepository.findAllByFloorAndUser(floor, user);
 
         if (companies == null || companies.isEmpty()) {
-            log.warn("swapAllReadingsForFloor() called by user [%s] but no companies were found.".formatted(user.getUsername()));
-            return;
+            return companies;
         }
 
         for (Company company : companies) {
@@ -71,11 +61,7 @@ public class ReadingService {
             });
         }
 
-        log.info("User [%s] swapped [%d] company readings at: [%s]".formatted(
-                companies.get(0).getUser().getUsername(),
-                companies.size(),
-                LocalDateTime.now())
-        );
+        return companies;
     }
 
     public List<ReadingRequest> getReadingRequests(List<Company> companies) {
