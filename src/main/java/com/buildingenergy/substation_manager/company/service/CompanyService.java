@@ -122,4 +122,10 @@ public class CompanyService {
 
         return company;
     }
+
+    public double getTotalConsumption(User user) {
+        List<CompanyView> allWithTotalConsumption = getAllWithTotalConsumption(user);
+
+        return allWithTotalConsumption.stream().mapToDouble(CompanyView::getTotalConsumption).sum();
+    }
 }
