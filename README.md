@@ -10,7 +10,19 @@ A building energy management application which allows users to:
 - Generate excel reports with consumptions
 
 ## Technologies
-- Spring Boot
+- Spring Boot 3.4.0
+- Java 17
 - Thymeleaf
 - MySQL
-- Feign Client (for communication with Electricity Rate Microservice)
+- Spring Data JPA
+- Spring Security
+- Spring Validation
+- Spring Caching
+- Spring Scheduling
+- Feign Client (for communication with Energy Formula Microservice)
+- REST API Integration
+- Lombok
+- Excel export (Apache POI)
+- JUnit + Mockito (Unit and API testing)
+- Spring Boot Test (Integration testing)
+- ControllerAdvice global exception handling
