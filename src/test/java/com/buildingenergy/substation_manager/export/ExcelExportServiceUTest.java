@@ -1,5 +1,6 @@
 package com.buildingenergy.substation_manager.report;
 
+import com.buildingenergy.substation_manager.cloudinary.CloudinaryService;
 import com.buildingenergy.substation_manager.meter.model.MeterHistory;
 import com.buildingenergy.substation_manager.reading.model.ReadingHistory;
 import com.buildingenergy.substation_manager.report.service.ExcelExportService;
@@ -10,6 +11,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.DelegatingServletOutputStream;
 
@@ -29,7 +32,11 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class ExcelExportServiceUTest {
 
-    private final ExcelExportService excelExportService = new ExcelExportService();
+    @Mock
+    private CloudinaryService cloudinaryService;
+
+    @InjectMocks
+    private ExcelExportService excelExportService;
 
     @Test
     void givenValidReadingHistory_whenExportReadingHistory_ThenExcelFileIsGeneratedCorrectly() throws IOException {
