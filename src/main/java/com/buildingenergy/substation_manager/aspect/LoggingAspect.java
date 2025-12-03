@@ -3,7 +3,7 @@ package com.buildingenergy.substation_manager.aspect;
 import com.buildingenergy.substation_manager.company.model.Company;
 import com.buildingenergy.substation_manager.meter.model.Meter;
 import com.buildingenergy.substation_manager.reading.model.ReadingHistory;
-import com.buildingenergy.substation_manager.report.service.ExcelExportService;
+import com.buildingenergy.substation_manager.export.service.ExcelExportService;
 import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.user.model.UserRole;
 import com.buildingenergy.substation_manager.web.dto.MeterReadingRequest;
@@ -216,7 +216,7 @@ public class LoggingAspect {
     }
 
     @AfterReturning(
-            pointcut = "execution(* com.buildingenergy.substation_manager.report.service.ExcelExportService.exportReadingHistory(..))",
+            pointcut = "execution(* com.buildingenergy.substation_manager.export.service.ExcelExportService.exportReadingHistory(..))",
             returning = "result"
     )
     public void afterExportCompanyHistory(ExcelExportService.ExportResult result) {
@@ -227,7 +227,7 @@ public class LoggingAspect {
     }
 
     @AfterReturning(
-            pointcut = "execution(* com.buildingenergy.substation_manager.report.service.ExcelExportService.exportMeterHistory(..))",
+            pointcut = "execution(* com.buildingenergy.substation_manager.export.service.ExcelExportService.exportMeterHistory(..))",
             returning = "result"
     )
     public void afterExportMeterHistory(ExcelExportService.ExportResult result) {
