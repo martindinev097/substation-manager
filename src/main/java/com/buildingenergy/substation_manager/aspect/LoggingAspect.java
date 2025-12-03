@@ -109,7 +109,7 @@ public class LoggingAspect {
     }
 
     @After("execution(* com.buildingenergy.substation_manager.meter.service.MeterService.createMeter(..))")
-    public void AfterCreateMeter(JoinPoint jp) {
+    public void afterCreateMeter(JoinPoint jp) {
         String meterName = ((MeterRequest) jp.getArgs()[0]).getMeterName();
         User user = (User) jp.getArgs()[3];
 
