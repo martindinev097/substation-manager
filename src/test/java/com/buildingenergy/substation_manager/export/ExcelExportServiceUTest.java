@@ -1,9 +1,10 @@
-package com.buildingenergy.substation_manager.report;
+package com.buildingenergy.substation_manager.export;
 
 import com.buildingenergy.substation_manager.cloudinary.CloudinaryService;
+import com.buildingenergy.substation_manager.export.repository.ExportHistoryRepository;
 import com.buildingenergy.substation_manager.meter.model.MeterHistory;
 import com.buildingenergy.substation_manager.reading.model.ReadingHistory;
-import com.buildingenergy.substation_manager.report.service.ExcelExportService;
+import com.buildingenergy.substation_manager.export.service.ExcelExportService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -34,6 +35,8 @@ public class ExcelExportServiceUTest {
 
     @Mock
     private CloudinaryService cloudinaryService;
+    @Mock
+    private ExportHistoryRepository exportHistoryRepository;
 
     @InjectMocks
     private ExcelExportService excelExportService;

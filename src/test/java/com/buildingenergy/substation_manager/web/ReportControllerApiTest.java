@@ -8,7 +8,7 @@ import com.buildingenergy.substation_manager.meter.model.MeterHistory;
 import com.buildingenergy.substation_manager.meter.service.MeterHistoryService;
 import com.buildingenergy.substation_manager.reading.model.ReadingHistory;
 import com.buildingenergy.substation_manager.reading.service.ReadingHistoryService;
-import com.buildingenergy.substation_manager.report.service.ExcelExportService;
+import com.buildingenergy.substation_manager.export.service.ExcelExportService;
 import com.buildingenergy.substation_manager.security.UserData;
 import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.user.model.UserRole;
