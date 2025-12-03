@@ -1,8 +1,11 @@
-package com.buildingenergy.substation_manager.report.service;
+package com.buildingenergy.substation_manager.export.service;
 
 import com.buildingenergy.substation_manager.cloudinary.CloudinaryService;
 import com.buildingenergy.substation_manager.exception.CannotExportEmptyCompanyHistory;
 import com.buildingenergy.substation_manager.exception.CannotExportEmptyMetersHistory;
+import com.buildingenergy.substation_manager.export.model.ExportHistory;
+import com.buildingenergy.substation_manager.export.model.ExportType;
+import com.buildingenergy.substation_manager.export.repository.ExportHistoryRepository;
 import com.buildingenergy.substation_manager.meter.model.MeterHistory;
 import com.buildingenergy.substation_manager.reading.model.ReadingHistory;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,9 +23,11 @@ import java.util.UUID;
 public class ExcelExportService {
 
     private final CloudinaryService cloudinaryService;
+    private final ExportHistoryRepository exportHistoryRepository;
 
-    public ExcelExportService(CloudinaryService cloudinaryService) {
+    public ExcelExportService(CloudinaryService cloudinaryService, ExportHistoryRepository exportHistoryRepository) {
         this.cloudinaryService = cloudinaryService;
+        this.exportHistoryRepository = exportHistoryRepository;
     }
 
     public record ExportResult(String monthWord, UUID userId, String cloudUrl) {}
@@ -74,14 +80,17 @@ public class ExcelExportService {
                 sheet.autoSizeColumn(i);
             }
 
-//            workbook.write(response.getOutputStream());
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            workbook.write(baos);
-            byte[] bytes = baos.toByteArray();
+            String url = writeUpload(workbook, response, fileName);
 
-            response.getOutputStream().write(bytes);
+            ExportHistory history = ExportHistory.builder()
+                    .userId(userId)
+                    .type(ExportType.COMPANY)
+                    .month(monthWord)
+                    .cloudinaryUrl(url)
+                    .exportedAt(LocalDateTime.now())
+                    .build();
 
-            String url = cloudinaryService.uploadExcel(bytes, fileName);
+            exportHistoryRepository.save(history);
 
             return new ExportResult(monthWord, userId, url);
         }
@@ -136,16 +145,30 @@ public class ExcelExportService {
                 sheet.autoSizeColumn(i);
             }
 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            workbook.write(baos);
-            byte[] bytes = baos.toByteArray();
+            String url = writeUpload(workbook, response, fileName);
 
-            response.getOutputStream().write(bytes);
+            ExportHistory history = ExportHistory.builder()
+                    .userId(userId)
+                    .type(ExportType.METER)
+                    .month(monthWord)
+                    .cloudinaryUrl(url)
+                    .exportedAt(LocalDateTime.now())
+                    .build();
 
-            String url = cloudinaryService.uploadExcel(bytes, fileName);
+            exportHistoryRepository.save(history);
 
             return new ExportResult(monthWord, userId, url);
         }
+    }
+
+    private String writeUpload(Workbook workbook, HttpServletResponse response, String fileName) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        workbook.write(baos);
+        byte[] bytes = baos.toByteArray();
+
+        response.getOutputStream().write(bytes);
+
+        return cloudinaryService.uploadExcel(bytes, fileName);
     }
 
     private CellStyle createHeader(Workbook workbook, CellStyle cellStyle, Row header, String[] columns) {
