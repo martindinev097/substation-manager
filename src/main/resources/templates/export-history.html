@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Export History</title>
+
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/reports.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+
+<body>
+    <div th:replace="~{fragments/sidebar :: sidebar(currentPage=${currentPage})}"></div>
+
+    <div class="main-content">
+        <header>
+            <h1><i class="fa-solid fa-history"></i> Export History</h1>
+            <p>Download previously generated Excel reports.</p>
+        </header>
+
+        <section class="report-section">
+
+            <h2><i class="fa-solid fa-file-export"></i> Your Exported Files</h2>
+            <p class="section-subtitle">Company and meter exports uploaded to Cloudinary.</p>
+
+            <div th:if="${history.isEmpty()}" class="placeholder">
+                <i class="fa-regular fa-folder-open"></i>
+                <span>No export history yet.</span>
+            </div>
+
+            <div th:unless="${history.isEmpty()}" class="table-container">
+                <table class="styled-table">
+                    <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Month</th>
+                        <th>Exported At</th>
+                        <th>Download</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="h : ${history}">
+                        <td th:text="${h.type}"></td>
+                        <td th:text="${h.month}"></td>
+                        <td th:text="${#temporals.format(h.exportedAt, 'dd-MM-yyyy HH:mm')}"></td>
+                        <td>
+                            <a th:href="${h.cloudinaryUrl}" target="_blank" class="export-btn">
+                                <i class="fa-solid fa-download"></i> Download
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script src="/js/sidebar/sidebar.js"></script>
+</body>
+</html>

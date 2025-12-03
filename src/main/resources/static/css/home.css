@@ -98,6 +98,10 @@ body {
 }
 
 .menu > li:nth-child(7) > a {
+    padding-left: 0.8em;
+}
+
+.menu > li:nth-child(8) > a {
     margin-top: 3em;
     padding-left: 0.8em;
     gap: 0.5em;

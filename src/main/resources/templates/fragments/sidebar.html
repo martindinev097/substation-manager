@@ -69,6 +69,8 @@
                             class="fa-solid fa-users"></i>Owners</a></li>
                     <li><a th:href="@{/reports}" th:classappend="${currentPage == 'reports'} ? 'active' : ''"><i
                             class="fa-solid fa-file-invoice-dollar"></i>Reports</a></li>
+                    <li><a th:href="@{/export/history}" th:classappend="${currentPage == 'export-history' ? 'active' : ''}"><i
+                            class="fa fa-history"></i>Export History</a></li>
                     <li><a th:href="@{/settings}" th:classappend="${currentPage == 'settings'} ? 'active' : ''"><i
                             class="fa-solid fa-gear"></i>Settings</a></li>
                     <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin-panel}" th:classappend="${currentPage == 'admin'} ? 'active' : ''"><i
