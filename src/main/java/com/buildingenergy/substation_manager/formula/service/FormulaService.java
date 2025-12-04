@@ -7,6 +7,8 @@ import com.buildingenergy.substation_manager.formula.dto.MeterFormulaRequest;
 import com.buildingenergy.substation_manager.formula.dto.MeterFormulaResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -21,6 +23,7 @@ public class FormulaService {
         this.client = client;
     }
 
+    @Cacheable(value = "companyFormula", key = "#userId")
     public CompanyFormulaResponse getCompanyFormula(UUID userId) {
         try {
             return client.getCompanyFormula(userId).getBody();
@@ -30,6 +33,7 @@ public class FormulaService {
         }
     }
 
+    @CacheEvict(value = "companyFormula", key = "#userId")
     public boolean updateCompanyFormula(UUID userId, @Valid CompanyFormulaRequest request) {
         try {
             client.updateCompanyFormula(userId, request).getBody();
@@ -40,6 +44,7 @@ public class FormulaService {
         }
     }
 
+    @Cacheable(value = "meterFormula", key = "#userId")
     public MeterFormulaResponse getMeterFormula(UUID userId) {
         try {
             return client.getMeterFormula(userId).getBody();
@@ -49,6 +54,7 @@ public class FormulaService {
         }
     }
 
+    @CacheEvict(value = "meterFormula", key = "#userId")
     public boolean updateMeterFormula(UUID userId, @Valid MeterFormulaRequest request) {
         try {
             client.updateMeterFormula(userId, request).getBody();
