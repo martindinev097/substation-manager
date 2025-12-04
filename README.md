@@ -26,3 +26,4 @@ A building energy management application which allows users to:
 - JUnit + Mockito (Unit and API testing)
 - Spring Boot Test (Integration testing)
 - ControllerAdvice global exception handling
+- Cloudinary (cloud file storage for exported Excel reports)
