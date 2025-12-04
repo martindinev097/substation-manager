@@ -17,7 +17,8 @@ A building energy management application which allows users to:
 - Spring Data JPA
 - Spring Security
 - Spring Validation
-- Spring Caching
+- Spring Caching (with Redis)
+- Embedded Redis Server
 - Spring Scheduling
 - Feign Client (for communication with Energy Formula Microservice)
 - REST API Integration
