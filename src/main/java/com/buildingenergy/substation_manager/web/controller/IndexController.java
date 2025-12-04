@@ -9,7 +9,6 @@ import com.buildingenergy.substation_manager.security.UserData;
 import com.buildingenergy.substation_manager.user.model.User;
 import com.buildingenergy.substation_manager.user.service.UserService;
 import com.buildingenergy.substation_manager.util.LoginPageUtil;
-import com.buildingenergy.substation_manager.web.dto.CompanyView;
 import com.buildingenergy.substation_manager.web.dto.LoginRequest;
 import com.buildingenergy.substation_manager.web.dto.RegisterRequest;
 import jakarta.validation.Valid;
