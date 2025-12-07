@@ -37,7 +37,7 @@ public class LoginHistoryService {
     }
 
     @Scheduled(fixedDelay = 1000 * 60 * 60 * 24)
-    private void cleanupOldLoginAttempts() {
+    public void cleanupOldLoginAttempts() {
         LocalDateTime olderThan = LocalDateTime.now().minusDays(30);
 
         long deletedCount = loginHistoryRepository.deleteByLoginTimeBefore(olderThan);
