@@ -10,8 +10,8 @@
     <title>Meters</title>
 </head>
 <body>
-    <input type="hidden" id="pricePerKwh" th:value="${meterFormula.pricePerKwh}">
-    <input type="hidden" id="divider" th:value="${meterFormula.divider}">
+    <input type="hidden" id="pricePerKwh" th:value="${meterFormula != null ? meterFormula.pricePerKwh : 0.2}">
+    <input type="hidden" id="divider" th:value="${meterFormula != null ? meterFormula.divider : 2}">
 
     <div th:replace="~{fragments/sidebar :: sidebar(currentPage=${currentPage})}"></div>
 
@@ -22,6 +22,10 @@
             <h1 th:text="'Meters | Floor ' + ${floorNumber}">Floor 1</h1>
             <p>Manage Air Conditioners' Meters and Readings</p>
         </header>
+
+        <p th:if="${meterFormula == null}" class="error-message">
+            ⚠️ Company Formula Service unavailable. Total cost calculation won't work correctly.
+        </p>
 
         <section class="add-company">
             <h2>Add Meter</h2>

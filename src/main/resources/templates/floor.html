@@ -9,9 +9,9 @@
 </head>
 
 <body>
-    <input type="hidden" id="pricePerKwh" th:value="${formula.pricePerKwh}">
-    <input type="hidden" id="multiplier" th:value="${formula.multiplier}">
-    <input type="hidden" id="divider" th:value="${formula.divider}">
+    <input type="hidden" id="pricePerKwh" th:value="${formula != null ? formula.pricePerKwh : 0}">
+    <input type="hidden" id="multiplier" th:value="${formula != null ? formula.multiplier : 0}">
+    <input type="hidden" id="divider" th:value="${formula != null ? formula.divider : 1}">
 
     <div th:replace="~{fragments/sidebar :: sidebar(floorNumber=${floorNumber})}"></div>
 
@@ -20,6 +20,10 @@
             <h1 th:text="'Floor ' + ${floorNumber}">Floor 1</h1>
             <p>Manage Companies and Readings</p>
         </header>
+
+        <p th:if="${formula == null}" class="error-message">
+            ⚠️ Company Formula Service unavailable. Total cost calculation won't work correctly.
+        </p>
 
         <section class="add-company">
             <h2>Add Company</h2>
