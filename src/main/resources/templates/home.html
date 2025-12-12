@@ -14,50 +14,50 @@
 
     <div class="main-content" th:object="${user}">
         <header>
-            <h1>Dashboard</h1>
-            <p th:text="${'Welcome, ' + user.role.getDisplayName()}">Welcome, Admin</p>
+            <h1 th:text="#{home.header.title}">Dashboard</h1>
+            <p th:text="#{home.welcome.message} + ', ' + ${user.username}">Welcome, username</p>
         </header>
 
         <section class="dashboard-cards">
             <div class="card">
                 <i class="fa-solid fa-bolt"></i>
                 <div>
-                    <h3>Total Consumption</h3>
+                    <h3 th:text="#{home.card.totalConsumption}">Total Consumption</h3>
                     <p th:text="${#numbers.formatDecimal(totalConsumption, 0, 0)} + ' kWh'">1250 kWh</p>
                 </div>
             </div>
             <div class="card">
                 <i class="fa-solid fa-building"></i>
                 <div>
-                    <h3>Active Floors</h3>
+                    <h3 th:text="#{home.card.activeFloors}">Active Floors</h3>
                     <p th:text="${floorCount}">5</p>
                 </div>
             </div>
             <div class="card">
                 <i class="fa-solid fa-gauge-high"></i>
                 <div>
-                    <h3>Active Meters</h3>
+                    <h3 th:text="#{home.card.activeMeters}">Active Meters</h3>
                     <p th:text="${meterCount}">12</p>
                 </div>
             </div>
             <div class="card">
                 <i class="fa-solid fa-users"></i>
                 <div>
-                    <h3>Registered Companies</h3>
+                    <h3 th:text="#{home.card.owners}">Registered Owners</h3>
                     <p th:text="${companyCount}">8</p>
                 </div>
             </div>
         </section>
 
         <section class="recent">
-            <h2>Recent Readings</h2>
+            <h2 th:text="#{home.section.recentReadingsTitle}">Recent Readings</h2>
             <table>
                 <thead>
                 <tr>
-                    <th>Company</th>
-                    <th>Floor</th>
-                    <th>Date</th>
-                    <th>Value (kWh)</th>
+                    <th th:text="#{home.table.th.companyName}">Company</th>
+                    <th th:text="#{home.table.th.floorNumber}">Floor</th>
+                    <th th:text="#{home.table.th.date}">Date</th>
+                    <th th:text="#{home.table.th.consumption}">Value (kWh)</th>
                 </tr>
                 </thead>
                 <tbody>

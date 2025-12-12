@@ -19,43 +19,45 @@
 
     <div class="main-content">
         <header>
-            <h1 th:text="'Meters | Floor ' + ${floorNumber}">Floor 1</h1>
-            <p>Manage Air Conditioners' Meters and Readings</p>
+            <h1 th:text="#{meters.title} + ' ' + ${floorNumber}">Floor 1</h1>
+            <p th:text="#{meters.description}">Manage Air Conditioners' Meters and Readings</p>
         </header>
 
-        <p th:if="${meterFormula == null}" class="error-message">
+        <p th:if="${meterFormula == null}" class="error-message" th:text="#{meters.microservice.failure.message}">
             ⚠️ Meter Formula Service unavailable. Total cost calculation won't work correctly.
         </p>
 
         <section class="add-company">
-            <h2>Add Meter</h2>
+            <h2 th:text="#{meters.addMeter.title}">Add Meter</h2>
             <p th:if="${errorMessage}" th:text="${errorMessage}" class="error-message"></p>
             <form id="addMeterForm" class="styled-form" th:action="@{'/meters/floor/' + ${floorNumber}}"
                   th:method="POST" th:object="${meterRequest}">
-                <input th:field="*{meterName}" type="text" name="meterName" placeholder="Meter Name" required>
-                <input th:field="*{outsideBody}" type="text" placeholder="Outside Body" required>
-                <input th:field="*{room}" type="text" placeholder="Room" required>
-                <input th:field="*{description}" type="text" placeholder="Description">
-                <button type="submit"><i class="fa-solid fa-plus"></i> Add</button>
+                <input th:field="*{meterName}" type="text" name="meterName" th:placeholder="#{meters.addMeter.name.placeholder}" required>
+                <input th:field="*{outsideBody}" type="text" th:placeholder="#{meters.addMeter.outsideBody.placeholder}" required>
+                <input th:field="*{room}" type="text" th:placeholder="#{meters.addMeter.room.placeholder}" required>
+                <input th:field="*{description}" type="text" th:placeholder="#{meters.addMeter.description.placeholder}">
+                <button type="submit"><i class="fa-solid fa-plus"></i>
+                    <span th:text="#{meters.add.button}"> Add</span>
+                </button>
             </form>
         </section>
 
         <section class="recent">
-            <h2>Readings</h2>
+            <h2 th:text="#{section.readings.title}">Readings</h2>
 
             <form th:action="@{'/meters/save?floorNumber=' + ${floorNumber}}" th:method="POST" th:object="${readingWrapper}" >
                 <table class="styled-table">
                     <thead>
                     <tr>
-                        <th>Meter</th>
-                        <th>Out Body</th>
-                        <th>Room</th>
-                        <th>Description</th>
-                        <th>% Energy</th>
-                        <th>Old kWh</th>
-                        <th>New kWh</th>
-                        <th>Diff kWh</th>
-                        <th>Total Cost</th>
+                        <th th:text="#{meters.table.th.meterName}">Meter</th>
+                        <th th:text="#{meters.table.th.outsideBody}">Out Body</th>
+                        <th th:text="#{meters.table.th.room}">Room</th>
+                        <th th:text="#{meters.table.th.description}">Description</th>
+                        <th th:text="#{meters.table.th.energyPercentage}">% Energy</th>
+                        <th th:text="#{meters.table.th.oldReading}">Old kWh</th>
+                        <th th:text="#{meters.table.th.newReading}">New kWh</th>
+                        <th th:text="#{meters.table.th.diffReading}">Diff kWh</th>
+                        <th th:text="#{meters.table.th.totalCost}">Total Cost</th>
                     </tr>
                     </thead>
                     <tbody id="readingsBody">
@@ -76,12 +78,16 @@
                     </tbody>
                 </table>
                 <div class="save-container">
-                    <button th:unless="${meters.isEmpty()}" type="submit" class="save-btn"><i class="fas fa-save"></i> Save readings</button>
+                    <button th:unless="${meters.isEmpty()}" type="submit" class="save-btn"><i class="fas fa-save"></i>
+                       <span th:text="#{save.button}"> Save readings</span>
+                    </button>
                 </div>
             </form>
 
             <form class="swap-form" th:action="@{'/meters/swap?floorNumber=' + ${floorNumber}}" th:method="POST">
-                <button th:unless="${meters.isEmpty()}" th:disabled="${areSwapped == true}" type="submit" class="swap-btn"><i class="fas fa-exchange-alt"></i> Swap readings</button>
+                <button th:unless="${meters.isEmpty()}" th:disabled="${areSwapped == true}" type="submit" class="swap-btn"><i class="fas fa-exchange-alt"></i>
+                   <span th:text="#{swap.button}"> Swap readings</span>
+                </button>
             </form>
         </section>
     </div>

@@ -17,39 +17,41 @@
 
     <div class="main-content">
         <header>
-            <h1 th:text="'Floor ' + ${floorNumber}">Floor 1</h1>
-            <p>Manage Companies and Readings</p>
+            <h1 th:text="#{floor.title} + ' ' + ${floorNumber}">Floor 1</h1>
+            <p th:text="#{floor.description}">Manage Companies and Readings</p>
         </header>
 
-        <p th:if="${formula == null}" class="error-message">
+        <p th:if="${formula == null}" class="error-message" th:text="#{floor.microservice.failure.message}">
             ⚠️ Company Formula Service unavailable. Total cost calculation won't work correctly.
         </p>
 
         <section class="add-company">
-            <h2>Add Company</h2>
+            <h2 th:text="#{section.addCompany.title}">Add Company</h2>
             <form class="styled-form" th:action="@{'/floor/' + ${floorNumber} + '/add-company'}" th:method="POST">
-                <input type="text" name="companyName" placeholder="Company Name" required>
-                <button type="submit"><i class="fa-solid fa-plus"></i> Add</button>
+                <input type="text" name="companyName" th:placeholder="#{section.addCompany.placeholder}" required>
+                <button type="submit"><i class="fa-solid fa-plus"></i>
+                    <span th:text="#{section.addCompany.button}">Add</span>
+                </button>
             </form>
         </section>
 
         <section class="recent">
-            <h2>Readings</h2>
+            <h2 th:text="#{section.readings.title}">Readings</h2>
 
             <form th:action="@{'/readings/save?floorNumber=' + ${floorNumber}}" th:method="POST" th:object="${readingWrapper}" >
                 <table class="styled-table">
                     <thead>
                     <tr>
-                        <th>Company</th>
-                        <th>Office</th>
-                        <th>Old kWh M1</th>
-                        <th>New kWh M1</th>
-                        <th>Diff kWh M1</th>
-                        <th>Old kWh M2</th>
-                        <th>New kWh M2</th>
-                        <th>Diff kWh M2</th>
-                        <th>Total kWh</th>
-                        <th>Total Cost</th>
+                        <th th:text="#{section.table.th.companyName}">Company</th>
+                        <th th:text="#{section.table.th.office}">Office</th>
+                        <th th:text="#{section.table.th.oldM1}">Old kWh M1</th>
+                        <th th:text="#{section.table.th.newM1}">New kWh M1</th>
+                        <th th:text="#{section.table.th.diffM1}">Diff kWh M1</th>
+                        <th th:text="#{section.table.th.oldM2}">Old kWh M2</th>
+                        <th th:text="#{section.table.th.newM2}">New kWh M2</th>
+                        <th th:text="#{section.table.th.diffM2}">Diff kWh M2</th>
+                        <th th:text="#{section.table.th.totalKwh}">Total kWh</th>
+                        <th th:text="#{section.table.th.totalCost}">Total Cost</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -72,13 +74,16 @@
                 </table>
 
                 <div class="save-container">
-                    <button th:if="${companies.size() > 0}" type="submit" class="save-btn"><i class="fas fa-save"></i> Save readings</button>
+                    <button th:if="${companies.size() > 0}" type="submit" class="save-btn"><i class="fas fa-save"></i>
+                        <span th:text="#{save.button}"> Save readings</span>
+                    </button>
                 </div>
             </form>
 
-
             <form class="swap-form" th:action="@{'/readings/swap?floorNumber=' + ${floorNumber}}" th:method="POST">
-                <button th:if="${companies.size() > 0}" th:disabled="${areSwapped == true}" type="submit" class="swap-btn"><i class="fas fa-exchange-alt"></i> Swap readings</button>
+                <button th:if="${companies.size() > 0}" th:disabled="${areSwapped == true}" type="submit" class="swap-btn"><i class="fas fa-exchange-alt"></i>
+                    <span th:text="#{swap.button}"> Swap readings</span>
+                </button>
             </form>
 
         </section>

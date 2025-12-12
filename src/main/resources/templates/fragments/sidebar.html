@@ -20,66 +20,100 @@
                 <ul class="menu">
                     <li>
                         <a th:href="@{/home}" th:classappend="${currentPage == 'home'} ? 'active' : ''">
-                            <i class="fa-solid fa-chart-line"></i>Dashboard</a>
+                            <i class="fa-solid fa-chart-line"></i>
+                            <span th:text="#{sidebar.dashboard.title}">Dashboard</span>
+                        </a>
                     </li>
 
                     <li class="dropdown" th:classappend="${currentPage == 'floor'} ? 'active open' : ''">
-                        <a href="#"><i class="fa-solid fa-building"></i>Floors<i
-                                class="fa-solid fa-caret-down caret"></i></a>
+                        <a href="#"><i class="fa-solid fa-building"></i>
+                            <span th:text="#{sidebar.floors.title}">Floors</span>
+                            <i class="fa-solid fa-caret-down caret"></i></a>
                         <ul class="submenu">
                             <li><a th:href="@{/floor/1}" th:classappend="${currentPage == 'floor' and floorNumber == 1} ? 'active' : ''"><i
-                                    class="fa-regular fa-circle fa-xs"></i>Floor
-                                1</a></li>
+                                    class="fa-regular fa-circle fa-xs"></i>
+                                <span th:text="#{sidebar.floor.title} + ' 1'">Floor 1</span>
+                            </a></li>
                             <li><a th:href="@{/floor/2}" th:classappend="${currentPage == 'floor' and floorNumber == 2} ? 'active' : ''"><i
-                                    class="fa-regular fa-circle fa-xs"></i>Floor 2</a></li>
+                                    class="fa-regular fa-circle fa-xs"></i>
+                                <span th:text="#{sidebar.floor.title} + ' 2'">Floor 2</span>
+                            </a></li>
                             <li><a th:href="@{/floor/3}" th:classappend="${currentPage == 'floor' and floorNumber == 3} ? 'active' : ''"><i
-                                    class="fa-regular fa-circle fa-xs"></i>Floor 3</a></li>
+                                    class="fa-regular fa-circle fa-xs"></i>
+                                <span th:text="#{sidebar.floor.title} + ' 3'">Floor 3</span>
+                            </a></li>
                             <li><a th:href="@{/floor/4}" th:classappend="${currentPage == 'floor' and floorNumber == 4} ? 'active' : ''"><i
-                                    class="fa-regular fa-circle fa-xs"></i>Floor 4</a></li>
+                                    class="fa-regular fa-circle fa-xs"></i>
+                                <span th:text="#{sidebar.floor.title} + ' 4'">Floor 4</span>
+                            </a></li>
                             <li><a th:href="@{/floor/5}" th:classappend="${currentPage == 'floor' and floorNumber == 5} ? 'active' : ''"><i
-                                    class="fa-regular fa-circle fa-xs"></i>Floor 5</a></li>
+                                    class="fa-regular fa-circle fa-xs"></i>
+                                <span th:text="#{sidebar.floor.title} + ' 5'">Floor 5</span>
+                            </a></li>
                         </ul>
                     </li>
 
                     <li class="dropdown" th:classappend="${currentPage == 'meters'} ? 'active open' : ''">
-                        <a href="#"><i class="fa-solid fa-gauge"></i>Meters
+                        <a href="#"><i class="fa-solid fa-gauge"></i>
+                            <span th:text="#{sidebar.meters.title}">Meters</span>
                             <i class="fa-solid fa-caret-down caret"></i>
                         </a>
 
                         <ul class="submenu">
                             <li><a th:href="@{/meters/floor/1}" th:classappend="${currentPage == 'meters' and floorNumber == 1} ? 'active' : ''"><i
-                                    class="fa-regular fa-circle fa-xs"></i>Floor
-                                1</a></li>
+                                    class="fa-regular fa-circle fa-xs"></i>
+                                <span th:text="#{sidebar.floor.title} + ' 1'">Floor 1</span>
+                            </a></li>
                             <li><a th:href="@{/meters/floor/2}"
                                    th:classappend="${currentPage == 'meters' and floorNumber == 2} ? 'active' : ''"><i
-                                    class="fa-regular fa-circle fa-xs"></i>Floor 2</a></li>
+                                    class="fa-regular fa-circle fa-xs"></i>
+                                <span th:text="#{sidebar.floor.title} + ' 2'">Floor 2</span>
+                            </a></li>
                             <li><a th:href="@{/meters/floor/3}"
                                    th:classappend="${currentPage == 'meters' and floorNumber == 3} ? 'active' : ''"><i
-                                    class="fa-regular fa-circle fa-xs"></i>Floor 3</a></li>
+                                    class="fa-regular fa-circle fa-xs"></i>
+                                <span th:text="#{sidebar.floor.title} + ' 3'">Floor 3</span>
+                            </a></li>
                             <li><a th:href="@{/meters/floor/4}"
                                    th:classappend="${currentPage == 'meters' and floorNumber == 4} ? 'active' : ''"><i
-                                    class="fa-regular fa-circle fa-xs"></i>Floor 4</a></li>
+                                    class="fa-regular fa-circle fa-xs"></i>
+                                <span th:text="#{sidebar.floor.title} + ' 4'">Floor 4</span>
+                            </a></li>
                             <li><a th:href="@{/meters/floor/5}"
                                    th:classappend="${currentPage == 'meters' and floorNumber == 5} ? 'active' : ''"><i
-                                    class="fa-regular fa-circle fa-xs"></i>Floor 5</a></li>
+                                    class="fa-regular fa-circle fa-xs"></i>
+                                <span th:text="#{sidebar.floor.title} + ' 5'">Floor 5</span>
+                            </a></li>
                         </ul>
                     </li>
 
                     <li><a th:href="@{/owners}" th:classappend="${currentPage == 'owners'} ? 'active' : ''"><i
-                            class="fa-solid fa-users"></i>Owners</a></li>
+                            class="fa-solid fa-users"></i>
+                        <span th:text="#{sidebar.owners.title}">Owners</span>
+                    </a></li>
                     <li><a th:href="@{/reports}" th:classappend="${currentPage == 'reports'} ? 'active' : ''"><i
-                            class="fa-solid fa-file-invoice-dollar"></i>Reports</a></li>
+                            class="fa-solid fa-file-invoice-dollar"></i>
+                        <span th:text="#{sidebar.reports.title}">Reports</span>
+                    </a></li>
                     <li><a th:href="@{/export/history}" th:classappend="${currentPage == 'export-history' ? 'active' : ''}"><i
-                            class="fa fa-history"></i>Export History</a></li>
+                            class="fa fa-history"></i>
+                        <span th:text="#{sidebar.exportHistory.title}">Export History</span>
+                    </a></li>
                     <li><a th:href="@{/settings}" th:classappend="${currentPage == 'settings'} ? 'active' : ''"><i
-                            class="fa-solid fa-gear"></i>Settings</a></li>
+                            class="fa-solid fa-gear"></i>
+                        <span th:text="#{sidebar.settings.title}">Settings</span>
+                    </a></li>
                     <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin-panel}" th:classappend="${currentPage == 'admin'} ? 'active' : ''"><i
-                            class="fa-solid fa-user-shield"></i>Admin Panel</a></li>
+                            class="fa-solid fa-user-shield"></i>
+                        <span th:text="#{sidebar.adminPanel.title}">Admin Panel</span>
+                    </a></li>
                 </ul>
             </div>
 
             <form th:action="@{/logout}" th:method="GET" class="logout">
-                <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+                <button type="submit"><i class="fa-solid fa-right-from-bracket"></i>
+                   <span th:text="#{sidebar.logout.button}"> Logout</span>
+                </button>
             </form>
         </div>
     </div>
