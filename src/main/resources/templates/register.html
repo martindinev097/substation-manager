@@ -16,43 +16,43 @@
                 <i class="fa-solid fa-bolt"></i>
                 <h1>Substation</h1>
             </div>
-            <p class="subtitle">Create your account</p>
+            <p th:text="#{reg.createAccountMessage}" class="subtitle">Create your account</p>
 
             <form th:action="@{/register}" th:method="POST" th:object="${registerRequest}">
                 <div class="input-group">
-                    <label>Username</label>
-                    <input type="text" placeholder="Type your username" th:field="*{username}">
+                    <label th:text="#{reg.username}">Username</label>
+                    <input type="text" th:placeholder="#{reg.username.placeholder}" th:field="*{username}">
                     <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="error-message"></p>
                     <p th:if="${usernameExistsMessage}" th:text="${usernameExistsMessage}" class="error-message"></p>
                 </div>
 
                 <div class="input-group">
-                    <label>Email</label>
-                    <input type="text" placeholder="Type your email" th:field="*{email}">
+                    <label th:text="#{reg.email}">Email</label>
+                    <input type="text" th:placeholder="#{reg.email.placeholder}" th:field="*{email}">
                     <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message"></p>
                     <p th:if="${emailExistsMessage}" th:text="${emailExistsMessage}" class="error-message"></p>
                 </div>
 
                 <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" placeholder="Type your password" th:field="*{password}">
+                    <label th:text="#{reg.password}">Password</label>
+                    <input type="password" th:placeholder="#{reg.password.placeholder}" th:field="*{password}">
                     <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-message"></p>
                     <p th:if="${passwordErrorMessage}" th:text="${passwordErrorMessage}" class="error-message"></p>
                 </div>
 
                 <div class="input-group">
-                    <label>Confirm Password</label>
-                    <input type="password" placeholder="Retype your password" th:field="*{confirmedPassword}">
+                    <label th:text="#{reg.confirmPassword}">Confirm Password</label>
+                    <input type="password" th:placeholder="#{reg.confirmPassword.placeholder}" th:field="*{confirmedPassword}">
                     <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-message"></p>
                     <p th:if="${passwordErrorMessage}" th:text="${passwordErrorMessage}" class="error-message"></p>
                 </div>
 
-                <button class="btn" type="submit">Register</button>
+                <button th:text="#{reg.button}" class="btn" type="submit">Register</button>
             </form>
 
             <p class="footer-text">
-                Already have an account?
-                <a th:href="@{/login}">Log in</a>
+                <span th:text="#{reg.haveAccount}">Already have an account?</span>
+                <a th:href="@{/login}" th:text="#{reg.logInLink}">Log in</a>
             </p>
 
             <div th:replace="~{fragments/footer :: footer}"></div>

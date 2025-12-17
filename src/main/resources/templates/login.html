@@ -17,34 +17,34 @@
                 <h1>Substation</h1>
             </div>
 
-            <p class="subtitle">Sign in to your account</p>
+            <p th:text="#{login.signInMessage}" class="subtitle">Sign in to your account</p>
 
-            <p th:if="${loggedOut}" class="success-message" th:text="${loggedOut}">Logged out successfully</p>
+            <p th:if="${loggedOut}" class="success-message" th:text="#{login.logOutMessage}">Logged out successfully</p>
 
-            <p th:if="${registeredMessage}" class="success-message" th:text="${registeredMessage}"></p>
+            <p th:if="${registeredMessage}" class="success-message" th:text="#{login.registerMessage}"></p>
 
             <form th:action="@{/login}" th:method="POST" th:object="${loginRequest}">
 
                 <div class="input-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" th:field="*{username}" placeholder="Enter your username" required>
+                    <label th:text="#{login.username}" for="username">Username</label>
+                    <input type="text" id="username" th:field="*{username}" th:placeholder="#{login.username.placeholder}" required>
                 </div>
 
                 <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" th:field="*{password}" placeholder="Enter your password" required>
+                    <label th:text="#{login.password}" for="password">Password</label>
+                    <input type="password" id="password" th:field="*{password}" th:placeholder="#{login.password.placeholder}" required>
                 </div>
 
-                <p th:if="${errorMessage}" class="error-message" th:text="${errorMessage}">Invalid</p>
-                <p th:if="${inactiveMessage}" class="error-message" th:text="${inactiveMessage}">Deactivated</p>
-                <p th:if="${usernameNotExist}" class="error-message" th:text="${usernameNotExist}">Not exist</p>
-                <p th:if="${param.roleChanged}" class="warning-message">Your role has been changed. Please log in again.</p>
-                <button type="submit" class="btn">Login</button>
+                <p th:if="${errorMessage}" class="error-message" th:text="#{login.invalid.credentials}">Invalid</p>
+                <p th:if="${inactiveMessage}" class="error-message" th:text="#{login.deactivatedAccount}">Deactivated</p>
+                <p th:if="${usernameNotExist}" class="error-message" th:text="#{login.usernameDoesNotExist}">Not exist</p>
+                <p th:if="${param.roleChanged}" class="warning-message" th:text="#{login.roleChanged}">Your role has been changed. Please log in again.</p>
+                <button th:text="#{login.button}" type="submit" class="btn">Login</button>
             </form>
 
             <p class="footer-text">
-                Don’t have an account?
-                <a th:href="@{/register}">Sign up</a>
+                <span th:text="#{login.noAccount}">Don’t have an account?</span>
+                <a th:href="@{/register}" th:text="#{login.registrationLinkMessage}">Sign up</a>
             </p>
 
             <div th:replace="~{fragments/footer :: footer}"></div>
