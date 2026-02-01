@@ -38,9 +38,9 @@ public class IndexController {
         this.meterService = meterService;
     }
 
-    @GetMapping
-    public String indexPage() {
-        return "redirect:/login";
+    @GetMapping("/")
+    public String landingPage() {
+        return "landing";
     }
 
     @GetMapping("/login")

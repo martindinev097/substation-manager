@@ -33,7 +33,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 
         httpSecurity.authorizeHttpRequests(matcher -> matcher
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/login", "/register").permitAll()
+                        .requestMatchers("/", "/login", "/register").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin
