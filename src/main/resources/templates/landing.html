@@ -1,0 +1,28 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Substation Manager</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+          integrity="sha512-jk..." crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="logo">
+                <i class="fa-solid fa-bolt"></i>
+                <h1>Substation</h1>
+            </div>
+
+            <p class="subtitle">Choose language / Изберете език</p>
+
+            <div style="display:flex; gap:12px; justify-content:center; margin-top:16px;">
+                <a style="text-decoration: none" class="btn" th:href="@{/login(lang='en')}">English</a>
+                <a style="text-decoration: none" class="btn" th:href="@{/login(lang='bg')}">Български</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
