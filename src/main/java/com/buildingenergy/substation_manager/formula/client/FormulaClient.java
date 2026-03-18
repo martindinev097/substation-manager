@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@FeignClient(name = "energy-formula-svc", url = "http://localhost:8081/api/v1", configuration = FeignConfiguration.class)
+@FeignClient(name = "energy-formula-svc", url = "${microservice.url}", configuration = FeignConfiguration.class)
 public interface FormulaClient {
 
     @GetMapping("/company/formula")
