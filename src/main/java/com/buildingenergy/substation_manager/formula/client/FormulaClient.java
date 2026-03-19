@@ -14,15 +14,15 @@ import java.util.UUID;
 @FeignClient(name = "energy-formula-svc", url = "${microservice.url}", configuration = FeignConfiguration.class)
 public interface FormulaClient {
 
-    @GetMapping("/api/v1/company/formula")
+    @GetMapping("/company/formula")
     ResponseEntity<CompanyFormulaResponse> getCompanyFormula(@RequestParam("userId") UUID userId);
 
-    @PutMapping("/api/v1/company/formula")
+    @PutMapping("/company/formula")
     ResponseEntity<CompanyFormulaResponse> updateCompanyFormula(@RequestParam("userId") UUID userId, @RequestBody CompanyFormulaRequest request);
 
-    @GetMapping("/api/v1/meter/formula")
+    @GetMapping("/meter/formula")
     ResponseEntity<MeterFormulaResponse> getMeterFormula(@RequestParam("userId") UUID userId);
 
-    @PutMapping("/api/v1/meter/formula")
+    @PutMapping("/meter/formula")
     ResponseEntity<MeterFormulaResponse> updateMeterFormula(@RequestParam("userId") UUID userId, @RequestBody MeterFormulaRequest request);
 }
