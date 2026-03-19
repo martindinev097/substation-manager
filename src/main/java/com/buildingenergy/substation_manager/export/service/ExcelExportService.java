@@ -166,9 +166,12 @@ public class ExcelExportService {
         workbook.write(baos);
         byte[] bytes = baos.toByteArray();
 
-        response.getOutputStream().write(bytes);
+        String url = cloudinaryService.uploadExcel(bytes, fileName);
 
-        return cloudinaryService.uploadExcel(bytes, fileName);
+        response.getOutputStream().write(bytes);
+        response.flushBuffer();
+
+        return url;
     }
 
     private CellStyle createHeader(Workbook workbook, CellStyle cellStyle, Row header, String[] columns) {
